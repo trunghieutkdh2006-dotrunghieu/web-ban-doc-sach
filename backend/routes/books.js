@@ -155,6 +155,8 @@ router.put("/:id", auth, admin,
 
             const updated = await Book.findByIdAndUpdate(req.params.id, updates, { new: true });
             if (!updated) return res.status(404).json({ message: "Không tìm thấy sách" });
+            const io = req.app.get("io");
+            if (io) io.emit("bookUpdated", updated);
             res.json(updated);
         } catch (err) {
             console.error(err);
@@ -186,6 +188,8 @@ router.delete("/:id", auth, admin, async (req, res) => {
             })
         );
 
+        const io = req.app.get("io");
+        if (io) io.emit("bookDeleted", { _id: req.params.id });
         res.json({ message: "Xóa thành công" });
     } catch (error) {
         res.status(500).json({ error: error.message });

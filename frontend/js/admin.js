@@ -1205,6 +1205,25 @@ async function saveBook() {
         }
     });
 
+    // ============================================
+    // GỬI DANH SÁCH ẢNH CŨ CẦN GIỮ LẠI
+    // ============================================
+    // Khi update, cần báo backend biết ảnh nào
+    // vẫn còn trong gallery (không bị xóa)
+    if (bookId) {
+        const keptUrls = galleryBase64List
+            .filter(item => typeof item === 'string')
+            .concat(
+                galleryBase64List
+                    .filter(item => item && typeof item === 'object' && item.url && !item.file)
+                    .map(item => item.url)
+            );
+        formData.append(
+            'existingGalleryImages',
+            JSON.stringify(keptUrls)
+        );
+    }
+
 
 
     // ============================================
@@ -2158,6 +2177,35 @@ function removeGalleryImage(idx) {
     // ============================================
     // XÓA PHẦN TỬ KHỎI MẢNG
     // ============================================
+
+    const item = galleryBase64List[idx];
+
+    // Nếu là ảnh cũ từ server (string URL hoặc object không có file)
+    // -> gọi API xóa ngay trên server
+    const imageUrl = typeof item === 'string'
+        ? item
+        : (item && !item.file && item.url) ? item.url : null;
+
+    const bookId = document.getElementById('bookId')
+        ? document.getElementById('bookId').value
+        : '';
+
+    if (imageUrl && bookId) {
+        const token = JSON.parse(localStorage.getItem('user') || '{}').token;
+        fetch(`${BOOKS_API}/${bookId}/images?image=${encodeURIComponent(imageUrl)}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'ngrok-skip-browser-warning': 'true'
+            }
+        }).then(res => res.json()).then(data => {
+            // Cập nhật cache allBooks để mở lại form không bị phục hồi ảnh cũ
+            const cachedBook = allBooks.find(b => b._id === bookId);
+            if (cachedBook && data.galleryImages) {
+                cachedBook.galleryImages = data.galleryImages;
+            }
+        }).catch(e => console.warn('Xóa ảnh phụ thất bại:', e));
+    }
 
     // splice(vị trí, số lượng)
     //
