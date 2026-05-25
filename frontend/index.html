@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>HTTVBOOKS - Nền tảng đọc sách trực tuyến</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/enhancements.css">
+</head>
+
+<body>
+  <div class="toast-notification" id="toastContainer"></div>
+  <div id="mainWebsite">
+    <header class="header">
+
+      <div class="top-bar">
+        <div class="container">
+
+          <ul class="top-nav">
+            <li>
+              <a href="terms.html">
+                <i class="fas fa-file-contract"></i>
+                Điều khoản
+              </a>
+            </li>
+
+            <li>
+              <a href="contact.html">
+                <i class="fas fa-envelope"></i>
+                Liên hệ
+              </a>
+            </li>
+
+            <li>
+              <a href="support.html">
+                <i class="fas fa-headset"></i>
+                Hỗ trợ
+              </a>
+            </li>
+
+            <li>
+              <a href="privacy.html">
+                <i class="fas fa-shield-alt"></i>
+                Bảo mật
+              </a>
+            </li>
+          </ul>
+
+          <div class="top-right">
+            <div class="social-icons">
+              <a href="#">
+                <i class="fab fa-facebook-f"></i>
+              </a>
+
+              <a href="#">
+                <i class="fab fa-tiktok"></i>
+              </a>
+
+              <a href="#">
+                <i class="fab fa-youtube"></i>
+              </a>
+
+              <a href="#">
+                <i class="fab fa-instagram"></i>
+              </a>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </header>
+  </div>
+
+  <nav class="main-nav">
+    <div class="container nav-wrapper">
+      <div class="left">
+        <a href="#" class="logo">
+          <img src="img/taixuong.png" alt="Logo">
+        </a>
+        <ul class="main-menu">
+          <li><a href="#" class="active" onclick="showHomePage(); return false;">Trang chủ</a></li>
+          <li class="has-dropdown" id="categoryMenu">
+            <a href="#" onclick="toggleCategoryDropdown(event); return false;">Thể loại <i class="fas fa-chevron-down"
+                id="categoryChevron"></i></a>
+            <ul class="dropdown" id="categoryDropdown">
+              <li><a href="#" onclick="filterByCategory('Tất cả'); return false;">Tất cả</a></li>
+            </ul>
+          </li>
+          <li><a href="review.html">Review Sách</a></li>
+        </ul>
+      </div>
+
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Tìm tên sách, tác giả, thể loại...">
+        <i class="fas fa-search" onclick="performSearch()"></i>
+        <div id="searchResults" class="search-results"></div>
+      </div>
+
+      <div class="right-actions">
+        <div class="heart-wrapper">
+          <button class="action-btn heart-btn"><i class="far fa-heart"></i> <span class="heart-count">0</span></button>
+          <div class="heart-dropdown" id="wishlistPopup">
+            <div class="heart-dropdown-header">
+              <span>Sách đã tim</span>
+              <button class="clear-wishlist-btn" onclick="clearWishlist()">Xóa tất cả</button>
+            </div>
+            <div class="heart-dropdown-items" id="wishlistItems">
+              <div class="heart-empty"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cart-wrapper">
+
+          <!-- CART BUTTON -->
+          <button class="action-btn cart-btn" id="cartBtn">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+
+          <!-- DROPDOWN -->
+          <div class="cart-dropdown" id="cartDropdown">
+
+            <!-- HEADER -->
+            <div class="cart-dropdown-header">
+              <span class="cart-title">
+                <i class="fas fa-shopping-bag"></i>
+                Giỏ hàng của bạn
+              </span>
+
+              <button class="clear-cart-btn" onclick="clearCartDropdown()">
+                Xóa tất cả
+              </button>
+            </div>
+
+            <!-- ITEMS -->
+            <div class="cart-dropdown-items" id="cartDropdownItems">
+              <div class="cart-dropdown-empty">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Giỏ hàng đang trống</p>
+              </div>
+            </div>
+
+            <!-- FOOTER -->
+            <div class="cart-dropdown-footer" id="cartDropdownFooter" style="display:none;">
+              <div class="cart-dropdown-total">
+                <span>Tổng cộng:</span>
+                <span id="dropdownTotal">0đ</span>
+              </div>
+
+              <a href="cart.html" class="cart-dropdown-view-btn">
+                <i class="fas fa-arrow-right"></i>
+                Xem chi tiết giỏ hàng
+              </a>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="user-wrapper">
+          <button class="action-btn" id="userBtn"><i class="far fa-user-circle"></i></button>
+          <div class="user-dropdown" id="userDropdown">
+            <a href="#" onclick="openProfile()">👤 Hồ sơ</a>
+            <a href="#" onclick="openSettings()">⚙️ Cài đặt</a>
+            <a href="#" onclick="openOrderHistory()">📦 Lịch sử đơn hàng</a>
+            <a href="#" id="adminDashboardLink" onclick="showAdminDashboard(); return false;" style="display: none;">📊
+              Admin Dashboard</a>
+            <a href="#" onclick="logout()">🚪 Đăng xuất</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  </header>
+
+  <!-- <section class="hero">
+    <div class="container hero-content">
+      <h1>Khám Phá Thế Giới Qua Từng Trang Sách</h1>
+      <p>Hàng ngàn đầu sách hay đang chờ đón bạn tại HTTVEBOOKS.</p>
+      <a href="#new-books" class="btn-cta">Mua Ngay Hôm Nay</a>
+    </div>
+  </section> -->
+
+  <div class="filter-bar" id="filter-bar">
+    <div class="container filter-wrapper">
+      <div class="filter-group">
+        <span class="filter-label">📚 Thể loại:</span>
+        <select id="filterCategory" class="filter-select" onchange="applyFilters()">
+          <option value="all">Tất cả</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">💰 Giá:</span>
+        <div class="price-range">
+          <input type="number" id="minPrice" placeholder="Từ" onchange="applyFilters()">
+          <span>-</span>
+          <input type="number" id="maxPrice" placeholder="Đến" onchange="applyFilters()">
+        </div>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">⭐ Đánh giá:</span>
+        <select id="filterRating" class="filter-select" onchange="applyFilters()">
+          <option value="0">Tất cả</option>
+          <option value="4">4 sao trở lên</option>
+          <option value="3">3 sao trở lên</option>
+          <option value="2">2 sao trở lên</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <span class="filter-label">📅 Sắp xếp:</span>
+        <select id="sortOrder" class="filter-select" onchange="applyFilters()">
+          <option value="default">Mặc định</option>
+          <option value="price_asc">Giá tăng dần</option>
+          <option value="price_desc">Giá giảm dần</option>
+          <option value="rating_desc">Đánh giá cao nhất</option>
+          <option value="name_asc">Tên A-Z</option>
+        </select>
+      </div>
+      <div class="filter-buttons">
+        <button class="btn-filter btn-filter-secondary" onclick="resetFilters()">🔄 Đặt lại</button>
+        <button class="btn-filter btn-filter-primary" onclick="applyFilters()">🔍 Lọc ngay</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="mainContent">
+    <div class="book-grid" id="new-books"></div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section about">
+          <div class="footer-logo"><i class="fas fa-book-open"></i><span>HTTVEBOOKS</span></div>
+          <p>HTTVEBOOKS là nền tảng đọc sách trực tuyến hiện đại, cung cấp hàng ngàn đầu sách chất lượng.</p>
+          <div class="footer-contact">
+            <p><i class="fas fa-envelope"></i> support@httvebooks.com</p>
+            <p><i class="fas fa-phone"></i> +84 123 456 789</p>
+            <p><i class="fas fa-map-marker-alt"></i> Hà Nội, Việt Nam</p>
+          </div>
+          <div class="footer-socials">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-tiktok"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-section">
+          <h4>Hỗ trợ</h4>
+          <ul>
+            <li><a href="#">Liên hệ chúng tôi</a></li>
+            <li><a href="#">Câu hỏi thường gặp</a></li>
+            <li><a href="#">Chính sách hoàn trả</a></li>
+            <li><a href="#">Điều khoản dịch vụ</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Công ty</h4>
+          <ul>
+            <li><a href="#">Về chúng tôi</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Tuyển dụng</a></li>
+            <li><a href="#">Đối tác</a></li>
+          </ul>
+        </div>
+        <div class="footer-section newsletter">
+          <h4>Đăng ký nhận tin</h4>
+          <p>Nhận thông báo về sách mới, ưu đãi hấp dẫn.</p>
+          <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+            <input type="email" id="newsletterEmail" placeholder="Nhập email của bạn">
+            <button type="submit">Đăng ký</button>
+          </form>
+        </div>
+      </div>
+      <div class="footer-payment">
+        <span>Phương thức thanh toán:</span>
+        <div class="payment-icons">
+          <i class="fab fa-cc-visa"></i>
+          <i class="fab fa-cc-mastercard"></i>
+          <i class="fab fa-cc-paypal"></i>
+          <i class="fas fa-wallet"></i>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copyright">© 2026 HTTVEBOOKS. All rights reserved.</div>
+        <div class="footer-links">
+          <a href="privacy.html">Chính sách bảo mật</a>
+          <a href="terms.html">Điều khoản sử dụng</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  </div>
+
+  <!-- Modals -->
+  <div class="login-panel" id="authPanel">
+    <div class="login-box">
+      <button class="close-btn" onclick="toggleAuth(false)">✕</button>
+      <div class="auth-header" style="text-align:center;">
+        <h2 id="authTitle">Chào bạn trở lại!</h2>
+        <p id="authSubtitle">Vui lòng đăng nhập để tiếp tục khám phá sách.</p>
+      </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Đăng nhập</button>
+        <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Đăng ký</button>
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label>Email hoặc Tên đăng nhập</label>
+          <div class="input-wrapper">
+            <input type="email" id="loginEmail" placeholder="example@email.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mật khẩu</label>
+          <div class="input-wrapper">
+            <input type="password" id="loginPass" placeholder="••••••••" required>
+            <i class="fas fa-eye toggle-pass" onclick="togglePass('loginPass', this)"></i>
+          </div>
+        </div>
+        <button type="submit" class="btn-auth">Đăng nhập</button>
+      </form>
+      <form id="registerForm" style="display: none;">
+        <div class="form-group">
+          <label>Họ và tên</label>
+          <div class="input-wrapper">
+            <input type="text" id="regName" placeholder="Nhập tên đầy đủ" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Địa chỉ Email</label>
+          <div class="input-wrapper">
+            <input type="email" id="regEmail" placeholder="example@email.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Mật khẩu mới</label>
+          <div class="input-wrapper">
+            <input type="password" id="regPass" placeholder="Tối thiểu 8 ký tự" required>
+            <i class="fas fa-eye toggle-pass" onclick="togglePass('regPass', this)"></i>
+          </div>
+        </div>
+        <button type="submit" class="btn-auth">Tạo tài khoản</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="reviewModal" class="review-modal">
+    <div class="review-modal-content">
+      <span class="review-modal-close" onclick="closeReviewModal()">&times;</span>
+      <div class="review-modal-header">
+        <h3>Đánh giá sách</h3>
+        <div id="reviewBookTitle" class="review-book-title"></div>
+      </div>
+      <div class="rating-section">
+        <label>Đánh giá của bạn:</label>
+        <div class="star-rating">
+          <span data-value="1" class="star">★</span>
+          <span data-value="2" class="star">★</span>
+          <span data-value="3" class="star">★</span>
+          <span data-value="4" class="star">★</span>
+          <span data-value="5" class="star">★</span>
+        </div>
+        <input type="hidden" id="reviewRating" value="0">
+      </div>
+      <div class="comment-section">
+        <label>Nhận xét của bạn:</label>
+        <textarea id="reviewComment" rows="4" placeholder="Chia sẻ cảm nhận của bạn về cuốn sách này..."></textarea>
+      </div>
+      <div class="review-actions">
+        <button class="btn-submit-review" onclick="submitReview()">Gửi đánh giá</button>
+        <button class="btn-cancel-review" onclick="closeReviewModal()">Hủy</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="reviewsListModal" class="reviews-modal">
+    <div class="reviews-modal-content">
+      <span class="reviews-modal-close" onclick="closeReviewsModal()">&times;</span>
+      <div class="reviews-modal-header">
+        <h3>Đánh giá về sách</h3>
+        <div id="reviewsBookTitle" class="reviews-book-title"></div>
+      </div>
+      <div id="reviewsList" class="reviews-list"></div>
+    </div>
+  </div>
+
+  <div id="adminModal" class="admin-modal" style="display: none;"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/enhancements.js"></script>
+  <script>
+    // Fix: đảm bảo openBookDetail luôn fetch fresh data và hiện gallery
+    window.addEventListener('load', function () {
+      window.switchModalImg = function (bookId, src, thumbEl) {
+        const mainImg = document.getElementById('modalMainImg_' + bookId);
+        if (mainImg) mainImg.src = src;
+        document.querySelectorAll('#modalThumbs_' + bookId + ' .modal-thumb').forEach(function (t) { t.classList.remove('active'); });
+        if (thumbEl) thumbEl.classList.add('active');
+      };
+
+      function applyGalleryFix() {
+        var cur = window.openBookDetail;
+        if (cur && cur.toString().indexOf('galleryImages') === -1) {
+          window.openBookDetail = async function (id) {
+            var book;
+            try {
+              var res = await fetch(BASE_URL + '/api/books/' + id, { headers: { 'ngrok-skip-browser-warning': '69420' } });
+              if (res.ok) book = await res.json();
+            } catch (e) { }
+            if (!book) { return cur.call(this, id); }
+            var coverImg = getBookImage(book);
+            var gallery = Array.isArray(book.galleryImages) ? book.galleryImages.filter(Boolean) : [];
+            var allImgs = [coverImg].concat(gallery.map(function (g) { return g.startsWith('http') ? g : BASE_URL + g; }));
+            var existingModal = document.querySelector('.book-modal');
+            if (existingModal) existingModal.remove();
+            var thumbsHtml = allImgs.length > 1 ? '<div class="modal-thumbs" id="modalThumbs_' + id + '">' + allImgs.map(function (src, i) { return '<img src="' + src + '" class="modal-thumb ' + (i === 0 ? 'active' : '') + '" onclick="switchModalImg(\'' + id + '\',\'' + src + '\',this)" onerror="this.style.display=\'none\'">'; }).join('') + '</div>' : '';
+            var pdfButton = book.samplePdf ? '<button class="modal-btn modal-btn-sample" onclick="openPdfPreview(\'' + id + '\')">📖 Đọc thử</button>' : '';
+            var modal = document.createElement('div');
+            modal.className = 'book-modal';
+            modal.innerHTML = '<div class="modal-content"><span class="close" onclick="closeBookModal()">&times;</span><div class="modal-left"><img src="' + coverImg + '" id="modalMainImg_' + id + '" class="modal-main-img" style="cursor:zoom-in" onclick="openLightbox(this.src)" onerror="this.src=PLACEHOLDER_SVG">' + thumbsHtml + '</div><div class="modal-right">' + (book.category ? '<div class="modal-category-badge">' + escapeHtml(book.category) + '</div>' : '') + '<h2>' + escapeHtml(book.title) + '</h2><p class="modal-author">Tác giả: <strong>' + escapeHtml(book.author || 'Không rõ') + '</strong></p><div class="modal-price">' + formatPrice(book.price) + '</div><div class="modal-rating"><div class="stars">' + renderStars(book.avgRating || 0) + '</div><span>(' + (book.reviewCount || 0) + ' đánh giá)</span><button class="view-reviews-link" onclick="viewReviews(\'' + id + '\',\'' + escapeHtml(book.title).replace(/\'/g, "\\'") + '\')">Xem tất cả</button></div><div class="modal-actions-row"><button class="modal-btn modal-btn-cart" onclick="addToCart(\'' + id + '\',\'' + escapeHtml(book.title).replace(/\'/g, "\\'") + '\',' + book.price + ',\'' + coverImg + '\')">🛒 Thêm giỏ</button><button class="modal-btn modal-btn-review" onclick="openReviewModal(\'' + id + '\',\'' + escapeHtml(book.title).replace(/\'/g, "\\'") + '\')">⭐ Đánh giá</button>' + pdfButton + '<button class="modal-btn modal-btn-wish ' + (isWishlisted(id) ? 'active' : '') + '" onclick="toggleWishlist(\'' + id + '\')"><i class="' + (isWishlisted(id) ? 'fas' : 'far') + ' fa-heart"></i></button></div>' + (book.description ? '<hr><h4>📖 Nội dung sách</h4><div class="modal-description">' + escapeHtml(book.description) + '</div>' : '') + '</div></div>';
+            document.body.appendChild(modal);
+            document.body.style.overflow = 'hidden';
+          };
+          console.log('[GalleryFix] Applied!');
+        }
+      }
+      applyGalleryFix();
+      setTimeout(applyGalleryFix, 500);
+      setTimeout(applyGalleryFix, 1500);
+
+      const _orig = window.openBookDetail;
+      window.openBookDetail = async function (id) {
+        let book;
+        try {
+          const res = await fetch(BASE_URL + '/api/books/' + id, { headers: { 'ngrok-skip-browser-warning': '69420' } });
+          if (res.ok) book = await res.json();
+        } catch (e) { }
+        if (!book) { if (_orig) return _orig.call(this, id); return; }
+
+        const coverImg = getBookImage(book);
+        const gallery = Array.isArray(book.galleryImages) ? book.galleryImages.filter(Boolean) : [];
+        const allImgs = [coverImg, ...gallery.map(g => g.startsWith('http') ? g : BASE_URL + g)];
+
+        const existingModal = document.querySelector('.book-modal');
+        if (existingModal) existingModal.remove();
+
+        const thumbsHtml = allImgs.length > 1 ? '<div class="modal-thumbs" id="modalThumbs_' + id + '">' +
+          allImgs.map(function (src, i) {
+            return '<img src="' + src + '" class="modal-thumb ' + (i === 0 ? 'active' : '') + '" onclick="switchModalImg(\'' + id + '\',\'' + src + '\',this)" onerror="this.style.display=\'none\'">';
+          }).join('') + '</div>' : '';
+
+        const pdfButton = book.samplePdf ? '<button class="modal-btn modal-btn-sample" onclick="openPdfPreview(\'' + id + '\')">📖 Đọc thử</button>' : '';
+        const modal = document.createElement('div');
+        modal.className = 'book-modal';
+        modal.innerHTML = '<div class="modal-content"><span class="close" onclick="closeBookModal()">&times;</span><div class="modal-left"><img src="' + coverImg + '" id="modalMainImg_' + id + '" class="modal-main-img" style="cursor:zoom-in" onclick="openLightbox(this.src)" onerror="this.src=PLACEHOLDER_SVG">' + thumbsHtml + '</div><div class="modal-right">' +
+          (book.category ? '<div class="modal-category-badge">' + escapeHtml(book.category) + '</div>' : '') +
+          '<h2>' + escapeHtml(book.title) + '</h2>' +
+          '<p class="modal-author">Tác giả: <strong>' + escapeHtml(book.author || 'Không rõ') + '</strong></p>' +
+          '<div class="modal-price">' + formatPrice(book.price) + '</div>' +
+          '<div class="modal-rating"><div class="stars">' + renderStars(book.avgRating || 0) + '</div><span>(' + (book.reviewCount || 0) + ' đánh giá)</span><button class="view-reviews-link" onclick="viewReviews(\'' + id + '\',\'' + escapeHtml(book.title).replace(/'/g, "\\'") + '\')">Xem tất cả</button></div>' +
+          '<div class="modal-actions-row"><button class="modal-btn modal-btn-cart" onclick="addToCart(\'' + id + '\',\'' + escapeHtml(book.title).replace(/'/g, "\\'") + '\',' + book.price + ',\'' + coverImg + '\')">🛒 Thêm giỏ</button><button class="modal-btn modal-btn-review" onclick="openReviewModal(\'' + id + '\',\'' + escapeHtml(book.title).replace(/'/g, "\\'") + '\')">⭐ Đánh giá</button>' + pdfButton +
+          '<button class="modal-btn modal-btn-wish ' + (isWishlisted(id) ? 'active' : '') + '" onclick="toggleWishlist(\'' + id + '\')"><i class="' + (isWishlisted(id) ? 'fas' : 'far') + ' fa-heart"></i></button>' +
+          '</div>' +
+          (book.description ? '<hr><h4>📖 Nội dung sách</h4><div class="modal-description">' + escapeHtml(book.description) + '</div>' : '') +
+          '</div></div>';
+        document.body.appendChild(modal);
+        document.body.style.overflow = 'hidden';
+      };
+    });
+  </script>
+  <script>
+    // Toggle dropdown thể loại khi click
+    function toggleCategoryDropdown(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('categoryMenu');
+      const chevron = document.getElementById('categoryChevron');
+      const isOpen = menu.classList.toggle('open');
+      if (chevron) {
+        chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+        chevron.style.transition = 'transform 0.25s ease';
+      }
+    }
+
+    // Đóng dropdown khi click ra ngoài
+    document.addEventListener('click', (e) => {
+      const menu = document.getElementById('categoryMenu');
+      const chevron = document.getElementById('categoryChevron');
+      if (menu && !menu.contains(e.target)) {
+        menu.classList.remove('open');
+        if (chevron) chevron.style.transform = '';
+      }
+    });
+  </script>
+</body>
+
+</html>

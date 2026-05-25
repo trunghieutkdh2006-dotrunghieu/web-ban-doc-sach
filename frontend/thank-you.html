@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt hàng thành công</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container" style="padding: 60px 0; text-align: center;">
+        <div
+            style="max-width: 700px; margin: auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 18px 45px rgba(15, 23, 42, 0.08);">
+            <h1>Cảm ơn bạn đã đặt hàng!</h1>
+            <p id="order-message" style="font-size: 18px; color: var(--gray); margin: 20px 0;"></p>
+            <div id="order-summary" style="text-align: left; margin: 24px 0;"></div>
+            <a href="index.html" class="checkout-btn"
+                style="display: inline-block; padding: 14px 28px; font-size: 16px; border-radius: 12px; text-decoration: none;">Tiếp
+                tục mua sắm</a>
+        </div>
+    </div>
+    <script>
+        const order = JSON.parse(localStorage.getItem('lastOrder')) || null;
+        const message = document.getElementById('order-message');
+        const summary = document.getElementById('order-summary');
+
+        if (!order) {
+            message.innerText = 'Đơn hàng đã được ghi nhận. Cảm ơn bạn!';
+            summary.innerHTML = '';
+        } else {
+            const orderId = order.id || order._id || '---';
+            const orderTotal = Number(order.total || order.totalPrice || 0).toLocaleString('vi-VN');
+            const orderPayment = (order.paymentMethod || '').toUpperCase() || 'COD';
+            message.innerText = `Mã đơn hàng: ${orderId}. Tổng thanh toán ${orderTotal}đ. Phương thức: ${orderPayment}.`;
+            const lines = [
+                `<p><strong>Ngày:</strong> ${new Date(order.createdAt || order.date || Date.now()).toLocaleString('vi-VN')}</p>`,
+                `<p><strong>Giảm giá:</strong> ${Number(order.discount || 0).toLocaleString('vi-VN')}đ</p>`,
+                `<p><strong>Tổng thanh toán:</strong> ${orderTotal}đ</p>`
+            ];
+            summary.innerHTML = lines.join('');
+        }
+    </script>
+</body>
+
+</html>

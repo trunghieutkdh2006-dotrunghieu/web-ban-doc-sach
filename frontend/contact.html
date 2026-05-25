@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên hệ | HTTVEBOOKS</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #dbeafe, transparent 35%),
+                radial-gradient(circle at bottom right, #bfdbfe, transparent 30%),
+                #f8fafc;
+            padding: 40px 20px;
+            color: #1e293b;
+        }
+
+        .contact-wrapper {
+            max-width: 1150px;
+            margin: auto;
+        }
+
+        .contact-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(18px);
+            border-radius: 34px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow:
+                0 30px 70px rgba(15, 23, 42, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            display: grid;
+            grid-template-columns: 1fr 1.1fr;
+        }
+
+        .contact-info {
+            padding: 50px 40px;
+            background: linear-gradient(135deg, #1D3557, #274c77);
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-info::before {
+            content: '';
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            top: -120px;
+            right: -120px;
+        }
+
+        .contact-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.12);
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .contact-info h1 {
+            font-size: 2.6rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .contact-info p {
+            color: rgba(255, 255, 255, 0.82);
+            line-height: 1.9;
+            font-size: 1rem;
+            margin-bottom: 34px;
+        }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 18px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .info-icon {
+            width: 54px;
+            height: 54px;
+            min-width: 54px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.12);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .info-item h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+            font-weight: 800;
+        }
+
+        .info-item span {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .contact-form {
+            padding: 50px 42px;
+            background: rgba(255, 255, 255, 0.92);
+        }
+
+        .form-title {
+            margin-bottom: 30px;
+        }
+
+        .form-title h2 {
+            font-size: 2rem;
+            color: #1D3557;
+            margin-bottom: 10px;
+            font-weight: 900;
+        }
+
+        .form-title p {
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 22px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #334155;
+            font-size: 0.94rem;
+            font-weight: 700;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            border: 1.5px solid #dbe4f0;
+            background: #f8fafc;
+            border-radius: 18px;
+            padding: 16px 18px;
+            font-size: 0.96rem;
+            color: #1e293b;
+            transition: all .28s ease;
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #457B9D;
+            background: #fff;
+            box-shadow: 0 0 0 5px rgba(69, 123, 157, 0.12);
+        }
+
+        .send-btn {
+            width: 100%;
+            height: 58px;
+            border: none;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #1D3557, #457B9D);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all .3s ease;
+            box-shadow: 0 18px 36px rgba(29, 53, 87, 0.2);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 24px 46px rgba(29, 53, 87, 0.28);
+        }
+
+        .back-home {
+            margin-top: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: #64748b;
+            text-decoration: none;
+            font-weight: 700;
+            transition: .25s ease;
+        }
+
+        .back-home:hover {
+            color: #1D3557;
+            transform: translateX(-3px);
+        }
+
+        @media (max-width: 960px) {
+
+            .contact-card {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+
+            .contact-info,
+            .contact-form {
+                padding: 30px 20px;
+            }
+
+            .contact-info h1 {
+                font-size: 2rem;
+            }
+
+            .form-title h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="contact-wrapper">
+
+        <div class="contact-card">
+
+            <!-- LEFT -->
+            <div class="contact-info">
+
+                <div class="contact-badge">
+                    <i class="fas fa-headset"></i>
+                    HTTVEBOOKS SUPPORT
+                </div>
+
+                <h1>Liên hệ với chúng tôi</h1>
+
+                <p>
+                    Nếu bạn cần hỗ trợ, góp ý hoặc gặp sự cố trong quá trình sử dụng
+                    HTTVEBOOKS, hãy gửi thông tin cho chúng tôi. Đội ngũ hỗ trợ sẽ
+                    phản hồi sớm nhất có thể.
+                </p>
+
+                <div class="info-list">
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+
+                        <div>
+                            <h3>Email hỗ trợ</h3>
+                            <span>support@httvebooks.vn</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+
+                        <div>
+                            <h3>Hotline</h3>
+                            <span>0123 456 789</span>
+                        </div>
+                    </div>
+
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-location-dot"></i>
+                        </div>
+
+                        <div>
+                            <h3>Địa chỉ</h3>
+                            <span>Hà Nội, Việt Nam</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="contact-form">
+
+                <div class="form-title">
+                    <h2>Gửi tin nhắn</h2>
+
+                    <p>
+                        Điền thông tin bên dưới và chúng tôi sẽ liên hệ lại với bạn.
+                    </p>
+                </div>
+
+                <form class="form-grid">
+
+                    <div class="form-group">
+                        <label>Họ và tên</label>
+                        <input type="text" placeholder="Nhập họ và tên">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="example@email.com">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chủ đề</label>
+                        <input type="text" placeholder="Ví dụ: Hỗ trợ tài khoản">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nội dung</label>
+                        <textarea placeholder="Nhập nội dung tin nhắn..."></textarea>
+                    </div>
+
+                    <button type="submit" class="send-btn">
+                        Gửi liên hệ
+                    </button>
+
+                </form>
+
+                <a href="index.html" class="back-home">
+                    <i class="fas fa-arrow-left"></i>
+                    Quay lại trang chủ
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+<script>
+    // =========================
+    // CONTACT FORM HANDLER
+    // =========================
+
+    document.addEventListener("DOMContentLoaded", () => {
+
+        const contactForm = document.querySelector(".form-grid");
+
+        if (!contactForm) return;
+
+        const sendBtn = document.querySelector(".send-btn");
+
+        // =========================
+        // SUBMIT FORM
+        // =========================
+        contactForm.addEventListener("submit", async function (e) {
+
+            e.preventDefault();
+
+            const nameInput = contactForm.querySelector('input[type="text"]');
+            const emailInput = contactForm.querySelector('input[type="email"]');
+            const subjectInput = contactForm.querySelectorAll('input[type="text"]')[1];
+            const messageInput = contactForm.querySelector("textarea");
+
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const subject = subjectInput.value.trim();
+            const message = messageInput.value.trim();
+
+            // =========================
+            // VALIDATE EMPTY
+            // =========================
+            if (!name || !email || !subject || !message) {
+
+                shakeForm();
+
+                showToast(
+                    "Vui lòng điền đầy đủ thông tin!",
+                    "error"
+                );
+
+                return;
+            }
+
+            // =========================
+            // VALIDATE EMAIL
+            // =========================
+            if (!validateEmail(email)) {
+
+                emailInput.focus();
+
+                showToast(
+                    "Email không hợp lệ!",
+                    "error"
+                );
+
+                return;
+            }
+
+            // =========================
+            // BUTTON LOADING
+            // =========================
+            const originalBtnText = sendBtn.innerHTML;
+
+            sendBtn.disabled = true;
+
+            sendBtn.innerHTML = `
+                <i class="fas fa-spinner fa-spin"></i>
+                Đang gửi liên hệ...
+            `;
+
+            // =========================
+            // FAKE API CALL
+            // =========================
+            setTimeout(() => {
+
+                // SUCCESS
+                showToast(
+                    "Gửi liên hệ thành công 🎉",
+                    "success"
+                );
+
+                // RESET FORM
+                contactForm.reset();
+
+                // RESTORE BUTTON
+                sendBtn.disabled = false;
+
+                sendBtn.innerHTML = originalBtnText;
+
+            }, 1800);
+
+        });
+
+        // =========================
+        // INPUT EFFECT
+        // =========================
+        const inputs = document.querySelectorAll(
+            ".form-group input, .form-group textarea"
+        );
+
+        inputs.forEach(input => {
+
+            input.addEventListener("focus", () => {
+
+                input.parentElement?.classList.add("focused");
+
+            });
+
+            input.addEventListener("blur", () => {
+
+                if (!input.value.trim()) {
+                    input.parentElement?.classList.remove("focused");
+                }
+
+            });
+
+        });
+
+    });
+
+    // =========================
+    // EMAIL VALIDATION
+    // =========================
+    function validateEmail(email) {
+
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        return regex.test(email);
+
+    }
+
+    // =========================
+    // SHAKE EFFECT
+    // =========================
+    function shakeForm() {
+
+        const form = document.querySelector(".contact-form");
+
+        form.classList.add("shake");
+
+        setTimeout(() => {
+            form.classList.remove("shake");
+        }, 500);
+
+    }
+
+    // =========================
+    // TOAST FUNCTION
+    // =========================
+    function showToast(message, type = "success") {
+
+        // REMOVE OLD TOAST
+        const oldToast = document.querySelector(".toast");
+
+        if (oldToast) oldToast.remove();
+
+        // CREATE TOAST
+        const toast = document.createElement("div");
+
+        toast.className = `toast toast-${type}`;
+
+        // ICON
+        const icon =
+            type === "success"
+                ? "fa-circle-check"
+                : type === "error"
+                    ? "fa-circle-xmark"
+                    : "fa-circle-info";
+
+        toast.innerHTML = `
+            <div class="toast-icon">
+                <i class="fas ${icon}"></i>
+            </div>
+
+            <div class="toast-content">
+                <strong>
+                    ${type === "success"
+                ? "Thành công"
+                : type === "error"
+                    ? "Lỗi"
+                    : "Thông báo"}
+                </strong>
+
+                <span>${message}</span>
+            </div>
+
+            <button class="toast-close">
+                <i class="fas fa-xmark"></i>
+            </button>
+        `;
+
+        // APPEND
+        document.body.appendChild(toast);
+
+        // SHOW
+        setTimeout(() => {
+            toast.classList.add("show");
+        }, 10);
+
+        // CLOSE BUTTON
+        toast.querySelector(".toast-close")
+            .addEventListener("click", () => {
+
+                removeToast(toast);
+
+            });
+
+        // AUTO REMOVE
+        setTimeout(() => {
+
+            removeToast(toast);
+
+        }, 3500);
+
+    }
+
+    // =========================
+    // REMOVE TOAST
+    // =========================
+    function removeToast(toast) {
+
+        if (!toast) return;
+
+        toast.classList.remove("show");
+
+        setTimeout(() => {
+
+            toast.remove();
+
+        }, 300);
+
+    }
+</script>
+
+<style>
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+        position: fixed;
+        top: 24px;
+        right: 24px;
+        width: 360px;
+        max-width: calc(100% - 30px);
+
+        display: flex;
+        align-items: center;
+        gap: 16px;
+
+        padding: 16px 18px;
+
+        border-radius: 24px;
+
+        background: rgba(255, 255, 255, 0.96);
+
+        backdrop-filter: blur(18px);
+
+        border: 1px solid rgba(255, 255, 255, 0.6);
+
+        box-shadow:
+            0 25px 55px rgba(15, 23, 42, 0.15);
+
+        transform: translateX(130%);
+        opacity: 0;
+
+        transition: all .35s ease;
+
+        z-index: 99999;
+    }
+
+    .toast.show {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    .toast-icon {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+
+        border-radius: 18px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        font-size: 1.2rem;
+    }
+
+    .toast-success .toast-icon {
+        background: rgba(16, 185, 129, 0.12);
+        color: #10b981;
+    }
+
+    .toast-error .toast-icon {
+        background: rgba(239, 68, 68, 0.12);
+        color: #ef4444;
+    }
+
+    .toast-content {
+        flex: 1;
+
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .toast-content strong {
+        font-size: 0.96rem;
+        color: #1e293b;
+    }
+
+    .toast-content span {
+        color: #64748b;
+        font-size: 0.92rem;
+        line-height: 1.6;
+    }
+
+    .toast-close {
+        width: 34px;
+        height: 34px;
+
+        border: none;
+        border-radius: 12px;
+
+        background: #f1f5f9;
+
+        cursor: pointer;
+
+        color: #64748b;
+
+        transition: .25s ease;
+    }
+
+    .toast-close:hover {
+        background: #e2e8f0;
+        color: #1e293b;
+    }
+
+    /* =========================
+       BUTTON LOADING
+    ========================= */
+
+    .send-btn:disabled {
+        opacity: .85;
+        cursor: not-allowed;
+    }
+
+    .send-btn i {
+        margin-right: 8px;
+    }
+
+    /* =========================
+       SHAKE EFFECT
+    ========================= */
+
+    .shake {
+        animation: shake .45s ease;
+    }
+
+    @keyframes shake {
+
+        0% {
+            transform: translateX(0);
+        }
+
+        20% {
+            transform: translateX(-6px);
+        }
+
+        40% {
+            transform: translateX(6px);
+        }
+
+        60% {
+            transform: translateX(-4px);
+        }
+
+        80% {
+            transform: translateX(4px);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+    /* =========================
+       INPUT FOCUS
+    ========================= */
+
+    .form-group.focused label {
+        color: #1D3557;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 600px) {
+
+        .toast {
+            top: 16px;
+            right: 15px;
+            left: 15px;
+            width: auto;
+        }
+    }
+</style>
+
+</html>

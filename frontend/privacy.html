@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Chính sách bảo mật | HTTVEBOOKS</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Inter", sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                radial-gradient(circle at top left, #dbeafe, transparent 35%),
+                radial-gradient(circle at bottom right, #bfdbfe, transparent 30%),
+                #f8fafc;
+
+            color: #1e293b;
+
+            padding: 40px 20px;
+        }
+
+        .privacy-wrapper {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .privacy-card {
+            background: rgba(255, 255, 255, 0.92);
+
+            backdrop-filter: blur(18px);
+
+            border-radius: 34px;
+
+            overflow: hidden;
+
+            border: 1px solid rgba(255, 255, 255, 0.6);
+
+            box-shadow:
+                0 30px 70px rgba(15, 23, 42, 0.12),
+                inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .privacy-hero {
+            padding: 70px 40px;
+
+            background:
+                linear-gradient(135deg, #1D3557, #274c77);
+
+            color: #fff;
+
+            text-align: center;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+        .privacy-hero::before,
+        .privacy-hero::after {
+            content: '';
+
+            position: absolute;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .privacy-hero::before {
+            width: 320px;
+            height: 320px;
+
+            top: -120px;
+            left: -120px;
+        }
+
+        .privacy-hero::after {
+            width: 260px;
+            height: 260px;
+
+            bottom: -120px;
+            right: -100px;
+        }
+
+        .privacy-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 12px 20px;
+
+            border-radius: 999px;
+
+            background: rgba(255, 255, 255, 0.12);
+
+            font-size: .92rem;
+            font-weight: 700;
+
+            margin-bottom: 24px;
+        }
+
+        .privacy-hero h1 {
+            font-size: 3rem;
+            font-weight: 900;
+
+            margin-bottom: 18px;
+
+            letter-spacing: -1px;
+        }
+
+        .privacy-hero p {
+            max-width: 760px;
+
+            margin: auto;
+
+            color: rgba(255, 255, 255, 0.82);
+
+            line-height: 1.9;
+
+            font-size: 1.04rem;
+        }
+
+        /* =========================
+           CONTENT
+        ========================= */
+
+        .privacy-content {
+            padding: 50px 40px;
+        }
+
+        .privacy-grid {
+            display: grid;
+            gap: 24px;
+        }
+
+        .privacy-item {
+            display: flex;
+            gap: 22px;
+
+            padding: 28px;
+
+            border-radius: 28px;
+
+            background:
+                linear-gradient(135deg, #f8fafc, #eef4ff);
+
+            border: 1px solid rgba(29, 53, 87, 0.08);
+
+            transition: all .3s ease;
+        }
+
+        .privacy-item:hover {
+            transform: translateY(-4px);
+
+            box-shadow:
+                0 20px 40px rgba(15, 23, 42, 0.08);
+        }
+
+        .privacy-icon {
+            width: 70px;
+            height: 70px;
+
+            min-width: 70px;
+
+            border-radius: 24px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(135deg, #1D3557, #457B9D);
+
+            color: #fff;
+
+            font-size: 1.4rem;
+
+            box-shadow:
+                0 14px 28px rgba(29, 53, 87, 0.18);
+        }
+
+        .privacy-text h3 {
+            font-size: 1.15rem;
+            font-weight: 800;
+
+            color: #1D3557;
+
+            margin-bottom: 12px;
+        }
+
+        .privacy-text p {
+            color: #64748b;
+
+            line-height: 1.9;
+
+            font-size: .97rem;
+        }
+
+        /* =========================
+           NOTICE
+        ========================= */
+
+        .privacy-notice {
+            margin-top: 40px;
+
+            padding: 28px;
+
+            border-radius: 28px;
+
+            background: rgba(29, 53, 87, 0.05);
+
+            border: 1px dashed rgba(29, 53, 87, 0.18);
+        }
+
+        .privacy-notice h4 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            color: #1D3557;
+
+            font-size: 1.08rem;
+            font-weight: 800;
+
+            margin-bottom: 12px;
+        }
+
+        .privacy-notice p {
+            color: #475569;
+
+            line-height: 1.9;
+        }
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .privacy-footer {
+            margin-top: 40px;
+
+            text-align: center;
+        }
+
+        .back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 16px 28px;
+
+            border-radius: 20px;
+
+            text-decoration: none;
+
+            background:
+                linear-gradient(135deg, #1D3557, #457B9D);
+
+            color: #fff;
+
+            font-weight: 800;
+
+            transition: all .3s ease;
+
+            box-shadow:
+                0 18px 36px rgba(29, 53, 87, 0.2);
+        }
+
+        .back-home:hover {
+            transform: translateY(-3px);
+
+            box-shadow:
+                0 24px 46px rgba(29, 53, 87, 0.28);
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .privacy-hero {
+                padding: 60px 20px;
+            }
+
+            .privacy-hero h1 {
+                font-size: 2.1rem;
+            }
+
+            .privacy-content {
+                padding: 30px 20px;
+            }
+
+            .privacy-item {
+                flex-direction: column;
+            }
+
+            .privacy-icon {
+                width: 62px;
+                height: 62px;
+
+                min-width: 62px;
+
+                border-radius: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="privacy-wrapper">
+
+        <div class="privacy-card">
+
+            <!-- HERO -->
+            <div class="privacy-hero">
+
+                <div class="privacy-badge">
+                    <i class="fas fa-shield-halved"></i>
+                    HTTVEBOOKS PRIVACY POLICY
+                </div>
+
+                <h1>Chính sách bảo mật</h1>
+
+                <p>
+                    HTTVEBOOKS cam kết bảo vệ thông tin cá nhân của người dùng.
+                    Mọi dữ liệu được thu thập sẽ được sử dụng minh bạch, an toàn
+                    và chỉ phục vụ cho trải nghiệm tốt hơn trên nền tảng.
+                </p>
+
+            </div>
+
+            <!-- CONTENT -->
+            <div class="privacy-content">
+
+                <div class="privacy-grid">
+
+                    <div class="privacy-item">
+
+                        <div class="privacy-icon">
+                            <i class="fas fa-user-lock"></i>
+                        </div>
+
+                        <div class="privacy-text">
+
+                            <h3>Thông tin được thu thập</h3>
+
+                            <p>
+                                Chúng tôi có thể thu thập họ tên, email, lịch sử
+                                mua hàng và thông tin đăng nhập để hỗ trợ trải nghiệm
+                                người dùng tốt hơn trên HTTVEBOOKS.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="privacy-item">
+
+                        <div class="privacy-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+
+                        <div class="privacy-text">
+
+                            <h3>Mục đích sử dụng dữ liệu</h3>
+
+                            <p>
+                                Dữ liệu được sử dụng để xử lý đơn hàng, gửi Ebook/PDF,
+                                hỗ trợ khách hàng và cải thiện chất lượng dịch vụ.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="privacy-item">
+
+                        <div class="privacy-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+
+                        <div class="privacy-text">
+
+                            <h3>Bảo mật thông tin</h3>
+
+                            <p>
+                                Mọi dữ liệu cá nhân đều được bảo mật bằng các công nghệ
+                                an toàn nhằm hạn chế truy cập trái phép hoặc rò rỉ thông tin.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                    <div class="privacy-item">
+
+                        <div class="privacy-icon">
+                            <i class="fas fa-cookie-bite"></i>
+                        </div>
+
+                        <div class="privacy-text">
+
+                            <h3>Cookie & trải nghiệm</h3>
+
+                            <p>
+                                HTTVEBOOKS sử dụng cookie để ghi nhớ tùy chọn người dùng
+                                và tối ưu trải nghiệm duyệt web trên nền tảng.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- NOTICE -->
+                <div class="privacy-notice">
+
+                    <h4>
+                        <i class="fas fa-circle-info"></i>
+                        Lưu ý quan trọng
+                    </h4>
+
+                    <p>
+                        Chính sách bảo mật có thể được cập nhật định kỳ để phù hợp
+                        với quy định và cải thiện chất lượng dịch vụ. Người dùng nên
+                        thường xuyên theo dõi để cập nhật phiên bản mới nhất.
+                    </p>
+
+                </div>
+
+                <!-- FOOTER -->
+                <div class="privacy-footer">
+
+                    <a href="index.html" class="back-home">
+                        <i class="fas fa-arrow-left"></i>
+                        Quay lại trang chủ
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
