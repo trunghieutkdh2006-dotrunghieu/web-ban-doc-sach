@@ -396,6 +396,23 @@
   <script src="js/config.js"></script>
   <script src="js/script.js"></script>
   <script src="js/enhancements.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script>
+    // Lắng nghe sự kiện từ admin để tự cập nhật danh sách sách
+    (function initSocket() {
+      try {
+        const socket = io(BASE_URL, {
+          path: '/socket.io',
+          transports: ['websocket', 'polling']
+        });
+        socket.on('bookAdded', () => { loadBooks(); });
+        socket.on('bookUpdated', () => { loadBooks(); });
+        socket.on('bookDeleted', () => { loadBooks(); });
+      } catch (e) {
+        console.warn('Socket.io không kết nối được:', e.message);
+      }
+    })();
+  </script>
   <script>
     // Fix: đảm bảo openBookDetail luôn fetch fresh data và hiện gallery
     window.addEventListener('load', function () {
