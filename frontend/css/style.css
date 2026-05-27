@@ -3819,11 +3819,6 @@ body {
     color: rgba(255, 255, 255, 0.75) !important;
 }
 
-.top-nav a:hover,
-.social-icons a:hover {
-    color: var(--gold-light) !important;
-}
-
 .social-icons a {
     width: 30px;
     height: 30px;
