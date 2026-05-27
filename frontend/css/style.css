@@ -418,8 +418,6 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 28px;
-    padding: 16px 0;
-    /* flex-wrap: wrap; */
 }
 
 .left {
@@ -3906,10 +3904,6 @@ body.dark-mode #darkModeToggle {
     align-items: center;
     justify-content: center;
     transition: var(--transition-smooth) !important;
-}
-
-.nav-wrapper {
-    padding: 14px 0 !important;
 }
 
 
