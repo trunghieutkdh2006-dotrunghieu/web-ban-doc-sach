@@ -81,7 +81,6 @@ h6 {
     padding: 12px 24px !important;
 }
 
-/* Hiệu ứng hover menu cực đẹp với thanh chạy neon */
 .main-menu a {
     position: relative;
     border-radius: var(--radius-sm) !important;
@@ -89,6 +88,13 @@ h6 {
     min-height: 44px !important;
     transition: var(--transition) !important;
     overflow: hidden;
+    padding: 0 18px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text);
 }
 
 .main-menu a:hover,
