@@ -2111,6 +2111,7 @@ body {
 .trending-price {
     color: red;
     font-weight: bold;
+    font-family: Sora, sans-serif !important;
 }
 
 .modal-rating {
@@ -3144,6 +3145,10 @@ body.dark-mode #darkModeToggle {
     grid-template-columns: 1.7fr 1fr 1fr 1.3fr;
     gap: 50px;
     padding-bottom: 50px;
+}
+
+.footer-section about {
+    margin-left: 10px;
 }
 
 .footer-logo {
