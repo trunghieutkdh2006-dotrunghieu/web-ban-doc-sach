@@ -534,8 +534,6 @@ body {
     width: 270px;
 
     opacity: 0;
-    visibility: hidden;
-    transform: translateY(10px);
 
     transition: var(--transition);
 
