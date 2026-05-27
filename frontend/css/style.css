@@ -2516,12 +2516,6 @@ body {
     z-index: 10 !important;
 }
 
-.book-modal .close:hover {
-    background: #ef4444 !important;
-    color: white !important;
-    transform: rotate(90deg) !important;
-}
-
 .book-modal .modal-actions-row {
     display: flex !important;
     flex-wrap: wrap !important;
