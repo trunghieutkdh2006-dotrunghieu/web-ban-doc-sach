@@ -1065,7 +1065,11 @@ body {
 }
 
 .filter-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
     font-weight: 700;
+    color: #1D3557;
+    letter-spacing: 0.02em;
 }
 
 .filter-select,
@@ -3994,14 +3998,6 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 20px 50px rgba(255, 255, 255, 0.3), 0 8px 20px rgba(29, 53, 87, 0.15) !important;
 }
 
-.filter-label {
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    color: #1D3557 !important;
-    letter-spacing: 0.2px !important;
-}
-
 .filter-select,
 .price-range input {
     font-family: 'DM Sans', sans-serif !important;
@@ -4769,25 +4765,27 @@ h6,
     letter-spacing: 0 !important;
 }
 
-/* Filter labels */
-.filter-label {
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 12.5px !important;
-    color: #1D3557 !important;
-    letter-spacing: 0.02em !important;
-}
-
 /* Filter selects & inputs */
 .filter-select,
 .price-range input,
 .search-container input,
 .input-wrapper input {
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 500 !important;
-    font-size: 13.5px !important;
-    color: #1D3557 !important;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 500;
+
+    height: 44px;
+    padding: 0 16px;
+
+    border-radius: 12px;
+    border: 1.5px solid rgba(29, 53, 87, 0.07);
+
+    background: rgba(248, 250, 252, 0.95);
+
+    transition: all 0.25s ease;
+    color: #1D3557;
 }
+
 
 /* Toast */
 .toast-title {
