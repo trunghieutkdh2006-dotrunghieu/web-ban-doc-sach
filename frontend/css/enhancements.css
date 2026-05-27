@@ -148,7 +148,10 @@ h6 {
     backdrop-filter: var(--glass-blur) !important;
     border: 1px solid var(--glass-border) !important;
     box-shadow: var(--shadow-lg) !important;
-    overflow: hidden !important;
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
     animation: slideDownIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
