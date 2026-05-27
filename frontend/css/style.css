@@ -80,6 +80,7 @@
 
     /* Đảm bảo width/height tính luôn padding + border (dễ layout, tránh vỡ giao diện) */
     box-sizing: border-box;
+    font-family: sans-serif;
 }
 
 /* Áp dụng cho thẻ gốc của trang (html) */
@@ -89,7 +90,7 @@ html {
 }
 
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
     font-size: 15px;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
@@ -141,7 +142,7 @@ body {
     position: relative;
     border-radius: 16px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: sans-serif;
 }
 
 /* Track chứa các slide/banner (dùng trong carousel/slider) */
@@ -442,7 +443,7 @@ body {
 
 .top-nav a,
 .social-icons a {
-    font-family: 'DM Sans', sans-serif;
+    font-family: sans-serif;
     font-size: 12px;
     font-weight: 500;
     letter-spacing: 0.3px;
@@ -534,7 +535,7 @@ body {
     text-decoration: none;
 
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: sans-serif;
 
     font-size: 14px;
     font-weight: 600;
@@ -608,7 +609,7 @@ body {
     border-radius: 12px;
 
     color: var(--text);
-    font-family: 'DM Sans', sans-serif;
+    font-family: sans-serif;
     font-size: 14px;
     font-weight: 600;
     line-height: 1;
@@ -816,7 +817,7 @@ body {
 .search-result-title {
     margin-bottom: 4px;
 
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
     font-size: 13px;
     font-weight: 700;
 
@@ -833,7 +834,7 @@ body {
 .search-result-price {
     margin-top: 8px;
 
-    font-family: 'Sora', sans-serif;
+    font-family: sans-serif;
     font-size: 13px;
     font-weight: 700;
 
@@ -907,7 +908,7 @@ body {
     align-items: center;
     justify-content: center;
 
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
     font-size: 10px;
     font-weight: 700;
 
@@ -1066,7 +1067,7 @@ body {
 
     color: #fff;
 
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
     font-weight: 800;
 
     letter-spacing: -0.01em;
@@ -1129,7 +1130,7 @@ body {
 
     margin-bottom: 12px;
 
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
     font-size: 14px;
     font-weight: 700;
 
@@ -1156,7 +1157,7 @@ body {
 
     color: #fff;
 
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
     font-size: 14px;
     font-weight: 700;
 
@@ -1186,7 +1187,7 @@ body {
 
     color: var(--text-light);
 
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
 }
 
 .heart-empty::before {
@@ -1248,7 +1249,7 @@ body {
     background: var(--surface);
     border: 1px solid var(--border);
 
-    font-family: "Inter", sans-serif;
+    font-family: sans-serif;
     font-size: 14px;
     font-weight: 600;
     color: var(--text);
@@ -1369,7 +1370,7 @@ body {
     margin:
         0 auto 34px;
 
-    font-family: 'DM Sans', sans-serif;
+    font-family: sans-serif;
 
     font-size: 18px;
     font-weight: 400;
@@ -1402,7 +1403,7 @@ body {
 
     color: #1D3557;
 
-    font-family: 'DM Sans', sans-serif;
+    font-family: sans-serif;
     font-size: 15px;
     font-weight: 700;
 
@@ -1471,7 +1472,7 @@ body {
 }
 
 .filter-label {
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
     font-size: 13px;
     font-weight: 700;
     color: #1D3557;
@@ -1505,7 +1506,7 @@ body {
 
     cursor: pointer;
 
-    font-family: 'DM Sans', sans-serif;
+    font-family: sans-serif;
 
     font-size: 13px;
     font-weight: 700;
@@ -1555,7 +1556,7 @@ body {
     margin-top: 16px;
     margin-bottom: 10px;
 
-    font-family: 'Inter', sans-serif;
+    font-family: sans-serif;
 
     font-size: 10.5px;
     font-weight: 700;
