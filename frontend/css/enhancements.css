@@ -354,8 +354,6 @@ h6 {
 
 .deal-add-btn:hover,
 .flash-add-btn:hover {
-    background: linear-gradient(135deg, var(--accent), #FF2E93) !important;
-    box-shadow: 0 10px 22px rgba(236, 72, 153, 0.3) !important;
     transform: translateY(-2px) !important;
 }
 
