@@ -1,37 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap');
 
-/* Áp dụng cho TẤT CẢ phần tử trên trang */
 * {
-    /* Xóa toàn bộ margin mặc định của trình duyệt */
     margin: 0;
-
-    /* Xóa toàn bộ padding mặc định của trình duyệt */
     padding: 0;
-
-    /* Đảm bảo width/height tính luôn padding + border (dễ layout, tránh vỡ giao diện) */
     box-sizing: border-box;
 }
 
-/* Áp dụng cho thẻ gốc của trang (html) */
 html {
-    /* Khi người dùng click vào anchor link (#section), trang sẽ cuộn mượt thay vì nhảy thẳng */
     scroll-behavior: smooth;
 }
 
-/* Toàn bộ trang web */
 body {
-
-    /* Nền trang gồm 2 lớp:
-       - radial-gradient: ánh sáng loang từ góc trên trái (tạo hiệu ứng depth)
-       - linear-gradient: chuyển màu nền từ trên xuống dưới */
     background:
         radial-gradient(circle at top left, rgba(29, 53, 87, .05), transparent 25%),
         linear-gradient(to bottom, #f8fbff, #f3f6fb);
-
-    /* Màu chữ chính lấy từ biến CSS (--text) */
     color: var(--text);
-
-    /* Ẩn thanh cuộn ngang, tránh vỡ layout khi element tràn */
     overflow-x: hidden;
     font-size: 15px !important;
     line-height: 1.65 !important;
@@ -40,93 +23,45 @@ body {
     letter-spacing: -0.01em !important;
 }
 
-/* Thanh cuộn (scrollbar) trên trình duyệt WebKit như Chrome, Edge, Safari */
 ::-webkit-scrollbar {
-    /* Độ rộng của thanh cuộn dọc */
     width: 8px;
 }
 
-/* Phần nền của thanh cuộn (track - đường chạy) */
 ::-webkit-scrollbar-track {
-    /* Màu nền nhạt, tạo cảm giác sạch và nhẹ */
     background: #dbe4ef;
 }
 
-/* Phần “nút kéo” của thanh cuộn (thumb) */
 ::-webkit-scrollbar-thumb {
-    /* Gradient màu xanh từ đậm → nhạt, tạo cảm giác hiện đại */
     background: linear-gradient(to bottom, #1D3557, #274c77);
-
-    /* Bo tròn cực lớn → dạng pill (viên thuốc), nhìn mềm hơn */
     border-radius: 999px;
 }
 
-/* Class container dùng để giới hạn nội dung chính của trang */
 .container {
-
-    /* Chiếm toàn bộ chiều ngang của màn hình */
     width: 100%;
-
-    /* Giới hạn tối đa chiều rộng là 1440px
-       → giúp nội dung không bị kéo quá rộng trên màn hình lớn */
     max-width: 1440px;
-
-    /* Căn giữa container theo chiều ngang (trái + phải = auto) */
     margin: 0 auto;
-
-    /* Tạo khoảng cách bên trong trái/phải 28px
-       → tránh nội dung dính sát mép màn hình */
     padding: 0 28px;
 }
 
-/* Áp dụng khi màn hình có chiều rộng từ 768px trở xuống (tablet + mobile) */
 @media (max-width: 768px) {
-
-    /* Điều chỉnh container trên màn hình nhỏ */
     .container {
-
-        /* Giảm padding hai bên từ 28px xuống 18px
-           → giúp tận dụng thêm không gian hiển thị trên mobile */
         padding: 0 18px;
     }
 }
 
-/* Track chứa các slide/banner (dùng trong carousel/slider) */
 .banner-track-enhanced {
-
-    /* Xếp các banner theo hàng ngang (carousel layout) */
     display: flex;
-
-    /* Hiệu ứng chuyển động khi thay đổi transform (slide mượt) */
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-
-    /* Tối ưu hiệu năng: báo cho browser biết phần tử sẽ animate transform
-       → giúp render mượt hơn, giảm giật lag */
     will-change: transform;
 }
 
-/* Một slide trong banner carousel (mỗi "trang" của slider) */
 .banner-slide-enhanced {
-
-    /* Mỗi slide chiếm 100% chiều ngang của track */
     min-width: 100%;
-
-    /* Cho phép đặt các phần tử con absolute nếu cần (text, overlay, button...) */
     position: relative;
-
-    /* Chiều cao cố định của banner */
     height: 480px;
-
-    /* Dùng flex để chia layout trái/phải trong slide */
     display: flex;
-
-    /* Căn giữa theo chiều dọc */
     align-items: center;
-
-    /* Tách nội dung sang 2 bên (text trái, ảnh phải chẳng hạn) */
     justify-content: space-between;
-
-    /* Khoảng cách bên trong trái/phải */
     padding: 0 60px;
 }
 
@@ -199,17 +134,12 @@ body {
 
 .highlight-text {
     background: linear-gradient(135deg, #fff500 0%, #ffb700 100%);
-
     background-clip: text;
     -webkit-background-clip: text;
-
     color: transparent;
     -webkit-text-fill-color: transparent;
-
     display: inline-block;
-
     filter: drop-shadow(0px 0px 12px rgba(255, 245, 0, 0.6));
-
     font-weight: 900;
     letter-spacing: 0.5px;
 }
@@ -368,10 +298,7 @@ body {
     }
 }
 
-/* ============================================================
-   TOP BAR & NAVIGATION
-   ============================================================ */
-
+/* TOP BAR & NAVIGATION */
 .top-bar .container {
     display: flex;
     justify-content: space-between;
@@ -401,7 +328,6 @@ body {
     color: #fff;
     transform: translateY(-1px);
 }
-
 
 .nav-wrapper {
     display: flex;
@@ -444,7 +370,6 @@ body {
     align-items: center;
 }
 
-
 .has-dropdown {
     position: relative;
 }
@@ -454,13 +379,9 @@ body {
     top: calc(100% + 12px);
     left: 0;
     width: 270px;
-
     opacity: 0;
-
     transition: var(--transition);
-
     z-index: 100;
-
     padding: 10px !important;
 }
 
@@ -474,29 +395,20 @@ body {
     list-style: none;
 }
 
-
 .dropdown a {
     width: 100%;
-
     display: flex !important;
     justify-content: flex-start !important;
     align-items: center !important;
-
     text-align: left !important;
-
     padding: 12px 16px !important;
-
     color: var(--text);
     text-decoration: none;
-
     font-family: 'DM Sans', sans-serif !important;
     font-size: 14px !important;
     font-weight: 600 !important;
-
     min-height: 44px !important;
-
     border-radius: 12px !important;
-
     transition: var(--transition-smooth) !important;
 }
 
@@ -527,26 +439,19 @@ body {
     }
 }
 
-/* SEARCH INPUT */
 .search-container input {
     width: 100% !important;
     height: 46px !important;
     padding: 0 20px !important;
-
     border-radius: 14px !important;
     border: 1px solid rgba(0, 0, 0, 0.06) !important;
-
     background: rgba(255, 255, 255, 0.75) !important;
-
     font-family: 'Inter', sans-serif !important;
     font-size: 13.5px !important;
     font-weight: 500 !important;
     color: #1D3557 !important;
-
     box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
-
     outline: none !important;
-
     transition: all 0.25s ease !important;
 }
 
@@ -554,38 +459,25 @@ body {
     position: absolute;
     right: 18px;
     top: 50%;
-
     transform: translateY(-50%);
-
     color: #1D3557;
     font-size: 16px;
-
     cursor: pointer;
 }
 
 .search-results {
     position: absolute;
-
     top: 100%;
     left: 0;
     right: 0;
-
     margin-top: 14px;
-
     display: none;
-
     z-index: 1000;
-
     overflow: hidden;
-
     border-radius: 24px;
-
     background: rgba(255, 255, 255, 0.94);
-
     backdrop-filter: blur(20px);
-
     border: 1px solid rgba(255, 255, 255, 0.75);
-
     box-shadow: var(--shadow-md);
 }
 
@@ -595,15 +487,10 @@ body {
 
 .search-result-item {
     display: flex;
-
     gap: 14px;
-
     padding: 16px;
-
     cursor: pointer;
-
     border-radius: 12px !important;
-
     transition: var(--transition-smooth) !important;
 }
 
@@ -618,7 +505,6 @@ body {
     border-radius: 14px;
 }
 
-
 .search-result-author {
     font-size: 13px;
     color: var(--text-light);
@@ -630,9 +516,7 @@ body {
     font-weight: 800 !important;
 }
 
-/* ============================================================
-   ACTION BUTTONS & DROPDOWNS
-   ============================================================ */
+/* ACTION BUTTONS & DROPDOWNS */
 .right-actions {
     display: flex;
     align-items: center;
@@ -855,9 +739,7 @@ body {
     font-size: 18px;
 }
 
-/* ============================================================
-   HERO SECTION
-   ============================================================ */
+/* HERO SECTION */
 .hero {
     position: relative;
     overflow: hidden;
@@ -915,9 +797,7 @@ body {
     transform: translateY(-4px);
 }
 
-/* ============================================================
-   FILTER BAR
-   ============================================================ */
+/* FILTER BAR */
 .filter-bar {
     position: relative;
     z-index: 10;
@@ -1007,9 +887,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* ============================================================
-   SECTION HEADER
-   ============================================================ */
+/* SECTION HEADER */
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -1043,9 +921,7 @@ body {
     justify-content: center;
 }
 
-/* ============================================================
-   BOOK GRID & CARDS - UNIFIED SYSTEM
-   ============================================================ */
+/* BOOK GRID & CARDS */
 .new-releases-section .container,
 .trending-section .container,
 .favorites-section .container,
@@ -1140,22 +1016,14 @@ body {
 .deal-title {
     font-size: 14px !important;
     font-weight: 800 !important;
-
     min-height: 42px !important;
     line-height: 1.4 !important;
-
     display: -webkit-box !important;
-    display: box !important;
-
     -webkit-box-orient: vertical !important;
-
     line-clamp: 2 !important;
     -webkit-line-clamp: 2 !important;
-
     overflow: hidden !important;
-
     margin-bottom: 6px !important;
-
     cursor: pointer;
 }
 
@@ -1260,9 +1128,7 @@ body {
     background: #fff;
 }
 
-/* ============================================================
-   TRENDING SECTION
-   ============================================================ */
+/* TRENDING SECTION */
 .trending-section {
     padding: 60px 0;
     background: #f8fafc;
@@ -1282,9 +1148,7 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* ============================================================
-   NEW RELEASES SECTION
-   ============================================================ */
+/* NEW RELEASES SECTION */
 .new-releases-section {
     padding: 60px 0;
     background: #fff;
@@ -1308,9 +1172,6 @@ body {
     z-index: 2;
 }
 
-
-
-
 .daily-deal-header {
     display: flex;
     justify-content: space-between;
@@ -1330,21 +1191,13 @@ body {
 .daily-deal-icon {
     width: 70px;
     height: 70px;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 34px;
-
     border-radius: 20px;
-
     background: linear-gradient(135deg, #ef4444, #f59e0b);
-
-    box-shadow:
-        0 10px 25px rgba(239, 68, 68, 0.35),
-        inset 0 0 15px rgba(255, 255, 255, 0.15);
-
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35), inset 0 0 15px rgba(255, 255, 255, 0.15);
     animation: pulseDeal 2s infinite;
 }
 
@@ -1378,26 +1231,18 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
-
     background: rgba(255, 255, 255, 0.08);
-
     border: 1px solid rgba(255, 255, 255, 0.08);
-
     backdrop-filter: blur(12px);
-
     padding: 14px 26px;
-
     border-radius: 999px;
-
-    box-shadow:
-        0 10px 25px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 .daily-deal-timer>span {
     font-size: 28px;
     font-weight: 900;
     color: rgba(255, 255, 255, 0.6);
-
     animation: blinkColon 1s infinite;
 }
 
@@ -1420,24 +1265,14 @@ body {
 .timer-block span {
     font-size: 30px;
     font-weight: 900;
-
-    background:
-        linear-gradient(135deg,
-            rgba(255, 255, 255, 0.15),
-            rgba(255, 255, 255, 0.06));
-
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.06));
     padding: 10px 14px;
-
     border-radius: 16px;
-
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     min-width: 74px;
-
     border: 1px solid rgba(255, 255, 255, 0.08);
-
     color: #fff;
 }
 
@@ -1445,12 +1280,9 @@ body {
     font-size: 11px;
     display: block;
     margin-top: 7px;
-
     opacity: 0.7;
-
     letter-spacing: 1px;
     text-transform: uppercase;
-
     font-weight: 600;
 }
 
@@ -1458,49 +1290,32 @@ body {
     position: absolute;
     top: 12px;
     right: 12px;
-
     background: linear-gradient(135deg, #ef4444, #dc2626);
-
     color: #fff;
-
     font-size: 13px;
     font-weight: 900;
-
     padding: 6px 12px;
-
     border-radius: 999px;
-
-    box-shadow:
-        0 8px 20px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
 }
 
 .deal-add-btn {
     width: 100%;
-
     padding: 13px;
-
     border: none;
     outline: none;
-
     border-radius: 14px;
-
     background: linear-gradient(135deg, #ef4444, #f59e0b);
-
     color: #fff;
-
     font-size: 13px;
     font-weight: 800;
-
     cursor: pointer;
-
     transition: all 0.3s ease;
 }
 
 .deal-add-btn:hover {
     transform: translateY(-2px) scale(1.02);
-
-    box-shadow:
-        0 10px 25px rgba(239, 68, 68, 0.35);
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35);
 }
 
 .deal-add-btn i {
@@ -1508,7 +1323,6 @@ body {
 }
 
 @media (max-width: 768px) {
-
     .daily-deal-title {
         font-size: 26px;
     }
@@ -1531,21 +1345,11 @@ body {
 }
 
 .flash-sale-section {
-    background:
-        linear-gradient(135deg,
-            #0f0c29,
-            #1e1b4b 40%,
-            #111827);
-
+    background: linear-gradient(135deg, #0f0c29, #1e1b4b 40%, #111827);
     padding: 50px 0;
-
     position: relative;
-
     overflow-x: auto;
-
-    font-family:
-        'Be Vietnam Pro',
-        sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .flash-sale-header {
@@ -1557,7 +1361,6 @@ body {
     gap: 20px;
     padding: 0 20px;
 }
-
 
 .flash-sale-left {
     display: flex;
@@ -1585,10 +1388,8 @@ body {
     background: linear-gradient(135deg, #ef4444, #f59e0b);
     border-radius: 12px;
     font-size: 24px;
-
     animation: pulse 2s infinite;
 }
-
 
 @keyframes pulse {
 
@@ -1607,7 +1408,6 @@ body {
     align-items: center;
     gap: 10px;
 }
-
 
 .countdown-block {
     background: rgba(255, 255, 255, 0.12);
@@ -1639,18 +1439,6 @@ body {
     font-weight: 900;
     color: rgba(255, 255, 255, 0.6);
     animation: blinkColon 1s step-end infinite;
-}
-
-@keyframes blinkColon {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0;
-    }
 }
 
 .flash-see-all {
@@ -1738,22 +1526,14 @@ body {
     font-weight: 700;
     line-height: 1.5;
     color: #fff;
-
     margin-bottom: 10px;
-
     display: -webkit-box;
-    display: box;
-
     -webkit-box-orient: vertical;
-
     line-clamp: 2;
     -webkit-line-clamp: 2;
-
     overflow: hidden;
-
     min-height: 46px;
 }
-
 
 .flash-price-row {
     display: flex;
@@ -1775,9 +1555,7 @@ body {
     text-decoration: line-through;
 }
 
-/* ============================================================
-   FAVORITES SECTION
-   ============================================================ */
+/* FAVORITES SECTION */
 .favorites-section {
     padding: 60px 0;
     background: #fff5f5;
@@ -1803,9 +1581,7 @@ body {
     transform: scale(1.1);
 }
 
-/* ============================================================
-   RECENTLY VIEWED SECTION
-   ============================================================ */
+/* RECENTLY VIEWED SECTION */
 .recently-viewed-section {
     background: #fff;
     padding: 60px 0;
@@ -1837,9 +1613,7 @@ body {
     border-color: #ef4444;
 }
 
-/* ============================================================
-   BOOK MODAL
-   ============================================================ */
+/* BOOK MODAL */
 .book-modal {
     position: fixed !important;
     top: 0 !important;
@@ -2005,9 +1779,7 @@ body {
     margin-left: 15px !important;
 }
 
-/* ============================================================
-   MODAL OVERLAY & CONTENT (Legacy)
-   ============================================================ */
+/* MODAL OVERLAY & CONTENT (Legacy) */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -2129,9 +1901,7 @@ body {
     margin-top: 10px;
 }
 
-/* ============================================================
-   BUTTONS - MODAL & ACTIONS
-   ============================================================ */
+/* BUTTONS - MODAL & ACTIONS */
 .modal-btn {
     border: none;
     padding: 10px 14px;
@@ -2279,7 +2049,6 @@ body {
 }
 
 @media (max-width: 768px) {
-
     .flash-label {
         font-size: 22px;
     }
@@ -2302,9 +2071,7 @@ body {
     }
 }
 
-/* ============================================================
-   REVIEW MODAL & MODAL
-   ============================================================ */
+/* REVIEW MODAL & MODAL */
 .review-modal,
 .reviews-modal {
     display: none;
@@ -2460,9 +2227,7 @@ body {
     background: #e2e8f0;
 }
 
-/* ============================================================
-   REVIEWS LIST MODAL
-   ============================================================ */
+/* REVIEWS LIST MODAL */
 .reviews-modal-content {
     width: 900px;
     max-width: 95%;
@@ -2739,9 +2504,7 @@ body {
     }
 }
 
-/* ============================================================
-   LOGIN PANEL
-   ============================================================ */
+/* LOGIN PANEL */
 .login-panel {
     display: none;
     position: fixed;
@@ -2879,9 +2642,7 @@ body {
     color: #94a3b8;
 }
 
-/* ============================================================
-   TOAST NOTIFICATION
-   ============================================================ */
+/* TOAST NOTIFICATION */
 #toastContainer {
     position: fixed;
     bottom: 24px;
@@ -2935,9 +2696,7 @@ body {
     }
 }
 
-/* ============================================================
-   SCROLL TO TOP & DARK MODE TOGGLE
-   ============================================================ */
+/* SCROLL TO TOP & DARK MODE TOGGLE */
 #scrollTopBtn {
     position: fixed;
     bottom: 28px;
@@ -2996,9 +2755,7 @@ body {
     transform: scale(1.1);
 }
 
-/* ============================================================
-   DARK MODE
-   ============================================================ */
+/* DARK MODE */
 body.dark-mode {
     background: #0f172a;
     color: #e2e8f0;
@@ -3107,9 +2864,7 @@ body.dark-mode #darkModeToggle {
     color: #1e293b;
 }
 
-/* ============================================================
-   EXTRA SPACING FIXES
-   ============================================================ */
+/* EXTRA SPACING FIXES */
 .book-section-wrapper {
     margin-top: 32px;
     padding-top: 16px;
@@ -3119,9 +2874,7 @@ body.dark-mode #darkModeToggle {
     margin-top: 24px;
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
+/* FOOTER */
 .footer {
     position: relative;
     overflow: hidden;
@@ -3368,9 +3121,6 @@ body.dark-mode #darkModeToggle {
     color: white;
 }
 
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media (max-width: 992px) {
     .footer-content {
         grid-template-columns: 1fr 1fr;
@@ -3550,24 +3300,18 @@ body.dark-mode #darkModeToggle {
 
 .action-btn {
     position: relative;
-
     min-width: 44px;
     height: 44px;
     padding: 0 16px;
-
     border-radius: 12px;
     background: #fff;
     border: 1px solid #e5e7eb;
-
     cursor: pointer;
-
     display: flex;
     align-items: center;
     gap: 8px;
-
     transition: 0.2s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-
     white-space: nowrap;
 }
 
@@ -3576,7 +3320,6 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.10);
 }
 
-/* ========== BADGES ========== */
 .cart-count,
 .heart-count {
     position: absolute;
@@ -3596,7 +3339,6 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
-/* ========== HEART DROPDOWN ========== */
 .heart-wrapper {
     position: relative;
     display: inline-block;
@@ -3611,7 +3353,6 @@ body.dark-mode #darkModeToggle {
     border-radius: 14px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -3645,7 +3386,6 @@ body.dark-mode #darkModeToggle {
     cursor: pointer;
 }
 
-
 .heart-dropdown-items {
     max-height: 280px;
     overflow-y: auto;
@@ -3658,7 +3398,6 @@ body.dark-mode #darkModeToggle {
     color: #9ca3af;
 }
 
-/* wishlist item */
 .wishlist-item {
     display: flex;
     gap: 10px;
@@ -3709,7 +3448,6 @@ body.dark-mode #darkModeToggle {
     border-radius: 14px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
-
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -3749,8 +3487,6 @@ body.dark-mode #darkModeToggle {
     cursor: pointer;
 }
 
-
-
 .cart-dropdown-items {
     max-height: 300px;
     overflow-y: auto;
@@ -3763,7 +3499,6 @@ body.dark-mode #darkModeToggle {
     color: #9ca3af;
 }
 
-/* cart item */
 .cart-dropdown-item {
     display: flex;
     gap: 10px;
@@ -3845,7 +3580,6 @@ body.dark-mode #darkModeToggle {
     color: #d9363e;
 }
 
-/* ========== RESPONSIVE ========== */
 @media (max-width: 480px) {
 
     .cart-dropdown,
@@ -3861,7 +3595,6 @@ body.dark-mode #darkModeToggle {
     }
 }
 
-/* ── SCROLLBAR VIP ───────────────────────────────────────── */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -3874,7 +3607,6 @@ body.dark-mode #darkModeToggle {
     border-radius: 999px;
 }
 
-/* ── TOP BAR ─────────────────────────────────────────────── */
 .top-bar {
     background: linear-gradient(135deg, #10243f, #1D3557);
     border-bottom: 1px solid rgba(201, 168, 76, 0.2) !important;
@@ -3892,8 +3624,6 @@ body.dark-mode #darkModeToggle {
     transition: var(--transition-smooth) !important;
 }
 
-
-
 .dropdown a:hover,
 .dropdown a.active {
     background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
@@ -3901,7 +3631,6 @@ body.dark-mode #darkModeToggle {
     padding-left: 20px !important;
 }
 
-/* ── HERO SECTION ────────────────────────────────────────── */
 .hero {
     background:
         radial-gradient(ellipse 70% 80% at 80% 50%, rgba(69, 123, 157, 0.25) 0%, transparent 60%),
@@ -3975,7 +3704,6 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 20px 50px rgba(255, 255, 255, 0.3), 0 8px 20px rgba(29, 53, 87, 0.15) !important;
 }
 
-/* ── FILTER BAR VIP ──────────────────────────────────────── */
 .filter-bar {
     background: rgba(255, 255, 255, 0.92) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
@@ -4043,7 +3771,6 @@ body.dark-mode #darkModeToggle {
     transform: translateY(-1px) !important;
 }
 
-/* ── SECTION HEADERS ─────────────────────────────────────── */
 .section-header h2 {
     font-family: 'Playfair Display', serif !important;
     font-size: 36px !important;
@@ -4062,7 +3789,6 @@ body.dark-mode #darkModeToggle {
     color: var(--primary-light) !important;
 }
 
-/* ── BOOK CARDS VIP ──────────────────────────────────────── */
 .section-row .book-card,
 .new-release-card,
 .trending-card,
@@ -4088,7 +3814,6 @@ body.dark-mode #darkModeToggle {
     border-color: rgba(29, 53, 87, 0.1) !important;
 }
 
-/* Shine effect on hover */
 .section-row .book-card::before,
 .new-release-card::before,
 .trending-card::before {
@@ -4109,7 +3834,6 @@ body.dark-mode #darkModeToggle {
     opacity: 1 !important;
 }
 
-/* Card image zoom */
 .section-row .book-card img,
 .new-release-card .new-img-wrap img,
 .trending-card img,
@@ -4126,7 +3850,6 @@ body.dark-mode #darkModeToggle {
     transform: scale(1.08) !important;
 }
 
-/* Book info typography */
 .section-row .book-info h3,
 .new-release-card .new-title,
 .trending-card .trending-title {
@@ -4145,7 +3868,6 @@ body.dark-mode #darkModeToggle {
     font-weight: 500 !important;
 }
 
-/* Price */
 .price-sale,
 .deal-price-sale {
     font-family: 'DM Sans', sans-serif !important;
@@ -4160,7 +3882,6 @@ body.dark-mode #darkModeToggle {
     color: #cbd5e1 !important;
 }
 
-/* ── BOOK ACTION BUTTONS ──────────────────────────────────── */
 .modal-btn {
     font-family: 'DM Sans', sans-serif !important;
     font-size: 11px !important;
@@ -4220,7 +3941,6 @@ body.dark-mode #darkModeToggle {
     background: rgba(239, 68, 68, 0.18) !important;
 }
 
-/* ── CART & WISHLIST DROPDOWNS ───────────────────────────── */
 .cart-dropdown,
 .heart-dropdown,
 .user-dropdown {
@@ -4237,7 +3957,6 @@ body.dark-mode #darkModeToggle {
     border-radius: 18px 18px 0 0 !important;
 }
 
-/* ── FOOTER VIP ──────────────────────────────────────────── */
 .footer {
     background: linear-gradient(150deg, #071524 0%, #0d1f38 40%, #1D3557 100%) !important;
     border-top: 1px solid rgba(201, 168, 76, 0.15) !important;
@@ -4316,7 +4035,6 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 8px 20px rgba(201, 168, 76, 0.35) !important;
 }
 
-/* ── SCROLL TO TOP VIP ───────────────────────────────────── */
 #scrollTopBtn {
     background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
     box-shadow: 0 8px 24px rgba(29, 53, 87, 0.4) !important;
@@ -4330,7 +4048,6 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 16px 36px rgba(29, 53, 87, 0.5) !important;
 }
 
-/* ── LOGIN MODAL VIP ─────────────────────────────────────── */
 .login-box {
     border-radius: 28px !important;
     box-shadow: 0 32px 80px rgba(15, 23, 42, 0.25) !important;
@@ -4369,7 +4086,6 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 16px 36px rgba(29, 53, 87, 0.35) !important;
 }
 
-/* ── TOAST VIP ───────────────────────────────────────────── */
 .toast {
     font-family: 'DM Sans', sans-serif !important;
     border-radius: 16px !important;
@@ -4384,13 +4100,10 @@ body.dark-mode #darkModeToggle {
 .toast::before {
     content: '' !important;
     position: absolute !important;
-
     top: 0 !important;
     bottom: 0 !important;
-
     left: 0 !important;
     width: 4px !important;
-
     border-radius: 16px 0 0 16px !important;
 }
 
@@ -4443,7 +4156,6 @@ body.dark-mode #darkModeToggle {
     margin-top: 2px !important;
 }
 
-/* ── DARK MODE VIP ───────────────────────────────────────── */
 body.dark-mode {
     background: linear-gradient(160deg, #070f1c 0%, #0d1928 50%, #0a1520 100%) !important;
     color: #e2e8f0 !important;
@@ -4492,7 +4204,6 @@ body.dark-mode .price-range input {
     border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
-/* ── LIVE NOTIF VIP ──────────────────────────────────────── */
 .live-notif-box {
     background: rgba(255, 255, 255, 0.97) !important;
     backdrop-filter: blur(20px) !important;
@@ -4526,7 +4237,6 @@ body.dark-mode .price-range input {
     transform: translateY(-2px) !important;
 }
 
-/* ── MODAL BOOK DETAIL VIP ───────────────────────────────── */
 .book-modal {
     background: rgba(7, 21, 36, 0.85) !important;
     backdrop-filter: blur(16px) !important;
@@ -4569,7 +4279,6 @@ body.dark-mode .price-range input {
     letter-spacing: -0.5px !important;
 }
 
-/* ── TRENDING RANK BADGE ─────────────────────────────────── */
 .trending-rank {
     background: linear-gradient(135deg, #1D3557, #274c77) !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -4583,11 +4292,9 @@ body.dark-mode .price-range input {
 .search-result-title {
     font-family: 'DM Sans', sans-serif !important;
     font-weight: 700 !important;
-
     margin-bottom: 4px;
 }
 
-/* ── SUBTLE PAGE LOAD ANIMATION ──────────────────────────── */
 @keyframes vip-fadein {
     from {
         opacity: 0;
@@ -4620,12 +4327,7 @@ body.dark-mode .price-range input {
     animation: vip-fadein 0.6s ease 0.3s both;
 }
 
-
-/* ============================================================
-   ✦ TYPOGRAPHY SYSTEM — Inter + Sora, màu #1D3557
-   ============================================================ */
-
-/* ── HEADINGS dùng Sora ───────────────────────────────────── */
+/* TYPOGRAPHY SYSTEM */
 h1,
 h2,
 h3,
@@ -4645,21 +4347,18 @@ h6,
     line-height: 1.18 !important;
 }
 
-/* Hero title — trắng vì nền tối */
 .hero h1 {
     color: #fff !important;
     font-size: clamp(38px, 5vw, 68px) !important;
     font-weight: 800 !important;
 }
 
-/* Section headings */
 .section-header h2 {
     font-size: 32px !important;
     font-weight: 800 !important;
     color: #1D3557 !important;
 }
 
-/* Card title */
 .section-row .book-info h3,
 .new-release-card .new-title,
 .trending-card .trending-title,
@@ -4674,7 +4373,6 @@ h6,
     line-height: 1.42 !important;
 }
 
-/* Author, label phụ */
 .section-row .book-info p,
 .new-release-card .new-author,
 .search-result-author,
@@ -4689,7 +4387,6 @@ h6,
     letter-spacing: 0 !important;
 }
 
-/* Nav links */
 .main-menu a,
 .dropdown a,
 .user-dropdown a,
@@ -4700,7 +4397,6 @@ h6,
     letter-spacing: -0.01em !important;
 }
 
-/* Buttons */
 .btn-cta,
 .btn-filter,
 .btn-auth,
@@ -4714,7 +4410,6 @@ h6,
     letter-spacing: -0.01em !important;
 }
 
-/* Price — số nổi bật */
 .price-sale,
 .deal-price-sale,
 .flash-price-sale,
@@ -4736,8 +4431,6 @@ h6,
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
 }
 
-
-/* Price gốc gạch ngang */
 .price-orig,
 .deal-price-orig,
 .flash-price-orig {
@@ -4749,7 +4442,6 @@ h6,
     letter-spacing: 0 !important;
 }
 
-/* Filter labels */
 .filter-label {
     font-family: 'Inter', sans-serif !important;
     font-weight: 700 !important;
@@ -4758,7 +4450,6 @@ h6,
     letter-spacing: 0.02em !important;
 }
 
-/* Filter selects & inputs */
 .filter-select,
 .price-range input,
 .search-container input,
@@ -4769,7 +4460,6 @@ h6,
     color: #1D3557 !important;
 }
 
-/* Toast */
 .toast-title {
     font-family: 'Inter', sans-serif !important;
     font-weight: 700 !important;
@@ -4785,7 +4475,6 @@ h6,
     color: #475569 !important;
 }
 
-/* Auth modal */
 .auth-header h2 {
     font-size: 26px !important;
     font-weight: 800 !important;
@@ -4800,7 +4489,6 @@ h6,
     color: #475569 !important;
 }
 
-/* Review */
 .reviewer-name {
     font-family: 'Inter', sans-serif !important;
     font-weight: 700 !important;
@@ -4815,7 +4503,6 @@ h6,
     line-height: 1.7 !important;
 }
 
-/* Footer */
 .footer-logo span {
     font-size: 20px !important;
     font-weight: 700 !important;
@@ -4842,7 +4529,6 @@ h6,
     line-height: 1.7 !important;
 }
 
-/* Live notif */
 .live-notif-box span:last-child {
     font-family: 'Inter', sans-serif !important;
     font-size: 12px !important;
@@ -4850,7 +4536,6 @@ h6,
     color: #1D3557 !important;
 }
 
-/* Modal book detail */
 .modal-content h2 {
     font-size: 24px !important;
     font-weight: 800 !important;
@@ -4868,7 +4553,6 @@ h6,
     color: #64748b !important;
 }
 
-/* Section tag above heading */
 .section-tag {
     font-family: 'Inter', sans-serif !important;
     font-size: 10.5px !important;
@@ -4878,7 +4562,6 @@ h6,
     color: #457b9d !important;
 }
 
-/* Discount badge */
 .discount-badge {
     font-family: 'Inter', sans-serif !important;
     font-weight: 800 !important;
@@ -4886,7 +4569,6 @@ h6,
     letter-spacing: 0.02em !important;
 }
 
-/* Review modal titles */
 .reviews-modal-header h3,
 .review-modal-header h3 {
     font-family: 'Sora', sans-serif !important;
@@ -4895,15 +4577,12 @@ h6,
     color: #1D3557 !important;
 }
 
-/* Flash sale label */
 .flash-label {
     font-size: 20px !important;
     font-weight: 800 !important;
     color: #fff !important;
 }
 
-
-/* ── GIÁ TIỀN — nổi bật đỏ ───────────────────────────────── */
 .price-sale,
 .deal-price-sale,
 .flash-price-sale,
@@ -4916,7 +4595,6 @@ h6,
     letter-spacing: -0.03em !important;
 }
 
-/* ==================== NÚT ĐỌC SÁCH ==================== */
 .modal-btn-read {
     background: linear-gradient(135deg, #2d6a4f, #40916c);
     color: white;
@@ -4934,7 +4612,6 @@ h6,
     transform: translateY(-1px);
 }
 
-/* ==================== GALLERY THUMBNAILS TRONG MODAL ==================== */
 .modal-main-img {
     width: 100%;
     max-height: 360px;
@@ -4977,4 +4654,17 @@ h6,
     opacity: 1;
     border-color: #1D3557;
     box-shadow: 0 0 0 2px #a8c4e0;
+}
+
+/* Custom variables for consistency */
+:root {
+    --primary: #1D3557;
+    --primary-light: #274c77;
+    --text: #0f172a;
+    --text-light: #64748b;
+    --transition: all 0.25s ease;
+    --transition-smooth: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    --shadow-md: 0 20px 35px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.02);
+    --card-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.08);
+    --card-shadow-hover: 0 28px 36px -18px rgba(0, 0, 0, 0.2);
 }
