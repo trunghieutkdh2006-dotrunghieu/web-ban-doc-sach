@@ -80,7 +80,6 @@
 
     /* Đảm bảo width/height tính luôn padding + border (dễ layout, tránh vỡ giao diện) */
     box-sizing: border-box;
-    font-family: 'Merriweather', serif;
 }
 
 /* Áp dụng cho thẻ gốc của trang (html) */
@@ -287,7 +286,6 @@ body {
 }
 
 .banner-cta-enhanced:hover {
-    transform: translateY(-3px) scale(1.05);
     box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
 }
 
