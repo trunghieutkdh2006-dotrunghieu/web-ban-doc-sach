@@ -629,9 +629,6 @@ body {
 }
 
 .search-container input:focus {
-    background: #fff !important;
-
-    border-color: #4F46E5 !important;
 
     box-shadow:
         0 0 0 4px rgba(79, 70, 229, 0.15),
