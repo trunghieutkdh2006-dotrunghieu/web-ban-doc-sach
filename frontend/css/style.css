@@ -753,20 +753,6 @@ body {
 }
 
 
-.search-container input:focus {
-    outline: none;
-
-    border-color: rgba(29, 53, 87, 0.3);
-
-    background: #fff;
-
-    box-shadow:
-        0 0 0 4px rgba(29, 53, 87, 0.08),
-        0 4px 16px rgba(15, 23, 42, 0.08);
-
-    transition: var(--transition);
-}
-
 .search-container i {
     position: absolute;
     right: 18px;
