@@ -650,9 +650,9 @@ body {
     position: relative;
 }
 
-.search-container:hover {
+/* .search-container:hover {
     box-shadow: var(--shadow-md);
-}
+} */
 
 .search-container input {
     flex: 1;
