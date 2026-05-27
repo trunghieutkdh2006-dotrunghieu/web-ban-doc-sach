@@ -1763,62 +1763,76 @@ body.dark-mode #darkModeToggle {
 
 /* FOOTER */
 .footer {
-    position: relative;
-    overflow: hidden;
+    width: 100% !important;
+    position: relative !important;
+    overflow: hidden !important;
     background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 30%),
         radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.12), transparent 30%),
-        linear-gradient(135deg, #0f172a, #111827);
-    color: #f8fafc;
-    padding-top: 80px;
-    margin-top: 80px;
+        linear-gradient(135deg, #0f172a, #111827) !important;
+    color: #f8fafc !important;
+    padding-top: 60px !important;
+    margin-top: 60px !important;
 }
+
 
 .footer .container {
     max-width: 1440px !important;
     width: 100% !important;
-    padding: 0 28px !important;
     margin: 0 auto !important;
+    padding: 0 28px !important;
+}
+
+@media (max-width: 768px) {
+    .footer .container {
+        padding: 0 18px !important;
+    }
 }
 
 .footer-content {
     display: grid;
     grid-template-columns: 1.7fr 1fr 1fr 1.3fr;
-    gap: 50px;
-    padding-bottom: 50px;
+    gap: 40px;
+    padding-bottom: 40px;
 }
 
 @media (max-width: 992px) {
     .footer-content {
         grid-template-columns: 1fr 1fr;
+        gap: 30px;
     }
 }
 
 @media (max-width: 768px) {
     .footer-content {
         grid-template-columns: 1fr;
-        gap: 40px;
+        gap: 30px;
     }
 }
+
 
 .footer-logo {
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-bottom: 22px;
-    font-size: 28px;
-    font-weight: 900;
+    gap: 12px;
+    margin-bottom: 20px;
 }
 
 .footer-logo i {
-    width: 58px;
-    height: 58px;
+    font-size: 28px;
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 18px;
+    border-radius: 14px;
     background: linear-gradient(135deg, #2563eb, #7c3aed);
-    color: white;
-    box-shadow: 0 12px 30px rgba(37, 99, 235, .35);
+    color: #fff;
+}
+
+.footer-logo span {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
 }
 
 .footer-section.about p {
@@ -1831,59 +1845,54 @@ body.dark-mode #darkModeToggle {
 .footer-contact {
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    margin-top: 22px;
+    gap: 12px;
+    margin-top: 20px;
 }
 
 .footer-contact p {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     color: #cbd5e1;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .footer-contact i {
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.08);
+    width: 32px;
+    font-size: 16px;
     color: #60a5fa;
 }
 
 .footer-socials {
     display: flex;
-    gap: 14px;
-    margin-top: 28px;
+    gap: 12px;
+    margin-top: 20px;
 }
 
 .footer-socials a {
-    width: 48px;
-    height: 48px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.08);
-    color: white;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
     font-size: 18px;
-    transition: .35s ease;
+    transition: all 0.3s ease;
 }
 
+
 .footer-socials a:hover {
-    transform: translateY(-6px) rotate(-6deg);
     background: linear-gradient(135deg, #2563eb, #7c3aed);
+    transform: translateY(-3px);
 }
 
 .footer-section h4 {
-    position: relative;
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 26px;
-    padding-bottom: 12px;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    margin-bottom: 20px !important;
+    color: #fff !important;
 }
 
 .footer-section h4::after {
@@ -1899,23 +1908,23 @@ body.dark-mode #darkModeToggle {
 
 .footer-section ul {
     list-style: none;
+    padding: 0;
 }
 
 .footer-section ul li {
-    margin-bottom: 16px;
+    margin-bottom: 12px;
 }
 
 .footer-section ul li a {
-    position: relative;
     color: #cbd5e1;
     text-decoration: none;
-    font-size: 15px;
-    transition: .3s ease;
+    font-size: 14px;
+    transition: all 0.3s ease;
 }
 
 .footer-section ul li a:hover {
-    color: white;
-    padding-left: 12px;
+    color: #fff;
+    padding-left: 5px;
 }
 
 .newsletter p {
@@ -1927,33 +1936,36 @@ body.dark-mode #darkModeToggle {
 .newsletter-form {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
 }
 
 .newsletter-form input {
-    width: 100%;
-    padding: 16px 18px;
-    border: 1px solid rgba(255, 255, 255, .12);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, .08);
-    color: white;
-    font-size: 15px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 14px;
+}
+
+.newsletter-form input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .newsletter-form button {
+    padding: 12px 16px;
+    border-radius: 12px;
     border: none;
-    padding: 16px;
-    border-radius: 18px;
-    font-weight: 700;
-    font-size: 15px;
-    color: white;
-    cursor: pointer;
     background: linear-gradient(135deg, #2563eb, #7c3aed);
-    transition: .35s ease;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .newsletter-form button:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
 }
 
 .footer-payment {
@@ -1962,27 +1974,26 @@ body.dark-mode #darkModeToggle {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 20px;
-    padding: 26px 0;
-    border-top: 1px solid rgba(255, 255, 255, .08);
-    border-bottom: 1px solid rgba(255, 255, 255, .08);
-    margin-top: 10px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 20px 0;
 }
 
 .payment-icons {
     display: flex;
-    align-items: center;
-    gap: 18px;
+    gap: 15px;
 }
 
 .payment-icons i {
-    font-size: 34px;
+    font-size: 28px;
     color: #cbd5e1;
-    transition: .3s ease;
+    transition: all 0.3s ease;
 }
 
 .payment-icons i:hover {
-    color: white;
-    transform: translateY(-4px) scale(1.1);
+    color: #fff;
+    transform: translateY(-3px);
 }
 
 .footer-bottom {
@@ -1991,7 +2002,7 @@ body.dark-mode #darkModeToggle {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 20px;
-    padding: 28px 0;
+    padding: 20px 0;
 }
 
 .footer-copyright {
@@ -2116,4 +2127,54 @@ body.dark-mode #darkModeToggle {
     --shadow-md: 0 20px 35px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.02);
     --card-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.08);
     --card-shadow-hover: 0 28px 36px -18px rgba(0, 0, 0, 0.2);
+}
+
+.main-nav {
+    width: 100% !important;
+    position: sticky !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(20px) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    z-index: 1000 !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+}
+
+.main-nav .nav-wrapper {
+    max-width: 1440px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 12px 28px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 20px !important;
+}
+
+@media (max-width: 768px) {
+    .main-nav .nav-wrapper {
+        padding: 12px 18px !important;
+    }
+}
+
+.top-bar {
+    width: 100% !important;
+    background: linear-gradient(135deg, #10243f, #1D3557) !important;
+    padding: 10px 0 !important;
+}
+
+.top-bar .container {
+    max-width: 1440px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 28px !important;
+}
+
+@media (max-width: 768px) {
+    .top-bar .container {
+        padding: 0 18px !important;
+    }
 }
