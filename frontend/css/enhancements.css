@@ -159,10 +159,6 @@ h6 {
     }
 }
 
-.cart-dropdown-header,
-.heart-dropdown-header {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
-}
 
 /* ============================================================
    BANNER SLIDE OVERHAUL (HERO AREA)
