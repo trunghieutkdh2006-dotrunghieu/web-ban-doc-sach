@@ -740,23 +740,21 @@ body {
 }
 
 .search-container input {
-    font-family: 'DM Sans', sans-serif;
-
-    height: 50px;
-
-    border-radius: 16px;
-
-    background: rgba(248, 250, 252, 0.98);
-
-    border: 1.5px solid rgba(29, 53, 87, 0.08);
-
-    box-shadow:
-        0 2px 12px rgba(15, 23, 42, 0.06);
-
+    flex: 1;
+    border: none !important;
+    /* Xóa bỏ hoàn toàn viền mặc định hoặc viền từ thư viện khác */
+    outline: none !important;
+    /* Xóa viền khi click chọn vào ô */
+    box-shadow: none !important;
+    /* Xóa bóng mờ bên trong (nếu có) */
+    background: transparent;
+    /* Giữ nền trong suốt để lộ nền trắng của container */
     font-size: 14px;
-
-    transition: var(--transition);
+    color: var(--text);
+    padding: 8px 0;
+    /* Thêm chút khoảng cách trên dưới cho thoáng */
 }
+
 
 .search-container input:focus {
     outline: none;
