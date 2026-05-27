@@ -1,68 +1,203 @@
-/* ========== TOÀN BỘ CSS GỐC (GIỮ NGUYÊN 100%) ========== */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap');
 
+:root {
+    /* Màu chính của website (primary brand color) */
+    --primary: #1D3557;
+
+    /* Màu chính đậm hơn (dùng cho hover, header, footer...) */
+    --primary-dark: #152b47;
+
+    /* Màu phụ sáng hơn (dùng cho highlight, hover nhẹ, badge...) */
+    --primary-light: #457b9d;
+
+    /* Màu nhấn (accent) - hiện đang trùng primary, có thể đổi nếu muốn nổi bật hơn */
+    --accent: #1D3557;
+
+    /* Màu nền chính của toàn site */
+    --bg: #f4f7fb;
+
+    /* Màu nền phụ (card, section xen kẽ) */
+    --bg-secondary: #edf2f7;
+
+    /* Màu trắng chuẩn dùng cho card, modal, navbar... */
+    --white: #ffffff;
+
+    /* Màu chữ chính (đen xanh đậm, dễ đọc) */
+    --text: #0f172a;
+
+    /* Màu chữ phụ (mô tả, label, placeholder) */
+    --text-light: #64748b;
+
+    /* Màu trạng thái thành công (success) */
+    --success: #10b981;
+
+    /* Màu trạng thái lỗi / nguy hiểm (error, delete) */
+    --danger: #ef4444;
+
+    /* Màu cảnh báo (warning, rating star, highlight) */
+    --warning: #f59e0b;
+
+    /* Màu thông tin (info, tooltip, highlight nhẹ) */
+    --info: #06b6d4;
+
+    /* Shadow nhẹ (card nhỏ, button hover) */
+    --shadow-sm: 0 4px 12px rgba(15, 23, 42, .05);
+
+    /* Shadow trung bình (card, dropdown, modal nhỏ) */
+    --shadow-md: 0 12px 30px rgba(15, 23, 42, .08);
+
+    /* Shadow lớn (modal, popup, overlay quan trọng) */
+    --shadow-lg: 0 24px 60px rgba(15, 23, 42, .12);
+
+    /* Bo góc nhỏ (button, input, tag) */
+    --radius-sm: 12px;
+
+    /* Bo góc trung bình (card, modal, dropdown) */
+    --radius-md: 20px;
+
+    /* Bo góc lớn (hero section, container lớn) */
+    --radius-lg: 32px;
+
+    /* Hiệu ứng chuyển động mượt (hover, animation UI) */
+    --transition: .28s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* Áp dụng cho TẤT CẢ phần tử trên trang */
 * {
+    /* Xóa toàn bộ margin mặc định của trình duyệt */
     margin: 0;
+
+    /* Xóa toàn bộ padding mặc định của trình duyệt */
     padding: 0;
+
+    /* Đảm bảo width/height tính luôn padding + border (dễ layout, tránh vỡ giao diện) */
     box-sizing: border-box;
 }
 
+/* Áp dụng cho thẻ gốc của trang (html) */
 html {
+    /* Khi người dùng click vào anchor link (#section), trang sẽ cuộn mượt thay vì nhảy thẳng */
     scroll-behavior: smooth;
 }
 
+/* Toàn bộ trang web */
 body {
+
+    /* Font chữ chính của toàn site */
+    /* 'Inter' là font hiện đại, sạch, hay dùng trong UI/UX */
+    font-family: 'Inter', sans-serif;
+
+    /* Nền trang gồm 2 lớp:
+       - radial-gradient: ánh sáng loang từ góc trên trái (tạo hiệu ứng depth)
+       - linear-gradient: chuyển màu nền từ trên xuống dưới */
     background:
         radial-gradient(circle at top left, rgba(29, 53, 87, .05), transparent 25%),
         linear-gradient(to bottom, #f8fbff, #f3f6fb);
+
+    /* Màu chữ chính lấy từ biến CSS (--text) */
     color: var(--text);
+
+    /* Ẩn thanh cuộn ngang, tránh vỡ layout khi element tràn */
     overflow-x: hidden;
-    font-size: 15px !important;
-    line-height: 1.65 !important;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-    letter-spacing: -0.01em !important;
 }
 
+/* Thanh cuộn (scrollbar) trên trình duyệt WebKit như Chrome, Edge, Safari */
 ::-webkit-scrollbar {
+    /* Độ rộng của thanh cuộn dọc */
     width: 8px;
 }
 
+/* Phần nền của thanh cuộn (track - đường chạy) */
 ::-webkit-scrollbar-track {
+    /* Màu nền nhạt, tạo cảm giác sạch và nhẹ */
     background: #dbe4ef;
 }
 
+/* Phần “nút kéo” của thanh cuộn (thumb) */
 ::-webkit-scrollbar-thumb {
+    /* Gradient màu xanh từ đậm → nhạt, tạo cảm giác hiện đại */
     background: linear-gradient(to bottom, #1D3557, #274c77);
+
+    /* Bo tròn cực lớn → dạng pill (viên thuốc), nhìn mềm hơn */
     border-radius: 999px;
 }
 
+/* Class container dùng để giới hạn nội dung chính của trang */
 .container {
+
+    /* Chiếm toàn bộ chiều ngang của màn hình */
     width: 100%;
+
+    /* Giới hạn tối đa chiều rộng là 1440px
+       → giúp nội dung không bị kéo quá rộng trên màn hình lớn */
     max-width: 1440px;
+
+    /* Căn giữa container theo chiều ngang (trái + phải = auto) */
     margin: 0 auto;
+
+    /* Tạo khoảng cách bên trong trái/phải 28px
+       → tránh nội dung dính sát mép màn hình */
     padding: 0 28px;
 }
 
+/* Áp dụng khi màn hình có chiều rộng từ 768px trở xuống (tablet + mobile) */
 @media (max-width: 768px) {
+
+    /* Điều chỉnh container trên màn hình nhỏ */
     .container {
+
+        /* Giảm padding hai bên từ 28px xuống 18px
+           → giúp tận dụng thêm không gian hiển thị trên mobile */
         padding: 0 18px;
     }
 }
 
+/* Banner nâng cao (hero section hoặc slider đầu trang) */
+.enhanced-banner {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Track chứa các slide/banner (dùng trong carousel/slider) */
 .banner-track-enhanced {
+
+    /* Xếp các banner theo hàng ngang (carousel layout) */
     display: flex;
+
+    /* Hiệu ứng chuyển động khi thay đổi transform (slide mượt) */
     transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    /* Tối ưu hiệu năng: báo cho browser biết phần tử sẽ animate transform
+       → giúp render mượt hơn, giảm giật lag */
     will-change: transform;
 }
 
+/* Một slide trong banner carousel (mỗi "trang" của slider) */
 .banner-slide-enhanced {
+
+    /* Mỗi slide chiếm 100% chiều ngang của track */
     min-width: 100%;
+
+    /* Cho phép đặt các phần tử con absolute nếu cần (text, overlay, button...) */
     position: relative;
+
+    /* Chiều cao cố định của banner */
     height: 480px;
+
+    /* Dùng flex để chia layout trái/phải trong slide */
     display: flex;
+
+    /* Căn giữa theo chiều dọc */
     align-items: center;
+
+    /* Tách nội dung sang 2 bên (text trái, ảnh phải chẳng hạn) */
     justify-content: space-between;
+
+    /* Khoảng cách bên trong trái/phải */
     padding: 0 60px;
 }
 
@@ -135,9 +270,7 @@ body {
 
 .highlight-text {
     background: linear-gradient(135deg, #fff500 0%, #ffb700 100%);
-    background-clip: text;
     -webkit-background-clip: text;
-    color: transparent;
     -webkit-text-fill-color: transparent;
     display: inline-block;
     filter: drop-shadow(0px 0px 12px rgba(255, 245, 0, 0.6));
@@ -299,7 +432,14 @@ body {
     }
 }
 
-/* TOP BAR & NAVIGATION */
+/* ============================================================
+   TOP BAR & NAVIGATION
+   ============================================================ */
+.top-bar {
+    background: linear-gradient(135deg, #10243f, #1D3557);
+    padding: 12px 0;
+}
+
 .top-bar .container {
     display: flex;
     justify-content: space-between;
@@ -330,11 +470,23 @@ body {
     transform: translateY(-1px);
 }
 
+.main-nav {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, .7);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, .04);
+}
+
 .nav-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 28px;
+    padding: 16px 0;
+    /* flex-wrap: wrap; */
 }
 
 .left {
@@ -371,6 +523,28 @@ body {
     align-items: center;
 }
 
+.main-menu a {
+    min-height: 48px;
+    padding: 0 20px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+    transition: var(--transition);
+}
+
+.main-menu a:hover,
+.main-menu a.active {
+    background: linear-gradient(135deg, #1D3557, #274c77);
+    color: #fff;
+    box-shadow: 0 12px 24px rgba(29, 53, 87, .18);
+}
+
 .has-dropdown {
     position: relative;
 }
@@ -380,10 +554,16 @@ body {
     top: calc(100% + 12px);
     left: 0;
     width: 270px;
+    padding: 12px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, .96);
+    backdrop-filter: blur(20px);
+    box-shadow: var(--shadow-lg);
     opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
     transition: var(--transition);
     z-index: 100;
-    padding: 10px !important;
 }
 
 .has-dropdown:hover .dropdown {
@@ -398,19 +578,18 @@ body {
 
 .dropdown a {
     width: 100%;
-    display: flex !important;
-    justify-content: flex-start !important;
-    align-items: center !important;
-    text-align: left !important;
-    padding: 12px 16px !important;
+    min-height: 48px;
+    padding: 0 16px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
     color: var(--text);
     text-decoration: none;
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    min-height: 44px !important;
-    border-radius: 12px !important;
-    transition: var(--transition-smooth) !important;
+    font-weight: 600;
+    transition: var(--transition);
+    line-height: 1;
 }
 
 .dropdown a:hover {
@@ -429,6 +608,9 @@ body {
     transform: translateY(0);
 }
 
+/* ============================================================
+   SEARCH
+   ============================================================ */
 .search-container {
     position: relative;
     width: 360px;
@@ -441,19 +623,21 @@ body {
 }
 
 .search-container input {
-    width: 100% !important;
-    height: 46px !important;
-    padding: 0 20px !important;
-    border-radius: 14px !important;
-    border: 1px solid rgba(0, 0, 0, 0.06) !important;
-    background: rgba(255, 255, 255, 0.75) !important;
-    font-family: 'Inter', sans-serif !important;
-    font-size: 13.5px !important;
-    font-weight: 500 !important;
-    color: #1D3557 !important;
-    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05) !important;
-    outline: none !important;
-    transition: all 0.25s ease !important;
+    width: 100%;
+    height: 54px;
+    padding: 0 56px 0 20px;
+    border: 1px solid transparent;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .96);
+    box-shadow: var(--shadow-sm);
+    font-size: 14px;
+    transition: var(--transition);
+}
+
+.search-container input:focus {
+    outline: none;
+    border-color: rgba(29, 53, 87, .15);
+    box-shadow: 0 0 0 5px rgba(29, 53, 87, .08);
 }
 
 .search-container i {
@@ -472,13 +656,13 @@ body {
     left: 0;
     right: 0;
     margin-top: 14px;
+    border-radius: 24px;
+    overflow: hidden;
     display: none;
     z-index: 1000;
-    overflow: hidden;
-    border-radius: 24px;
-    background: rgba(255, 255, 255, 0.94);
+    background: rgba(255, 255, 255, .94);
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(255, 255, 255, .75);
     box-shadow: var(--shadow-md);
 }
 
@@ -491,12 +675,11 @@ body {
     gap: 14px;
     padding: 16px;
     cursor: pointer;
-    border-radius: 12px !important;
-    transition: var(--transition-smooth) !important;
+    transition: var(--transition);
 }
 
 .search-result-item:hover {
-    background: rgba(29, 53, 87, 0.04) !important;
+    background: #f8fafc;
 }
 
 .search-result-img {
@@ -506,6 +689,11 @@ body {
     border-radius: 14px;
 }
 
+.search-result-title {
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
 .search-result-author {
     font-size: 13px;
     color: var(--text-light);
@@ -513,22 +701,38 @@ body {
 
 .search-result-price {
     margin-top: 8px;
-    color: #1D3557 !important;
-    font-weight: 800 !important;
+    font-weight: 800;
+    color: #1D3557;
 }
 
-/* ACTION BUTTONS & DROPDOWNS */
+/* ============================================================
+   ACTION BUTTONS & DROPDOWNS
+   ============================================================ */
 .right-actions {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
 }
 
 .heart-wrapper,
 .cart-wrapper,
 .user-wrapper {
     position: relative;
+}
+
+.heart-btn,
+.cart-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: none;
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
 }
 
 .heart-btn:hover,
@@ -539,6 +743,7 @@ body {
 
 .cart-btn i {
     font-size: 1.1rem;
+    color: var(--primary);
 }
 
 .cart-count,
@@ -729,6 +934,26 @@ body {
     color: #fff;
 }
 
+.action-btn {
+    position: relative;
+    min-height: 50px;
+    padding: 0 18px;
+    border: 1px solid rgba(255, 255, 255, .8);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, .95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+    margin-right: 22px;
+}
+
 .action-btn:hover {
     background: linear-gradient(135deg, #1D3557, #274c77);
     color: #fff;
@@ -740,7 +965,9 @@ body {
     font-size: 18px;
 }
 
-/* HERO SECTION */
+/* ============================================================
+   HERO SECTION
+   ============================================================ */
 .hero {
     position: relative;
     overflow: hidden;
@@ -798,7 +1025,9 @@ body {
     transform: translateY(-4px);
 }
 
-/* FILTER BAR */
+/* ============================================================
+   FILTER BAR
+   ============================================================ */
 .filter-bar {
     position: relative;
     z-index: 10;
@@ -888,7 +1117,9 @@ body {
     transform: translateY(-2px);
 }
 
-/* SECTION HEADER */
+/* ============================================================
+   SECTION HEADER
+   ============================================================ */
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -922,7 +1153,9 @@ body {
     justify-content: center;
 }
 
-/* BOOK GRID & CARDS */
+/* ============================================================
+   BOOK GRID & CARDS - UNIFIED SYSTEM
+   ============================================================ */
 .new-releases-section .container,
 .trending-section .container,
 .favorites-section .container,
@@ -1021,7 +1254,6 @@ body {
     line-height: 1.4 !important;
     display: -webkit-box !important;
     -webkit-box-orient: vertical !important;
-    line-clamp: 2 !important;
     -webkit-line-clamp: 2 !important;
     overflow: hidden !important;
     margin-bottom: 6px !important;
@@ -1129,7 +1361,9 @@ body {
     background: #fff;
 }
 
-/* TRENDING SECTION */
+/* ============================================================
+   TRENDING SECTION
+   ============================================================ */
 .trending-section {
     padding: 60px 0;
     background: #f8fafc;
@@ -1149,7 +1383,9 @@ body {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* NEW RELEASES SECTION */
+/* ============================================================
+   NEW RELEASES SECTION
+   ============================================================ */
 .new-releases-section {
     padding: 60px 0;
     background: #fff;
@@ -1173,6 +1409,15 @@ body {
     z-index: 2;
 }
 
+/* ============================================================
+   DAILY DEAL SECTION
+   ============================================================ */
+.daily-deal-section {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #1e1b4b 0%, #111827 100%);
+    color: #fff;
+}
+
 .daily-deal-header {
     display: flex;
     justify-content: space-between;
@@ -1190,73 +1435,26 @@ body {
 }
 
 .daily-deal-icon {
-    width: 70px;
-    height: 70px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 34px;
-    border-radius: 20px;
-    background: linear-gradient(135deg, #ef4444, #f59e0b);
-    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35), inset 0 0 15px rgba(255, 255, 255, 0.15);
-    animation: pulseDeal 2s infinite;
-}
-
-@keyframes pulseDeal {
-
-    0%,
-    100% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.08);
-    }
+    font-size: 52px;
 }
 
 .daily-deal-label {
     font-size: 13px;
-    letter-spacing: 3px;
-    font-weight: 700;
-    color: #f59e0b;
-    margin-bottom: 5px;
+    letter-spacing: 2px;
+    opacity: 0.8;
 }
 
 .daily-deal-title {
-    font-size: 34px;
+    font-size: 28px;
     font-weight: 900;
-    line-height: 1.1;
 }
 
 .daily-deal-timer {
     display: flex;
-    align-items: center;
     gap: 15px;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
-    padding: 14px 26px;
-    border-radius: 999px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-}
-
-.daily-deal-timer>span {
-    font-size: 28px;
-    font-weight: 900;
-    color: rgba(255, 255, 255, 0.6);
-    animation: blinkColon 1s infinite;
-}
-
-@keyframes blinkColon {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.35;
-    }
+    background: rgba(0, 0, 0, 0.5);
+    padding: 12px 28px;
+    border-radius: 60px;
 }
 
 .timer-block {
@@ -1264,93 +1462,53 @@ body {
 }
 
 .timer-block span {
-    font-size: 30px;
+    font-size: 32px;
     font-weight: 900;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.06));
-    padding: 10px 14px;
-    border-radius: 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 74px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #fff;
+    background: #000;
+    padding: 8px 14px;
+    border-radius: 14px;
+    display: inline-block;
+    min-width: 70px;
 }
 
 .timer-block small {
     font-size: 11px;
     display: block;
-    margin-top: 7px;
-    opacity: 0.7;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    font-weight: 600;
+    margin-top: 6px;
+    opacity: 0.8;
 }
 
 .deal-discount {
     position: absolute;
-    top: 12px;
-    right: 12px;
-    background: linear-gradient(135deg, #ef4444, #dc2626);
+    top: 10px;
+    right: 10px;
+    background: #ef4444;
     color: #fff;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 900;
-    padding: 6px 12px;
-    border-radius: 999px;
-    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+    padding: 4px 10px;
+    border-radius: 20px;
 }
 
 .deal-add-btn {
     width: 100%;
-    padding: 13px;
-    border: none;
-    outline: none;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #ef4444, #f59e0b);
-    color: #fff;
-    font-size: 13px;
-    font-weight: 800;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    padding: 10px;
+    font-size: 12px;
 }
 
 .deal-add-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35);
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.deal-add-btn i {
-    margin-right: 7px;
-}
-
-@media (max-width: 768px) {
-    .daily-deal-title {
-        font-size: 26px;
-    }
-
-    .daily-deal-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 28px;
-    }
-
-    .daily-deal-timer {
-        padding: 12px 18px;
-        gap: 10px;
-    }
-
-    .timer-block span {
-        min-width: 60px;
-        font-size: 24px;
-    }
-}
-
+/* ============================================================
+   FLASH SALE SECTION
+   ============================================================ */
 .flash-sale-section {
     background: linear-gradient(135deg, #0f0c29, #1e1b4b 40%, #111827);
     padding: 50px 0;
     position: relative;
     overflow-x: auto;
-    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .flash-sale-header {
@@ -1377,7 +1535,6 @@ body {
     font-size: 28px;
     font-weight: 900;
     color: #fff;
-    letter-spacing: 0.5px;
 }
 
 .bolt {
@@ -1389,7 +1546,6 @@ body {
     background: linear-gradient(135deg, #ef4444, #f59e0b);
     border-radius: 12px;
     font-size: 24px;
-    animation: pulse 2s infinite;
 }
 
 @keyframes pulse {
@@ -1413,9 +1569,9 @@ body {
 .countdown-block {
     background: rgba(255, 255, 255, 0.12);
     backdrop-filter: blur(8px);
-    border-radius: 14px;
-    padding: 10px 14px;
-    min-width: 70px;
+    border-radius: 12px;
+    padding: 8px 14px;
+    min-width: 65px;
     text-align: center;
 }
 
@@ -1427,12 +1583,9 @@ body {
 }
 
 .countdown-label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    color: rgba(255, 255, 255, 0.65);
-    margin-top: 6px;
-    text-transform: uppercase;
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.6);
+    margin-top: 4px;
 }
 
 .countdown-colon {
@@ -1442,22 +1595,32 @@ body {
     animation: blinkColon 1s step-end infinite;
 }
 
+@keyframes blinkColon {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0;
+    }
+}
+
 .flash-see-all {
     background: none;
     border: 2px solid rgba(245, 158, 11, 0.5);
     color: #f59e0b;
-    padding: 11px 24px;
+    padding: 10px 22px;
     border-radius: 50px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
     font-weight: 700;
-    font-size: 14px;
 }
 
 .flash-see-all:hover {
     background: rgba(245, 158, 11, 0.15);
     border-color: #f59e0b;
-    transform: translateY(-2px);
 }
 
 .flash-books-row {
@@ -1484,26 +1647,23 @@ body {
 
 .flash-book-card {
     flex: 0 0 auto;
-    width: 210px;
-    min-height: 430px;
+    width: 200px;
+    min-height: 420px;
     background: rgba(255, 255, 255, 0.08);
-    border-radius: 22px;
+    border-radius: 20px;
     overflow: hidden;
-    transition: all 0.35s ease;
+    transition: all 0.3s;
     cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    backdrop-filter: blur(12px);
 }
 
 .flash-book-card:hover {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
     background: rgba(255, 255, 255, 0.14);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
 }
 
 .flash-book-img-wrap {
     position: relative;
-    height: 250px;
+    height: 240px;
     overflow: hidden;
 }
 
@@ -1511,52 +1671,51 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.45s ease;
+    transition: transform 0.4s;
 }
 
 .flash-book-card:hover .flash-book-img-wrap img {
-    transform: scale(1.08);
+    transform: scale(1.05);
 }
 
 .flash-book-info {
-    padding: 16px;
+    padding: 14px;
 }
 
 .flash-book-title {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
-    line-height: 1.5;
     color: #fff;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     display: -webkit-box;
-    -webkit-box-orient: vertical;
-    line-clamp: 2;
     -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    min-height: 46px;
+    min-height: 42px;
 }
 
 .flash-price-row {
     display: flex;
     align-items: baseline;
     gap: 10px;
-    margin: 10px 0 14px;
+    margin: 8px 0;
 }
 
 .flash-price-sale {
-    font-size: 20px;
+    font-size: 16px;
     font-weight: 900;
     color: #ef4444;
 }
 
 .flash-price-orig {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 12px;
     color: rgba(255, 255, 255, 0.5);
     text-decoration: line-through;
 }
 
-/* FAVORITES SECTION */
+/* ============================================================
+   FAVORITES SECTION
+   ============================================================ */
 .favorites-section {
     padding: 60px 0;
     background: #fff5f5;
@@ -1582,7 +1741,9 @@ body {
     transform: scale(1.1);
 }
 
-/* RECENTLY VIEWED SECTION */
+/* ============================================================
+   RECENTLY VIEWED SECTION
+   ============================================================ */
 .recently-viewed-section {
     background: #fff;
     padding: 60px 0;
@@ -1614,7 +1775,9 @@ body {
     border-color: #ef4444;
 }
 
-/* BOOK MODAL */
+/* ============================================================
+   BOOK MODAL
+   ============================================================ */
 .book-modal {
     position: fixed !important;
     top: 0 !important;
@@ -1780,7 +1943,9 @@ body {
     margin-left: 15px !important;
 }
 
-/* MODAL OVERLAY & CONTENT (Legacy) */
+/* ============================================================
+   MODAL OVERLAY & CONTENT (Legacy)
+   ============================================================ */
 .modal-overlay {
     position: fixed;
     inset: 0;
@@ -1884,7 +2049,6 @@ body {
 .trending-price {
     color: red;
     font-weight: bold;
-    font-family: Sora, sans-serif !important;
 }
 
 .modal-rating {
@@ -1902,7 +2066,9 @@ body {
     margin-top: 10px;
 }
 
-/* BUTTONS - MODAL & ACTIONS */
+/* ============================================================
+   BUTTONS - MODAL & ACTIONS
+   ============================================================ */
 .modal-btn {
     border: none;
     padding: 10px 14px;
@@ -1936,6 +2102,10 @@ body {
 .modal-btn-sample {
     background: #f59e0b;
     color: #fff;
+}
+
+.modal-btn-sample:hover {
+    background: #d97706;
 }
 
 .modal-btn-wish {
@@ -2031,48 +2201,18 @@ body {
 }
 
 .flash-add-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
     width: 100%;
-    border: none;
-    outline: none;
-    background: linear-gradient(135deg, #f59e0b, #ef4444);
-    color: #fff;
-    padding: 12px;
-    border-radius: 14px;
-    font-size: 14px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    margin-top: 8px;
 }
 
 .flash-add-btn:hover {
-    transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.35);
+    background: linear-gradient(135deg, #f87171, #ef4444);
 }
 
-@media (max-width: 768px) {
-    .flash-label {
-        font-size: 22px;
-    }
-
-    .countdown-num {
-        font-size: 24px;
-    }
-
-    .flash-book-card {
-        width: 170px;
-        min-height: 390px;
-    }
-
-    .flash-book-img-wrap {
-        height: 210px;
-    }
-
-    .flash-price-sale {
-        font-size: 18px;
-    }
-}
-
-/* REVIEW MODAL & MODAL */
+/* ============================================================
+   REVIEW MODAL & MODAL
+   ============================================================ */
 .review-modal,
 .reviews-modal {
     display: none;
@@ -2228,7 +2368,9 @@ body {
     background: #e2e8f0;
 }
 
-/* REVIEWS LIST MODAL */
+/* ============================================================
+   REVIEWS LIST MODAL
+   ============================================================ */
 .reviews-modal-content {
     width: 900px;
     max-width: 95%;
@@ -2364,6 +2506,10 @@ body {
     display: flex;
     align-items: center;
     gap: 6px;
+}
+
+.write-review-btn:hover {
+    background: #1d4ed8;
 }
 
 .reviews-list-container {
@@ -2505,7 +2651,9 @@ body {
     }
 }
 
-/* LOGIN PANEL */
+/* ============================================================
+   LOGIN PANEL
+   ============================================================ */
 .login-panel {
     display: none;
     position: fixed;
@@ -2643,7 +2791,9 @@ body {
     color: #94a3b8;
 }
 
-/* TOAST NOTIFICATION */
+/* ============================================================
+   TOAST NOTIFICATION
+   ============================================================ */
 #toastContainer {
     position: fixed;
     bottom: 24px;
@@ -2697,7 +2847,9 @@ body {
     }
 }
 
-/* SCROLL TO TOP & DARK MODE TOGGLE */
+/* ============================================================
+   SCROLL TO TOP & DARK MODE TOGGLE
+   ============================================================ */
 #scrollTopBtn {
     position: fixed;
     bottom: 28px;
@@ -2756,7 +2908,9 @@ body {
     transform: scale(1.1);
 }
 
-/* DARK MODE */
+/* ============================================================
+   DARK MODE
+   ============================================================ */
 body.dark-mode {
     background: #0f172a;
     color: #e2e8f0;
@@ -2865,7 +3019,9 @@ body.dark-mode #darkModeToggle {
     color: #1e293b;
 }
 
-/* EXTRA SPACING FIXES */
+/* ============================================================
+   EXTRA SPACING FIXES
+   ============================================================ */
 .book-section-wrapper {
     margin-top: 32px;
     padding-top: 16px;
@@ -2875,7 +3031,9 @@ body.dark-mode #darkModeToggle {
     margin-top: 24px;
 }
 
-/* FOOTER */
+/* ============================================================
+   FOOTER
+   ============================================================ */
 .footer {
     position: relative;
     overflow: hidden;
@@ -2899,10 +3057,6 @@ body.dark-mode #darkModeToggle {
     grid-template-columns: 1.7fr 1fr 1fr 1.3fr;
     gap: 50px;
     padding-bottom: 50px;
-}
-
-.footer-section.about {
-    margin-left: 10px;
 }
 
 .footer-logo {
@@ -3122,6 +3276,9 @@ body.dark-mode #darkModeToggle {
     color: white;
 }
 
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 @media (max-width: 992px) {
     .footer-content {
         grid-template-columns: 1fr 1fr;
@@ -3301,19 +3458,17 @@ body.dark-mode #darkModeToggle {
 
 .action-btn {
     position: relative;
-    min-width: 44px;
+    width: 44px;
     height: 44px;
-    padding: 0 16px;
     border-radius: 12px;
     background: #fff;
     border: 1px solid #e5e7eb;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: center;
     transition: 0.2s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-    white-space: nowrap;
 }
 
 .action-btn:hover {
@@ -3321,6 +3476,7 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.10);
 }
 
+/* ========== BADGES ========== */
 .cart-count,
 .heart-count {
     position: absolute;
@@ -3340,6 +3496,7 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
+/* ========== HEART DROPDOWN ========== */
 .heart-wrapper {
     position: relative;
     display: inline-block;
@@ -3354,6 +3511,7 @@ body.dark-mode #darkModeToggle {
     border-radius: 14px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -3377,14 +3535,20 @@ body.dark-mode #darkModeToggle {
     border-bottom: 1px solid #e5e7eb;
     font-size: 14px;
     font-weight: 700;
+    color: #111827;
 }
 
 .clear-wishlist-btn {
     background: transparent;
     border: none;
+    color: #ef4444;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+}
+
+.clear-wishlist-btn:hover {
+    color: #b91c1c;
 }
 
 .heart-dropdown-items {
@@ -3399,6 +3563,7 @@ body.dark-mode #darkModeToggle {
     color: #9ca3af;
 }
 
+/* wishlist item */
 .wishlist-item {
     display: flex;
     gap: 10px;
@@ -3449,6 +3614,7 @@ body.dark-mode #darkModeToggle {
     border-radius: 14px;
     border: 1px solid #e5e7eb;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -3475,6 +3641,7 @@ body.dark-mode #darkModeToggle {
 .cart-title {
     font-size: 14px;
     font-weight: 700;
+    color: #111827;
     display: flex;
     align-items: center;
     gap: 6px;
@@ -3483,9 +3650,14 @@ body.dark-mode #darkModeToggle {
 .clear-cart-btn {
     background: transparent;
     border: none;
+    color: #ef4444;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+}
+
+.clear-cart-btn:hover {
+    color: #b91c1c;
 }
 
 .cart-dropdown-items {
@@ -3500,6 +3672,7 @@ body.dark-mode #darkModeToggle {
     color: #9ca3af;
 }
 
+/* cart item */
 .cart-dropdown-item {
     display: flex;
     gap: 10px;
@@ -3581,6 +3754,7 @@ body.dark-mode #darkModeToggle {
     color: #d9363e;
 }
 
+/* ========== RESPONSIVE ========== */
 @media (max-width: 480px) {
 
     .cart-dropdown,
@@ -3596,6 +3770,35 @@ body.dark-mode #darkModeToggle {
     }
 }
 
+/* ============================================================
+   ✨ VIP PRO UPGRADE — LUXURY NAVY EDITORIAL SYSTEM
+   Giữ tone #1D3557, nâng cấp toàn diện typography + motion + depth
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap');
+
+:root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --navy-glow: rgba(29, 53, 87, 0.15);
+    --glass: rgba(255, 255, 255, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.6);
+    --card-shadow: 0 8px 32px rgba(15, 23, 42, 0.10), 0 1.5px 4px rgba(15, 23, 42, 0.06);
+    --card-shadow-hover: 0 24px 56px rgba(15, 23, 42, 0.18), 0 4px 12px rgba(29, 53, 87, 0.12);
+    --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── BODY & FONTS ─────────────────────────────────────────── */
+body {
+    font-family: 'DM Sans', sans-serif !important;
+    background:
+        radial-gradient(ellipse 80% 60% at 10% 0%, rgba(29, 53, 87, 0.07) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(69, 123, 157, 0.05) 0%, transparent 50%),
+        linear-gradient(160deg, #f0f4fa 0%, #f8fbff 50%, #eef2f8 100%) !important;
+    min-height: 100vh;
+}
+
+/* ── SCROLLBAR VIP ───────────────────────────────────────── */
 ::-webkit-scrollbar {
     width: 6px;
 }
@@ -3605,13 +3808,29 @@ body.dark-mode #darkModeToggle {
 }
 
 ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #1D3557 0%, #457b9d 100%);
     border-radius: 999px;
 }
 
+/* ── TOP BAR ─────────────────────────────────────────────── */
 .top-bar {
-    background: linear-gradient(135deg, #10243f, #1D3557);
+    background: linear-gradient(135deg, #0d1f38 0%, #1D3557 60%, #274c77 100%) !important;
     border-bottom: 1px solid rgba(201, 168, 76, 0.2) !important;
     padding: 10px 0 !important;
+}
+
+.top-nav a,
+.social-icons a {
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.3px !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.top-nav a:hover,
+.social-icons a:hover {
+    color: var(--gold-light) !important;
 }
 
 .social-icons a {
@@ -3625,6 +3844,62 @@ body.dark-mode #darkModeToggle {
     transition: var(--transition-smooth) !important;
 }
 
+.social-icons a:hover {
+    background: rgba(201, 168, 76, 0.2) !important;
+    border-color: var(--gold) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ── MAIN NAV ────────────────────────────────────────────── */
+.main-nav {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
+    border-bottom: 1px solid rgba(29, 53, 87, 0.08) !important;
+    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06), 0 1px 0 rgba(255, 255, 255, 0.8) inset !important;
+}
+
+.nav-wrapper {
+    padding: 14px 0 !important;
+}
+
+.main-menu a {
+    font-family: 'DM Sans', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    letter-spacing: 0.2px !important;
+    border-radius: 12px !important;
+    padding: 0 18px !important;
+    transition: var(--transition-smooth) !important;
+}
+
+.main-menu a:hover,
+.main-menu a.active {
+    background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 8px 20px rgba(29, 53, 87, 0.25), 0 2px 4px rgba(29, 53, 87, 0.15) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* ── DROPDOWN VIP ────────────────────────────────────────── */
+.dropdown {
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, 0.97) !important;
+    backdrop-filter: blur(30px) saturate(200%) !important;
+    border: 1px solid rgba(29, 53, 87, 0.08) !important;
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.16), 0 4px 16px rgba(15, 23, 42, 0.08) !important;
+    padding: 10px !important;
+}
+
+.dropdown a {
+    font-family: 'DM Sans', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    border-radius: 12px !important;
+    min-height: 44px !important;
+    transition: var(--transition-smooth) !important;
+}
+
 .dropdown a:hover,
 .dropdown a.active {
     background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
@@ -3632,6 +3907,54 @@ body.dark-mode #darkModeToggle {
     padding-left: 20px !important;
 }
 
+/* ── SEARCH BAR ──────────────────────────────────────────── */
+.search-container input {
+    font-family: 'DM Sans', sans-serif !important;
+    height: 50px !important;
+    border-radius: 16px !important;
+    background: rgba(248, 250, 252, 0.98) !important;
+    border: 1.5px solid rgba(29, 53, 87, 0.08) !important;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06), 0 0 0 0 rgba(29, 53, 87, 0) !important;
+    font-size: 14px !important;
+    transition: var(--transition-smooth) !important;
+}
+
+.search-container input:focus {
+    border-color: rgba(29, 53, 87, 0.3) !important;
+    box-shadow: 0 0 0 4px rgba(29, 53, 87, 0.08), 0 4px 16px rgba(15, 23, 42, 0.08) !important;
+    background: #fff !important;
+}
+
+.search-container i {
+    color: #1D3557 !important;
+    font-size: 15px !important;
+    opacity: 0.7;
+    transition: var(--transition-smooth) !important;
+}
+
+.search-container input:focus~i {
+    opacity: 1;
+}
+
+/* ── ACTION BUTTONS ──────────────────────────────────────── */
+.action-btn {
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.96) !important;
+    border: 1.5px solid rgba(29, 53, 87, 0.1) !important;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
+    transition: var(--transition-smooth) !important;
+    font-family: 'DM Sans', sans-serif !important;
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, #1D3557, #274c77) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    box-shadow: 0 12px 28px rgba(29, 53, 87, 0.28) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* ── HERO SECTION ────────────────────────────────────────── */
 .hero {
     background:
         radial-gradient(ellipse 70% 80% at 80% 50%, rgba(69, 123, 157, 0.25) 0%, transparent 60%),
@@ -3705,6 +4028,7 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 20px 50px rgba(255, 255, 255, 0.3), 0 8px 20px rgba(29, 53, 87, 0.15) !important;
 }
 
+/* ── FILTER BAR VIP ──────────────────────────────────────── */
 .filter-bar {
     background: rgba(255, 255, 255, 0.92) !important;
     backdrop-filter: blur(24px) saturate(180%) !important;
@@ -3772,6 +4096,7 @@ body.dark-mode #darkModeToggle {
     transform: translateY(-1px) !important;
 }
 
+/* ── SECTION HEADERS ─────────────────────────────────────── */
 .section-header h2 {
     font-family: 'Playfair Display', serif !important;
     font-size: 36px !important;
@@ -3790,6 +4115,7 @@ body.dark-mode #darkModeToggle {
     color: var(--primary-light) !important;
 }
 
+/* ── BOOK CARDS VIP ──────────────────────────────────────── */
 .section-row .book-card,
 .new-release-card,
 .trending-card,
@@ -3815,6 +4141,7 @@ body.dark-mode #darkModeToggle {
     border-color: rgba(29, 53, 87, 0.1) !important;
 }
 
+/* Shine effect on hover */
 .section-row .book-card::before,
 .new-release-card::before,
 .trending-card::before {
@@ -3835,6 +4162,7 @@ body.dark-mode #darkModeToggle {
     opacity: 1 !important;
 }
 
+/* Card image zoom */
 .section-row .book-card img,
 .new-release-card .new-img-wrap img,
 .trending-card img,
@@ -3851,6 +4179,7 @@ body.dark-mode #darkModeToggle {
     transform: scale(1.08) !important;
 }
 
+/* Book info typography */
 .section-row .book-info h3,
 .new-release-card .new-title,
 .trending-card .trending-title {
@@ -3869,6 +4198,7 @@ body.dark-mode #darkModeToggle {
     font-weight: 500 !important;
 }
 
+/* Price */
 .price-sale,
 .deal-price-sale {
     font-family: 'DM Sans', sans-serif !important;
@@ -3883,6 +4213,19 @@ body.dark-mode #darkModeToggle {
     color: #cbd5e1 !important;
 }
 
+/* Discount badge */
+.discount-badge {
+    background: linear-gradient(135deg, #1D3557, #274c77) !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    font-family: 'DM Sans', sans-serif !important;
+    letter-spacing: 0.5px !important;
+    border-radius: 8px !important;
+    padding: 3px 8px !important;
+    box-shadow: 0 3px 8px rgba(29, 53, 87, 0.3) !important;
+}
+
+/* ── BOOK ACTION BUTTONS ──────────────────────────────────── */
 .modal-btn {
     font-family: 'DM Sans', sans-serif !important;
     font-size: 11px !important;
@@ -3942,6 +4285,7 @@ body.dark-mode #darkModeToggle {
     background: rgba(239, 68, 68, 0.18) !important;
 }
 
+/* ── CART & WISHLIST DROPDOWNS ───────────────────────────── */
 .cart-dropdown,
 .heart-dropdown,
 .user-dropdown {
@@ -3958,6 +4302,7 @@ body.dark-mode #darkModeToggle {
     border-radius: 18px 18px 0 0 !important;
 }
 
+/* ── FOOTER VIP ──────────────────────────────────────────── */
 .footer {
     background: linear-gradient(150deg, #071524 0%, #0d1f38 40%, #1D3557 100%) !important;
     border-top: 1px solid rgba(201, 168, 76, 0.15) !important;
@@ -4036,6 +4381,7 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 8px 20px rgba(201, 168, 76, 0.35) !important;
 }
 
+/* ── SCROLL TO TOP VIP ───────────────────────────────────── */
 #scrollTopBtn {
     background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
     box-shadow: 0 8px 24px rgba(29, 53, 87, 0.4) !important;
@@ -4049,6 +4395,7 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 16px 36px rgba(29, 53, 87, 0.5) !important;
 }
 
+/* ── LOGIN MODAL VIP ─────────────────────────────────────── */
 .login-box {
     border-radius: 28px !important;
     box-shadow: 0 32px 80px rgba(15, 23, 42, 0.25) !important;
@@ -4087,6 +4434,7 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 16px 36px rgba(29, 53, 87, 0.35) !important;
 }
 
+/* ── TOAST VIP ───────────────────────────────────────────── */
 .toast {
     font-family: 'DM Sans', sans-serif !important;
     border-radius: 16px !important;
@@ -4101,8 +4449,7 @@ body.dark-mode #darkModeToggle {
 .toast::before {
     content: '' !important;
     position: absolute !important;
-    top: 0 !important;
-    bottom: 0 !important;
+    inset-y: 0 !important;
     left: 0 !important;
     width: 4px !important;
     border-radius: 16px 0 0 16px !important;
@@ -4157,6 +4504,7 @@ body.dark-mode #darkModeToggle {
     margin-top: 2px !important;
 }
 
+/* ── DARK MODE VIP ───────────────────────────────────────── */
 body.dark-mode {
     background: linear-gradient(160deg, #070f1c 0%, #0d1928 50%, #0a1520 100%) !important;
     color: #e2e8f0 !important;
@@ -4205,6 +4553,7 @@ body.dark-mode .price-range input {
     border-color: rgba(255, 255, 255, 0.1) !important;
 }
 
+/* ── LIVE NOTIF VIP ──────────────────────────────────────── */
 .live-notif-box {
     background: rgba(255, 255, 255, 0.97) !important;
     backdrop-filter: blur(20px) !important;
@@ -4213,6 +4562,14 @@ body.dark-mode .price-range input {
     box-shadow: 0 12px 32px rgba(15, 23, 42, 0.15) !important;
     padding: 12px 16px !important;
     font-family: 'DM Sans', sans-serif !important;
+}
+
+/* ── FLASH SALE SECTION VIP ──────────────────────────────── */
+.flash-sale-section {
+    background: linear-gradient(135deg, #071524 0%, #0f2340 40%, #1D3557 100%) !important;
+    border-radius: 28px !important;
+    margin: 16px 0 !important;
+    overflow: hidden !important;
 }
 
 .flash-label {
@@ -4238,6 +4595,7 @@ body.dark-mode .price-range input {
     transform: translateY(-2px) !important;
 }
 
+/* ── MODAL BOOK DETAIL VIP ───────────────────────────────── */
 .book-modal {
     background: rgba(7, 21, 36, 0.85) !important;
     backdrop-filter: blur(16px) !important;
@@ -4280,6 +4638,7 @@ body.dark-mode .price-range input {
     letter-spacing: -0.5px !important;
 }
 
+/* ── TRENDING RANK BADGE ─────────────────────────────────── */
 .trending-rank {
     background: linear-gradient(135deg, #1D3557, #274c77) !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -4290,12 +4649,27 @@ body.dark-mode .price-range input {
     box-shadow: 0 4px 12px rgba(29, 53, 87, 0.4) !important;
 }
 
+/* ── SEARCH RESULTS ──────────────────────────────────────── */
+.search-result-item {
+    transition: var(--transition-smooth) !important;
+    border-radius: 12px !important;
+}
+
+.search-result-item:hover {
+    background: rgba(29, 53, 87, 0.04) !important;
+}
+
 .search-result-title {
     font-family: 'DM Sans', sans-serif !important;
     font-weight: 700 !important;
-    margin-bottom: 4px;
 }
 
+.search-result-price {
+    color: #1D3557 !important;
+    font-weight: 800 !important;
+}
+
+/* ── SUBTLE PAGE LOAD ANIMATION ──────────────────────────── */
 @keyframes vip-fadein {
     from {
         opacity: 0;
@@ -4328,7 +4702,22 @@ body.dark-mode .price-range input {
     animation: vip-fadein 0.6s ease 0.3s both;
 }
 
-/* TYPOGRAPHY SYSTEM */
+
+/* ============================================================
+   ✦ TYPOGRAPHY SYSTEM — Inter + Sora, màu #1D3557
+   ============================================================ */
+
+/* Body base */
+body {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* ── HEADINGS dùng Sora ───────────────────────────────────── */
 h1,
 h2,
 h3,
@@ -4346,20 +4735,24 @@ h6,
     font-family: 'Sora', sans-serif !important;
     letter-spacing: -0.03em !important;
     line-height: 1.18 !important;
+    color: #1D3557 !important;
 }
 
+/* Hero title — trắng vì nền tối */
 .hero h1 {
     color: #fff !important;
     font-size: clamp(38px, 5vw, 68px) !important;
     font-weight: 800 !important;
 }
 
+/* Section headings */
 .section-header h2 {
     font-size: 32px !important;
     font-weight: 800 !important;
     color: #1D3557 !important;
 }
 
+/* Card title */
 .section-row .book-info h3,
 .new-release-card .new-title,
 .trending-card .trending-title,
@@ -4374,6 +4767,7 @@ h6,
     line-height: 1.42 !important;
 }
 
+/* Author, label phụ */
 .section-row .book-info p,
 .new-release-card .new-author,
 .search-result-author,
@@ -4388,6 +4782,7 @@ h6,
     letter-spacing: 0 !important;
 }
 
+/* Nav links */
 .main-menu a,
 .dropdown a,
 .user-dropdown a,
@@ -4398,6 +4793,7 @@ h6,
     letter-spacing: -0.01em !important;
 }
 
+/* Buttons */
 .btn-cta,
 .btn-filter,
 .btn-auth,
@@ -4411,6 +4807,7 @@ h6,
     letter-spacing: -0.01em !important;
 }
 
+/* Price — số nổi bật */
 .price-sale,
 .deal-price-sale,
 .flash-price-sale,
@@ -4432,6 +4829,8 @@ h6,
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05) !important;
 }
 
+
+/* Price gốc gạch ngang */
 .price-orig,
 .deal-price-orig,
 .flash-price-orig {
@@ -4443,6 +4842,7 @@ h6,
     letter-spacing: 0 !important;
 }
 
+/* Filter labels */
 .filter-label {
     font-family: 'Inter', sans-serif !important;
     font-weight: 700 !important;
@@ -4451,6 +4851,7 @@ h6,
     letter-spacing: 0.02em !important;
 }
 
+/* Filter selects & inputs */
 .filter-select,
 .price-range input,
 .search-container input,
@@ -4461,6 +4862,7 @@ h6,
     color: #1D3557 !important;
 }
 
+/* Toast */
 .toast-title {
     font-family: 'Inter', sans-serif !important;
     font-weight: 700 !important;
@@ -4476,6 +4878,7 @@ h6,
     color: #475569 !important;
 }
 
+/* Auth modal */
 .auth-header h2 {
     font-size: 26px !important;
     font-weight: 800 !important;
@@ -4490,6 +4893,7 @@ h6,
     color: #475569 !important;
 }
 
+/* Review */
 .reviewer-name {
     font-family: 'Inter', sans-serif !important;
     font-weight: 700 !important;
@@ -4504,6 +4908,7 @@ h6,
     line-height: 1.7 !important;
 }
 
+/* Footer */
 .footer-logo span {
     font-size: 20px !important;
     font-weight: 700 !important;
@@ -4530,6 +4935,7 @@ h6,
     line-height: 1.7 !important;
 }
 
+/* Live notif */
 .live-notif-box span:last-child {
     font-family: 'Inter', sans-serif !important;
     font-size: 12px !important;
@@ -4537,6 +4943,23 @@ h6,
     color: #1D3557 !important;
 }
 
+/* Search result */
+.search-result-title {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    color: #1D3557 !important;
+}
+
+.search-result-price {
+    font-family: 'Sora', sans-serif !important;
+    font-weight: 700 !important;
+    color: #1D3557 !important;
+    font-size: 13px !important;
+    letter-spacing: -0.02em !important;
+}
+
+/* Modal book detail */
 .modal-content h2 {
     font-size: 24px !important;
     font-weight: 800 !important;
@@ -4554,6 +4977,7 @@ h6,
     color: #64748b !important;
 }
 
+/* Section tag above heading */
 .section-tag {
     font-family: 'Inter', sans-serif !important;
     font-size: 10.5px !important;
@@ -4563,6 +4987,7 @@ h6,
     color: #457b9d !important;
 }
 
+/* Discount badge */
 .discount-badge {
     font-family: 'Inter', sans-serif !important;
     font-weight: 800 !important;
@@ -4570,6 +4995,7 @@ h6,
     letter-spacing: 0.02em !important;
 }
 
+/* Review modal titles */
 .reviews-modal-header h3,
 .review-modal-header h3 {
     font-family: 'Sora', sans-serif !important;
@@ -4578,12 +5004,15 @@ h6,
     color: #1D3557 !important;
 }
 
+/* Flash sale label */
 .flash-label {
     font-size: 20px !important;
     font-weight: 800 !important;
     color: #fff !important;
 }
 
+
+/* ── GIÁ TIỀN — nổi bật đỏ ───────────────────────────────── */
 .price-sale,
 .deal-price-sale,
 .flash-price-sale,
@@ -4596,6 +5025,7 @@ h6,
     letter-spacing: -0.03em !important;
 }
 
+/* ==================== NÚT ĐỌC SÁCH ==================== */
 .modal-btn-read {
     background: linear-gradient(135deg, #2d6a4f, #40916c);
     color: white;
@@ -4613,6 +5043,7 @@ h6,
     transform: translateY(-1px);
 }
 
+/* ==================== GALLERY THUMBNAILS TRONG MODAL ==================== */
 .modal-main-img {
     width: 100%;
     max-height: 360px;
@@ -4655,17 +5086,4 @@ h6,
     opacity: 1;
     border-color: #1D3557;
     box-shadow: 0 0 0 2px #a8c4e0;
-}
-
-/* Custom variables for consistency */
-:root {
-    --primary: #1D3557;
-    --primary-light: #274c77;
-    --text: #0f172a;
-    --text-light: #64748b;
-    --transition: all 0.25s ease;
-    --transition-smooth: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-    --shadow-md: 0 20px 35px -12px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.02);
-    --card-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.08);
-    --card-shadow-hover: 0 28px 36px -18px rgba(0, 0, 0, 0.2);
 }

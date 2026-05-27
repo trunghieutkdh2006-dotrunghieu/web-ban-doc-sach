@@ -1,38 +1,73 @@
 const multer = require('multer');
-const cloudinary = require('cloudinary').v2;
-const { Readable } = require('stream');
+const path = require('path');
+const fs = require('fs');
 
-cloudinary.config({
-    cloud_name: 'dk7s3mjq8',
-    api_key: '969525826273365',
-    api_secret: 'tT6mgLgGwVKAYzEat9I1vkEdfSE'
+// Đảm bảo thư mục uploads tồn tại
+const uploadDir = 'uploads/';
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Tạo thư mục con
+const imagesDir = 'uploads/images/';
+const pdfDir = 'uploads/pdf/';
+if (!fs.existsSync(imagesDir)) fs.mkdirSync(imagesDir, { recursive: true });
+if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
+
+// Cấu hình cho ảnh
+const imageStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, imagesDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        cb(null, 'img-' + uniqueSuffix + ext);
+    }
 });
 
-const storage = multer.memoryStorage();
+// Cấu hình cho PDF
+const pdfStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, pdfDir);
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        cb(null, 'pdf-' + uniqueSuffix + ext);
+    }
+});
 
+// Filter cho ảnh
 const imageFilter = (req, file, cb) => {
     const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-    allowedTypes.includes(file.mimetype) ? cb(null, true) : cb(new Error('Chỉ chấp nhận file ảnh'), false);
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error('Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WEBP)'), false);
+    }
 };
 
+// Filter cho PDF
 const pdfFilter = (req, file, cb) => {
-    file.mimetype === 'application/pdf' ? cb(null, true) : cb(new Error('Chỉ chấp nhận file PDF'), false);
+    if (file.mimetype === 'application/pdf') {
+        cb(null, true);
+    } else {
+        cb(new Error('Chỉ chấp nhận file PDF'), false);
+    }
 };
 
-const uploadImage = multer({ storage, fileFilter: imageFilter, limits: { fileSize: 5 * 1024 * 1024 } });
-const uploadPdf = multer({ storage, fileFilter: pdfFilter, limits: { fileSize: 10 * 1024 * 1024 } });
+// Tạo các middleware
+const uploadImage = multer({
+    storage: imageStorage,
+    fileFilter: imageFilter,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB cho ảnh
+});
 
-const uploadToCloudinary = (buffer, folder, resourceType = 'image') => {
-    return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-            { folder, resource_type: resourceType },
-            (error, result) => {
-                if (error) reject(error);
-                else resolve(result);
-            }
-        );
-        Readable.from(buffer).pipe(stream);
-    });
-};
+const uploadPdf = multer({
+    storage: pdfStorage,
+    fileFilter: pdfFilter,
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB cho PDF
+});
 
-module.exports = { uploadImage, uploadPdf, uploadToCloudinary, cloudinary };
+module.exports = { uploadImage, uploadPdf };

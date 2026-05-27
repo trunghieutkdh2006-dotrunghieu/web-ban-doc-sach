@@ -5,11 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
   <title>HTTVBOOKS - Nền tảng đọc sách trực tuyến</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -80,15 +75,16 @@
       </div>
 
     </header>
+  </div>
 
-    <nav class="main-nav">
+  <nav class="main-nav">
     <div class="container nav-wrapper">
       <div class="left">
         <a href="#" class="logo">
           <img src="img/taixuong.png" alt="Logo">
         </a>
         <ul class="main-menu">
-          <li><a href="#" onclick="showHomePage(); return false;">Trang chủ</a></li>
+          <li><a href="#" class="active" onclick="showHomePage(); return false;">Trang chủ</a></li>
           <li class="has-dropdown" id="categoryMenu">
             <a href="#" onclick="toggleCategoryDropdown(event); return false;">Thể loại <i class="fas fa-chevron-down"
                 id="categoryChevron"></i></a>
@@ -182,7 +178,6 @@
     </div>
   </nav>
   </header>
-  </div>
 
   <!-- <section class="hero">
     <div class="container hero-content">
@@ -401,23 +396,6 @@
   <script src="js/config.js"></script>
   <script src="js/script.js"></script>
   <script src="js/enhancements.js"></script>
-  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-  <script>
-    // Lắng nghe sự kiện từ admin để tự cập nhật danh sách sách
-    (function initSocket() {
-      try {
-        const socket = io(BASE_URL, {
-          path: '/socket.io',
-          transports: ['websocket', 'polling']
-        });
-        socket.on('bookAdded', () => { loadBooks(); });
-        socket.on('bookUpdated', () => { loadBooks(); });
-        socket.on('bookDeleted', () => { loadBooks(); });
-      } catch (e) {
-        console.warn('Socket.io không kết nối được:', e.message);
-      }
-    })();
-  </script>
   <script>
     // Fix: đảm bảo openBookDetail luôn fetch fresh data và hiện gallery
     window.addEventListener('load', function () {

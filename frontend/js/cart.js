@@ -8,7 +8,7 @@ const VALID_COUPONS = {
   FREEDEL: 30000,
 };
 let appliedCoupon = null;
-
+const API_BASE_URL = 'https://passenger-grapple-dynamic.ngrok-free.dev/api';
 
 // ==================== CART FUNCTIONS ====================
 function getCart() {
@@ -827,7 +827,7 @@ let socket;
 
 function connectSocket() {
   try {
-    socket = io(BASE_URL, {
+    socket = io('https://passenger-grapple-dynamic.ngrok-free.dev', {
       path: '/socket.io',
       transports: ['websocket', 'polling']
     });

@@ -662,8 +662,7 @@ function injectEnhancements(books) {
   // Banner nâng cấp
   if (mainNav && !document.getElementById('enhancedBanner')) {
     const banner = buildEnhancedBanner();
-    const headerEl = mainNav.closest('header') || mainNav.parentNode;
-    headerEl.parentNode.insertBefore(banner, headerEl.nextSibling);
+    mainNav.parentNode.insertBefore(banner, mainNav.nextSibling);
   }
   
   if (heroSection) heroSection.style.display = 'none';

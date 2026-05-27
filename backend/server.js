@@ -27,14 +27,12 @@ app.set("io", io);
 
 io.on("connection", (socket) => {
     console.log("🔌 Client kết nối:", socket.id);
-    socket.on("disconnect", (reason) => {
-        console.log("❌ Client ngắt kết nối:", socket.id, "| Lý do:", reason);
+    socket.on("disconnect", () => {
+        console.log("❌ Client ngắt kết nối:", socket.id);
     });
 });
 
-// =========================
 // MIDDLEWARE
-// =========================
 app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
@@ -57,22 +55,15 @@ app.use(express.static(path.join(__dirname, "../frontend")));
 
 // =========================
 // FRONTEND ROUTES
-// ✅ Dùng regex để loại trừ /api và /socket.io
-// Tránh chặn HTTP handshake của Socket.IO
 // =========================
-app.get(/^(?!\/api|\/socket\.io).*/, (req, res) => {
+app.get("*", (req, res) => {
+    if (req.path.startsWith("/api")) {
+        return res.status(404).json({
+            success: false,
+            message: `API endpoint ${req.path} không tồn tại`
+        });
+    }
     res.sendFile(path.join(__dirname, "../frontend/index.html"));
-});
-
-// =========================
-// API 404 HANDLER
-// Phải đặt SAU tất cả routes /api
-// =========================
-app.use("/api/*", (req, res) => {
-    res.status(404).json({
-        success: false,
-        message: `API endpoint ${req.path} không tồn tại`
-    });
 });
 
 // =========================
