@@ -2480,6 +2480,9 @@ body {
     margin-bottom: 20px !important;
     letter-spacing: 0.5px !important;
     box-shadow: 0 4px 10px rgba(29, 53, 87, 0.2) !important;
+    margin-top: 18px;
+    font-family: 'DM Sans', sans-serif !important;
+    text-transform: uppercase !important;
 }
 
 .book-modal .modal-right h2 {
@@ -2642,20 +2645,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-}
-
-.modal-category-badge {
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    letter-spacing: 1.5px !important;
-    text-transform: uppercase !important;
-    background: rgba(29, 53, 87, 0.08) !important;
-    color: #1D3557 !important;
-    border-radius: 8px !important;
-    padding: 4px 12px !important;
-    display: inline-block !important;
-    margin-bottom: 14px !important;
 }
 
 .modal-right h2 {
