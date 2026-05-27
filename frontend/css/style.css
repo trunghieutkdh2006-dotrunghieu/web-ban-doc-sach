@@ -640,7 +640,8 @@ body {
    ============================================================ */
 .search-container {
     position: relative;
-    width: 360px;
+    width: 100%;
+    max-width: 520px;
 }
 
 @media(max-width:1100px) {
