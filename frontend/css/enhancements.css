@@ -424,7 +424,6 @@ h6 {
 .btn-auth,
 .btn-submit-review,
 .modal-btn-cart {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
     border-radius: var(--radius-sm) !important;
     font-weight: 700 !important;
     box-shadow: 0 10px 24px rgba(79, 70, 229, 0.2) !important;
@@ -433,7 +432,6 @@ h6 {
 .btn-auth:hover,
 .btn-submit-review:hover,
 .modal-btn-cart:hover {
-    background: linear-gradient(135deg, var(--accent), #FF2E93) !important;
     box-shadow: 0 10px 24px rgba(236, 72, 153, 0.3) !important;
     transform: translateY(-2px) !important;
 }
