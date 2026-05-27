@@ -442,10 +442,6 @@ body {
 /* ============================================================
    TOP BAR & NAVIGATION
    ============================================================ */
-.top-bar {
-    background: linear-gradient(135deg, #10243f, #1D3557);
-    padding: 12px 0;
-}
 
 .top-bar .container {
     display: flex;
@@ -477,15 +473,6 @@ body {
     transform: translateY(-1px);
 }
 
-.main-nav {
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    background: rgba(255, 255, 255, .92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(255, 255, 255, .7);
-    box-shadow: 0 4px 20px rgba(15, 23, 42, .04);
-}
 
 .nav-wrapper {
     display: flex;
@@ -4024,7 +4011,7 @@ body {
 
 /* ── TOP BAR ─────────────────────────────────────────────── */
 .top-bar {
-    background: linear-gradient(135deg, #0d1f38 0%, #1D3557 60%, #274c77 100%) !important;
+    background: linear-gradient(135deg, #10243f, #1D3557);
     border-bottom: 1px solid rgba(201, 168, 76, 0.2) !important;
     padding: 10px 0 !important;
 }
@@ -4058,15 +4045,6 @@ body {
     background: rgba(201, 168, 76, 0.2) !important;
     border-color: var(--gold) !important;
     transform: translateY(-2px) !important;
-}
-
-/* ── MAIN NAV ────────────────────────────────────────────── */
-.main-nav {
-    background: rgba(255, 255, 255, 0.95) !important;
-    backdrop-filter: blur(24px) saturate(180%) !important;
-    -webkit-backdrop-filter: blur(24px) saturate(180%) !important;
-    border-bottom: 1px solid rgba(29, 53, 87, 0.08) !important;
-    box-shadow: 0 4px 24px rgba(15, 23, 42, 0.06), 0 1px 0 rgba(255, 255, 255, 0.8) inset !important;
 }
 
 .nav-wrapper {

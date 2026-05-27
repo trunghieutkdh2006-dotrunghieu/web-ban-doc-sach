@@ -127,12 +127,6 @@ h6 {
     box-shadow: 0 10px 24px rgba(79, 70, 229, 0.25) !important;
 }
 
-.cart-count,
-.heart-count {
-    background: linear-gradient(135deg, var(--accent), #F43F5E) !important;
-    box-shadow: 0 4px 10px rgba(236, 72, 153, 0.4) !important;
-}
-
 /* Dropdown Menu Glassmorphism */
 .cart-dropdown,
 .heart-dropdown,
