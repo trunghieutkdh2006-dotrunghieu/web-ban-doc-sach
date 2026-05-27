@@ -4899,7 +4899,7 @@ h6,
 .modal-content h2,
 .daily-deal-title,
 .book-section-container h2 {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter';
     letter-spacing: -0.03em !important;
     line-height: 1.18 !important;
     color: #ef4444;
