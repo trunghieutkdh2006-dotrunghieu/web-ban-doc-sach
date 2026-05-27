@@ -841,9 +841,6 @@ body.dark-mode .back-home {
     border-color: rgba(255, 255, 255, 0.05) !important;
 }
 
-.back-home:hover {
-    color: var(--white) !important;
-}
 
 /* Các nút xóa bỏ / phụ */
 .btn-clear {
