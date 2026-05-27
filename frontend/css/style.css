@@ -1310,6 +1310,7 @@ body {
 
 
 
+
 .daily-deal-header {
     display: flex;
     justify-content: space-between;
@@ -3969,6 +3970,18 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 20px 50px rgba(255, 255, 255, 0.3), 0 8px 20px rgba(29, 53, 87, 0.15) !important;
 }
 
+/* ── FILTER BAR VIP ──────────────────────────────────────── */
+.filter-bar {
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(24px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08), 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+    border-radius: 28px !important;
+    padding: 24px 32px !important;
+    transition: none !important;
+    margin: 16px 0 !important;
+}
+
 .filter-label {
     font-family: 'DM Sans', sans-serif !important;
     font-size: 13px !important;
@@ -4582,6 +4595,9 @@ body.dark-mode .price-range input {
     }
 }
 
+.filter-bar {
+    animation: vip-fadein 0.5s ease both;
+}
 
 .hero-content {
     animation: vip-fadein 0.7s ease both;
