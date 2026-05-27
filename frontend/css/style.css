@@ -614,7 +614,6 @@ body {
 
 .dropdown a:hover,
 .dropdown a.active {
-    background: linear-gradient(135deg, #1D3557 0%, #274c77 100%);
     color: #fff;
 
     padding-left: 20px;
