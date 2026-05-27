@@ -3746,15 +3746,11 @@ body.dark-mode #darkModeToggle {
 .clear-wishlist-btn {
     background: transparent;
     border: none;
-    color: #ef4444;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
 }
 
-.clear-wishlist-btn:hover {
-    color: #b91c1c;
-}
 
 .heart-dropdown-items {
     max-height: 280px;
@@ -3854,15 +3850,12 @@ body.dark-mode #darkModeToggle {
 .clear-cart-btn {
     background: transparent;
     border: none;
-    color: #ef4444;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
 }
 
-.clear-cart-btn:hover {
-    color: #b91c1c;
-}
+
 
 .cart-dropdown-items {
     max-height: 300px;
