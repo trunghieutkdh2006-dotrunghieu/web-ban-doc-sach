@@ -4423,16 +4423,6 @@ body {
     color: #cbd5e1 !important;
 }
 
-/* Discount badge */
-.discount-badge {
-    background: linear-gradient(135deg, #ef4444, #dc2626) !important;
-    color: #fff !important;
-    box-shadow: 0 6px 14px rgba(239, 68, 68, 0.35) !important;
-    border-radius: 10px !important;
-    font-weight: 800 !important;
-    padding: 6px 10px;
-}
-
 /* ── BOOK ACTION BUTTONS ──────────────────────────────────── */
 .modal-btn {
     font-family: 'DM Sans', sans-serif !important;
