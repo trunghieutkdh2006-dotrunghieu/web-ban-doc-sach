@@ -306,15 +306,30 @@
     font-weight: 800 !important;
 }
 
-/* ============================================================
-   DAILY DEALS & FLASH SALE SECTIONS
-   ============================================================ */
 .daily-deal-section {
-    background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.15), transparent 45%),
-        linear-gradient(135deg, #0A0D1B 0%, #151A30 100%) !important;
-    border-radius: var(--radius-lg) !important;
+    position: relative;
+
+    overflow: hidden;
+
     margin: 40px 24px !important;
+
     padding: 60px 40px !important;
+
+    border-radius: var(--radius-lg) !important;
+
+    background:
+        radial-gradient(circle at top left,
+            rgba(79, 70, 229, 0.15),
+            transparent 45%),
+        linear-gradient(135deg,
+            #0A0D1B 0%,
+            #151A30 100%) !important;
+
+    color: #fff;
+
+    font-family:
+        'Be Vietnam Pro',
+        sans-serif;
 }
 
 .daily-deal-timer {
@@ -344,16 +359,33 @@
     transform: translateY(-2px) !important;
 }
 
-/* ============================================================
-   FILTER BAR GLOW
-   ============================================================ */
 .filter-bar {
+    position: relative;
+    z-index: 10;
+
     margin: 20px 24px !important;
-    border-radius: var(--radius-md) !important;
-    background: var(--glass-bg) !important;
-    backdrop-filter: var(--glass-blur) !important;
-    border: 1px solid var(--glass-border) !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04) !important;
+
+    padding: 24px 32px !important;
+
+    border-radius: 28px !important;
+
+    background:
+        rgba(255, 255, 255, 0.92) !important;
+
+    backdrop-filter:
+        blur(24px) saturate(180%) !important;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.7) !important;
+
+    box-shadow:
+        0 8px 32px rgba(15, 23, 42, 0.08),
+        0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
+
+    animation:
+        vip-fadein 0.5s ease both;
+
+    transition: none !important;
 }
 
 .filter-select,

@@ -90,6 +90,7 @@ body {
         padding: 0 18px;
     }
 }
+
 /* Track chứa các slide/banner (dùng trong carousel/slider) */
 .banner-track-enhanced {
 
@@ -1307,23 +1308,6 @@ body {
     z-index: 2;
 }
 
-/* ============================================================
-   DAILY DEAL SECTION
-   ============================================================ */
-.daily-deal-section {
-    padding: 60px 0;
-    background:
-        radial-gradient(circle at top left,
-            rgba(239, 68, 68, 0.15),
-            transparent 30%),
-        linear-gradient(135deg, #1e1b4b 0%, #111827 100%);
-
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-
-    font-family: 'Be Vietnam Pro', sans-serif;
-}
 
 
 .daily-deal-header {
@@ -1545,15 +1529,22 @@ body {
     }
 }
 
-/* ============================================================
-   FLASH SALE SECTION
-   ============================================================ */
-
 .flash-sale-section {
-    background: linear-gradient(135deg, #0f0c29, #1e1b4b 40%, #111827);
+    background:
+        linear-gradient(135deg,
+            #0f0c29,
+            #1e1b4b 40%,
+            #111827);
+
     padding: 50px 0;
+
     position: relative;
+
     overflow-x: auto;
+
+    font-family:
+        'Be Vietnam Pro',
+        sans-serif;
 }
 
 .flash-sale-header {
@@ -3126,26 +3117,16 @@ body.dark-mode #darkModeToggle {
     margin-top: 24px;
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.footer {
-    position: relative;
-    overflow: hidden;
-    background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.12), transparent 30%),
-        linear-gradient(135deg, #0f172a, #111827);
-    color: #f8fafc;
-    padding-top: 80px;
-    margin-top: 80px;
-}
 
 .footer .container {
     max-width: 1440px !important;
     width: 100% !important;
-    padding: 0 28px !important;
+
     margin: 0 auto !important;
+
+    padding: 0 28px !important;
 }
+
 
 .footer-content {
     display: grid;
@@ -3158,9 +3139,18 @@ body.dark-mode #darkModeToggle {
     display: flex;
     align-items: center;
     gap: 14px;
+
     margin-bottom: 22px;
-    font-size: 28px;
+
+    font-family:
+        'Playfair Display',
+        serif !important;
+
+    font-size: 22px !important;
+
     font-weight: 900;
+
+    letter-spacing: .5px !important;
 }
 
 .footer-logo i {
@@ -3234,21 +3224,43 @@ body.dark-mode #darkModeToggle {
 
 .footer-section h4 {
     position: relative;
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 26px;
+
+    margin-bottom: 20px !important;
     padding-bottom: 12px;
+
+    font-family:
+        'DM Sans',
+        sans-serif !important;
+
+    font-size: 11px !important;
+
+    font-weight: 700 !important;
+
+    letter-spacing: 2.5px !important;
+
+    text-transform: uppercase;
+
+    color:
+        rgba(201, 168, 76, .8) !important;
 }
 
 .footer-section h4::after {
     content: "";
+
     position: absolute;
-    bottom: 0;
+
     left: 0;
+    bottom: 0;
+
     width: 60px;
     height: 4px;
+
     border-radius: 999px;
-    background: linear-gradient(90deg, #3b82f6, #7c3aed);
+
+    background:
+        linear-gradient(90deg,
+            #3b82f6,
+            #7c3aed);
 }
 
 .footer-section ul {
@@ -3267,10 +3279,6 @@ body.dark-mode #darkModeToggle {
     transition: .3s ease;
 }
 
-.footer-section ul li a:hover {
-    color: white;
-    padding-left: 12px;
-}
 
 .newsletter p {
     color: #cbd5e1;
@@ -3285,25 +3293,40 @@ body.dark-mode #darkModeToggle {
 }
 
 .newsletter-form input {
-    width: 100%;
-    padding: 16px 18px;
-    border: 1px solid rgba(255, 255, 255, .12);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, .08);
-    color: white;
-    font-size: 15px;
+    background:
+        rgba(255, 255, 255, .08) !important;
+
+    border:
+        1px solid rgba(255, 255, 255, .12) !important;
+
+    border-radius: 12px !important;
+
+    color: #fff !important;
+
+    transition: .3s ease;
 }
 
 .newsletter-form button {
-    border: none;
-    padding: 16px;
-    border-radius: 18px;
-    font-weight: 700;
-    font-size: 15px;
-    color: white;
+    border: none !important;
+
+    border-radius: 12px !important;
+
     cursor: pointer;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    transition: .35s ease;
+
+    font-family:
+        'DM Sans',
+        sans-serif !important;
+
+    font-weight: 700 !important;
+
+    background:
+        linear-gradient(135deg,
+            #2563eb,
+            #7c3aed) !important;
+
+    color: #fff !important;
+
+    transition: .3s ease;
 }
 
 .newsletter-form button:hover {
@@ -3978,18 +4001,6 @@ body.dark-mode #darkModeToggle {
     box-shadow: 0 20px 50px rgba(255, 255, 255, 0.3), 0 8px 20px rgba(29, 53, 87, 0.15) !important;
 }
 
-/* ── FILTER BAR VIP ──────────────────────────────────────── */
-.filter-bar {
-    background: rgba(255, 255, 255, 0.92) !important;
-    backdrop-filter: blur(24px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.7) !important;
-    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08), 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
-    border-radius: 28px !important;
-    padding: 24px 32px !important;
-    transition: none !important;
-    margin: 16px 0 !important;
-}
-
 .filter-label {
     font-family: 'DM Sans', sans-serif !important;
     font-size: 13px !important;
@@ -4240,78 +4251,48 @@ body.dark-mode #darkModeToggle {
     border-radius: 18px 18px 0 0 !important;
 }
 
-/* ── FOOTER VIP ──────────────────────────────────────────── */
 .footer {
-    background: linear-gradient(150deg, #071524 0%, #0d1f38 40%, #1D3557 100%) !important;
-    border-top: 1px solid rgba(201, 168, 76, 0.15) !important;
     position: relative !important;
     overflow: hidden !important;
+
+    margin-top: 80px;
+    padding-top: 80px;
+
+    background:
+        radial-gradient(circle at top left,
+            rgba(59, 130, 246, 0.15),
+            transparent 30%),
+        radial-gradient(circle at bottom right,
+            rgba(124, 58, 237, 0.12),
+            transparent 30%),
+        linear-gradient(150deg,
+            #071524 0%,
+            #0d1f38 40%,
+            #1D3557 100%) !important;
+
+    color: #f8fafc;
+
+    border-top:
+        1px solid rgba(201, 168, 76, 0.15) !important;
 }
 
 .footer::before {
-    content: '' !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    height: 1px !important;
-    background: linear-gradient(90deg, transparent, rgba(201, 168, 76, 0.4), transparent) !important;
-}
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
 
-.footer-logo {
-    font-family: 'Playfair Display', serif !important;
-    font-size: 22px !important;
-    letter-spacing: 0.5px !important;
-}
-
-.footer-section h4 {
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 11px !important;
-    font-weight: 700 !important;
-    letter-spacing: 2.5px !important;
-    text-transform: uppercase !important;
-    color: rgba(201, 168, 76, 0.8) !important;
-    margin-bottom: 20px !important;
-}
-
-.footer-section a,
-.footer-section p {
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 14px !important;
-    font-weight: 400 !important;
-    color: rgba(255, 255, 255, 0.62) !important;
-    transition: var(--transition-smooth) !important;
-}
-
-.footer-section a:hover {
-    color: rgba(255, 255, 255, 0.95) !important;
-    padding-left: 6px !important;
-}
-
-.newsletter-form input {
-    font-family: 'DM Sans', sans-serif !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    color: #fff !important;
-    border-radius: 12px !important;
-    transition: var(--transition-smooth) !important;
+    background:
+        linear-gradient(90deg,
+            transparent,
+            rgba(201, 168, 76, .4),
+            transparent);
 }
 
 .newsletter-form input:focus {
     background: rgba(255, 255, 255, 0.14) !important;
     border-color: rgba(201, 168, 76, 0.4) !important;
     outline: none !important;
-}
-
-.newsletter-form button {
-    font-family: 'DM Sans', sans-serif !important;
-    font-weight: 700 !important;
-    background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
-    color: #071524 !important;
-    border-radius: 12px !important;
-    border: none !important;
-    cursor: pointer !important;
-    transition: var(--transition-smooth) !important;
 }
 
 .newsletter-form button:hover {
@@ -4506,17 +4487,6 @@ body.dark-mode .price-range input {
     font-family: 'DM Sans', sans-serif !important;
 }
 
-/* ── FLASH SALE SECTION VIP ──────────────────────────────── */
-.flash-sale-section {
-    background: linear-gradient(135deg, #0f0c29, #1e1b4b 40%, #111827);
-    padding: 50px 0;
-    position: relative;
-    overflow-x: auto;
-
-    /* FONT */
-    font-family: 'Be Vietnam Pro', sans-serif;
-}
-
 .flash-label {
     font-family: 'Playfair Display', serif !important;
     font-size: 22px !important;
@@ -4612,10 +4582,6 @@ body.dark-mode .price-range input {
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.filter-bar {
-    animation: vip-fadein 0.5s ease both;
 }
 
 .hero-content {
@@ -4829,31 +4795,21 @@ h6,
     line-height: 1.7 !important;
 }
 
-/* Footer */
-.footer-logo span {
-    font-size: 20px !important;
-    font-weight: 700 !important;
-    color: #fff !important;
-}
-
-.footer-section h4 {
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 11px !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
-    color: rgba(255, 255, 255, 0.45) !important;
-    margin-bottom: 18px !important;
-}
-
 .footer-section a,
 .footer-section p,
 .footer-copyright,
 .footer-links a {
     font-family: 'Inter', sans-serif !important;
+
     font-size: 13.5px !important;
+
     font-weight: 400 !important;
+
     line-height: 1.7 !important;
+
+    color: rgba(255, 255, 255, .62) !important;
+
+    transition: .3s ease !important;
 }
 
 /* Live notif */
