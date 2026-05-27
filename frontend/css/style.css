@@ -80,24 +80,20 @@ html {
     scroll-behavior: smooth;
 }
 
-/* Toàn bộ trang web */
 body {
-
-    /* Font chữ chính của toàn site */
-    /* 'Inter' là font hiện đại, sạch, hay dùng trong UI/UX */
     font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 
-    /* Nền trang gồm 2 lớp:
-       - radial-gradient: ánh sáng loang từ góc trên trái (tạo hiệu ứng depth)
-       - linear-gradient: chuyển màu nền từ trên xuống dưới */
-    background:
-        radial-gradient(circle at top left, rgba(29, 53, 87, .05), transparent 25%),
-        linear-gradient(to bottom, #f8fbff, #f3f6fb);
+    letter-spacing: -0.01em;
 
-    /* Màu chữ chính lấy từ biến CSS (--text) */
+    background: radial-gradient(ellipse 80% 60% at 10% 0%, rgba(29, 53, 87, 0.07), transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(69, 123, 157, 0.05), transparent 50%),
+        linear-gradient(160deg, #f0f4fa 0%, #f8fbff 50%, #eef2f8 100%);
+
     color: var(--text);
-
-    /* Ẩn thanh cuộn ngang, tránh vỡ layout khi element tràn */
     overflow-x: hidden;
 }
 
@@ -3780,16 +3776,6 @@ body.dark-mode #darkModeToggle {
     --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ── BODY & FONTS ─────────────────────────────────────────── */
-body {
-    font-family: 'DM Sans', sans-serif !important;
-    background:
-        radial-gradient(ellipse 80% 60% at 10% 0%, rgba(29, 53, 87, 0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(69, 123, 157, 0.05) 0%, transparent 50%),
-        linear-gradient(160deg, #f0f4fa 0%, #f8fbff 50%, #eef2f8 100%) !important;
-    min-height: 100vh;
-}
-
 /* ── SCROLLBAR VIP ───────────────────────────────────────── */
 ::-webkit-scrollbar {
     width: 6px;
@@ -4671,21 +4657,6 @@ body.dark-mode .price-range input {
 
 .btn-cta {
     animation: vip-fadein 0.6s ease 0.3s both;
-}
-
-
-/* ============================================================
-   ✦ TYPOGRAPHY SYSTEM — Inter + Sora, màu #1D3557
-   ============================================================ */
-
-/* Body base */
-body {
-    font-family: 'Inter', sans-serif !important;
-    font-size: 15px !important;
-    line-height: 1.65 !important;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-    letter-spacing: -0.01em !important;
 }
 
 /* ── HEADINGS dùng Sora ───────────────────────────────────── */
