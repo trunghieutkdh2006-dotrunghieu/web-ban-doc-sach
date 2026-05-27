@@ -594,9 +594,6 @@ body {
     transform: translateY(0);
 }
 
-/* ============================================================
-   SEARCH
-   ============================================================ */
 .search-container {
     position: relative;
     width: 360px;
@@ -608,47 +605,68 @@ body {
     }
 }
 
+/* SEARCH INPUT */
 .search-container input {
-    width: 100%;
-    height: 54px;
-    padding: 0 56px 0 20px;
-    border: 1px solid transparent;
-    border-radius: 18px;
-    background: rgba(255, 255, 255, .96);
-    box-shadow: var(--shadow-sm);
-    font-size: 14px;
-    transition: var(--transition);
-}
+    width: 100% !important;
+    height: 50px !important;
 
-.search-container input:focus {
-    outline: none;
-    border-color: rgba(29, 53, 87, .15);
-    box-shadow: 0 0 0 5px rgba(29, 53, 87, .08);
+    padding: 0 20px 0 20px !important;
+
+    border-radius: 16px !important;
+    border: 1.5px solid rgba(29, 53, 87, 0.08) !important;
+
+    background: rgba(255, 255, 255, 0.96) !important;
+
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+
+    color: #1D3557 !important;
+
+    box-shadow:
+        0 2px 12px rgba(15, 23, 42, 0.06) !important;
+
+    transition: all 0.25s ease !important;
+
+    outline: none !important;
 }
 
 .search-container i {
     position: absolute;
     right: 18px;
     top: 50%;
+
     transform: translateY(-50%);
+
     color: #1D3557;
     font-size: 16px;
+
     cursor: pointer;
 }
 
 .search-results {
     position: absolute;
+
     top: 100%;
     left: 0;
     right: 0;
+
     margin-top: 14px;
-    border-radius: 24px;
-    overflow: hidden;
+
     display: none;
+
     z-index: 1000;
-    background: rgba(255, 255, 255, .94);
+
+    overflow: hidden;
+
+    border-radius: 24px;
+
+    background: rgba(255, 255, 255, 0.94);
+
     backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, .75);
+
+    border: 1px solid rgba(255, 255, 255, 0.75);
+
     box-shadow: var(--shadow-md);
 }
 
@@ -658,14 +676,20 @@ body {
 
 .search-result-item {
     display: flex;
+
     gap: 14px;
+
     padding: 16px;
+
     cursor: pointer;
-    transition: var(--transition);
+
+    border-radius: 12px !important;
+
+    transition: var(--transition-smooth) !important;
 }
 
 .search-result-item:hover {
-    background: #f8fafc;
+    background: rgba(29, 53, 87, 0.04) !important;
 }
 
 .search-result-img {
@@ -675,10 +699,6 @@ body {
     border-radius: 14px;
 }
 
-.search-result-title {
-    font-weight: 700;
-    margin-bottom: 4px;
-}
 
 .search-result-author {
     font-size: 13px;
@@ -687,8 +707,8 @@ body {
 
 .search-result-price {
     margin-top: 8px;
-    font-weight: 800;
-    color: #1D3557;
+    color: #1D3557 !important;
+    font-weight: 800 !important;
 }
 
 /* ============================================================
@@ -3998,33 +4018,15 @@ body {
     padding-left: 20px !important;
 }
 
-/* ── SEARCH BAR ──────────────────────────────────────────── */
-.search-container input {
-    font-family: 'DM Sans', sans-serif !important;
-    height: 50px !important;
-    border-radius: 16px !important;
-    background: rgba(248, 250, 252, 0.98) !important;
-    border: 1.5px solid rgba(29, 53, 87, 0.08) !important;
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06), 0 0 0 0 rgba(29, 53, 87, 0) !important;
-    font-size: 14px !important;
-    transition: var(--transition-smooth) !important;
-}
 
 .search-container input:focus {
-    border-color: rgba(29, 53, 87, 0.3) !important;
-    box-shadow: 0 0 0 4px rgba(29, 53, 87, 0.08), 0 4px 16px rgba(15, 23, 42, 0.08) !important;
     background: #fff !important;
-}
 
-.search-container i {
-    color: #1D3557 !important;
-    font-size: 15px !important;
-    opacity: 0.7;
-    transition: var(--transition-smooth) !important;
-}
+    border-color: rgba(79, 70, 229, 0.28) !important;
 
-.search-container input:focus~i {
-    opacity: 1;
+    box-shadow:
+        0 0 0 4px rgba(79, 70, 229, 0.10),
+        0 8px 24px rgba(15, 23, 42, 0.08) !important;
 }
 
 /* ── HERO SECTION ────────────────────────────────────────── */
@@ -4717,24 +4719,11 @@ body.dark-mode .price-range input {
     box-shadow: 0 4px 12px rgba(29, 53, 87, 0.4) !important;
 }
 
-/* ── SEARCH RESULTS ──────────────────────────────────────── */
-.search-result-item {
-    transition: var(--transition-smooth) !important;
-    border-radius: 12px !important;
-}
-
-.search-result-item:hover {
-    background: rgba(29, 53, 87, 0.04) !important;
-}
-
 .search-result-title {
     font-family: 'DM Sans', sans-serif !important;
     font-weight: 700 !important;
-}
 
-.search-result-price {
-    color: #1D3557 !important;
-    font-weight: 800 !important;
+    margin-bottom: 4px;
 }
 
 /* ── SUBTLE PAGE LOAD ANIMATION ──────────────────────────── */
@@ -4998,22 +4987,6 @@ h6,
     font-size: 12px !important;
     font-weight: 500 !important;
     color: #1D3557 !important;
-}
-
-/* Search result */
-.search-result-title {
-    font-family: 'Inter', sans-serif !important;
-    font-weight: 700 !important;
-    font-size: 13px !important;
-    color: #1D3557 !important;
-}
-
-.search-result-price {
-    font-family: 'Sora', sans-serif !important;
-    font-weight: 700 !important;
-    color: #1D3557 !important;
-    font-size: 13px !important;
-    letter-spacing: -0.02em !important;
 }
 
 /* Modal book detail */
