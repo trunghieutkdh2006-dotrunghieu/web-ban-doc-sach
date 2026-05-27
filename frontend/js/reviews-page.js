@@ -1,5 +1,5 @@
 (() => {
-            const API_BASE = "https://passenger-grapple-dynamic.ngrok-free.dev";
+            const API_BASE = API_BASE_URL;
             let allReviews = [];
             let filteredReviews = [];
             let currentPage = 1;
@@ -75,7 +75,7 @@
 
             async function loadBooks() {
                 try {
-                    const res = await fetch(`${API_BASE}/api/books`, {
+                    const res = await fetch(`${API_BASE}/books`, {
                         headers: { "ngrok-skip-browser-warning": "69420" }
                     });
                     const data = await res.json();
@@ -99,7 +99,7 @@
 
                 for (const book of booksList) {
                     try {
-                        const res = await fetch(`${API_BASE}/api/reviews/book/${book._id}`, {
+                        const res = await fetch(`${API_BASE}/reviews/book/${book._id}`, {
                             headers: { "ngrok-skip-browser-warning": "69420" }
                         });
                         if (res.ok) {
