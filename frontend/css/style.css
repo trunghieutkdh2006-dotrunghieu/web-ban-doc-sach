@@ -90,17 +90,6 @@ body {
         padding: 0 18px;
     }
 }
-
-/* Banner nâng cao (hero section hoặc slider đầu trang) */
-.enhanced-banner {
-    width: 100%;
-    overflow: hidden;
-    position: relative;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 /* Track chứa các slide/banner (dùng trong carousel/slider) */
 .banner-track-enhanced {
 

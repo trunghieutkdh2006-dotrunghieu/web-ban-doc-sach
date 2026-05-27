@@ -138,11 +138,25 @@
    BANNER SLIDE OVERHAUL (HERO AREA)
    ============================================================ */
 .enhanced-banner {
-    margin: 0 24px 36px 24px !important;
+    position: relative;
+
     width: calc(100% - 48px) !important;
-    border-radius: var(--radius-md) !important;
-    box-shadow: var(--shadow-lg) !important;
+
+    margin: 0 24px 36px !important;
+
     overflow: hidden !important;
+
+    border-radius: var(--radius-md) !important;
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.15) !important;
+
+    font-family:
+        'Segoe UI',
+        Tahoma,
+        Geneva,
+        Verdana,
+        sans-serif;
 }
 
 .banner-slide-enhanced {
