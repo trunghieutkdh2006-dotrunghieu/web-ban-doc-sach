@@ -122,6 +122,7 @@ h6 {
     background: rgba(255, 255, 255, 0.8) !important;
     transition: var(--transition) !important;
     min-height: 46px !important;
+    gap: 10px;
 }
 
 .action-btn:hover {
