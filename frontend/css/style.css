@@ -527,6 +527,56 @@ body {
     position: relative;
 }
 
+.has-dropdown .dropdown {
+    position: absolute;
+    top: calc(100% + 12px);
+    left: 0;
+
+    min-width: 240px;
+
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+
+    border: 1px solid var(--glass-border);
+    border-radius: var(--radius-md);
+
+    box-shadow: var(--shadow-lg);
+
+    padding: 8px;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+
+    transition: var(--transition-smooth);
+
+    z-index: 1000;
+}
+
+.has-dropdown:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.has-dropdown .dropdown li a {
+    display: block;
+
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+
+    color: var(--text);
+    font-size: 13px;
+    font-weight: 500;
+
+    transition: var(--transition);
+}
+
+.has-dropdown .dropdown li a:hover {
+    background: var(--bg-secondary);
+    padding-left: 14px;
+}
+
 .dropdown {
     position: absolute;
     top: calc(100% + 12px);
