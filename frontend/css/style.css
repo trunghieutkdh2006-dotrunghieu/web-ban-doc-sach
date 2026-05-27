@@ -1507,10 +1507,13 @@ body {
    FLASH SALE SECTION
    ============================================================ */
 .flash-sale-section {
-    background: linear-gradient(135deg, #0f0c29, #1e1b4b 40%, #111827);
+    background: linear-gradient(135deg, #071524 0%, #0f2340 40%, #1D3557 100%);
     padding: 50px 0;
     position: relative;
-    overflow-x: auto;
+    overflow: hidden;
+
+    border-radius: 28px;
+    margin: 16px 0;
 }
 
 .flash-sale-header {
@@ -4519,14 +4522,6 @@ body.dark-mode .price-range input {
     box-shadow: 0 12px 32px rgba(15, 23, 42, 0.15) !important;
     padding: 12px 16px !important;
     font-family: 'DM Sans', sans-serif !important;
-}
-
-/* ── FLASH SALE SECTION VIP ──────────────────────────────── */
-.flash-sale-section {
-    background: linear-gradient(135deg, #071524 0%, #0f2340 40%, #1D3557 100%) !important;
-    border-radius: 28px !important;
-    margin: 16px 0 !important;
-    overflow: hidden !important;
 }
 
 .flash-label {
