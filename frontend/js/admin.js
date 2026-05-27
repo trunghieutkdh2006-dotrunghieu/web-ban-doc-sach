@@ -7670,7 +7670,7 @@ function initCharts() {
         function connectSocket() {
             try {
                 if (typeof io === 'undefined') return;
-                socket = io(BASE_URL, {
+                socket = io(API_BASE_URL.replace('/api', ''), {
                     path: '/socket.io',
                     transports: ['websocket', 'polling'],  // websocket trước, polling fallback
                     extraHeaders: {
