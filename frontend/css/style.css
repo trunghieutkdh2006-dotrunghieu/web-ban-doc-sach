@@ -80,6 +80,7 @@
 
     /* Đảm bảo width/height tính luôn padding + border (dễ layout, tránh vỡ giao diện) */
     box-sizing: border-box;
+    font-family: 'Merriweather', serif;
 }
 
 /* Áp dụng cho thẻ gốc của trang (html) */
@@ -2197,20 +2198,6 @@ body {
         transform 0.25s ease,
         background 0.25s ease,
         box-shadow 0.25s ease;
-}
-
-.flash-see-all:hover {
-    transform:
-        translateY(-2px);
-
-    background:
-        rgba(255, 255, 255, 0.18);
-
-    border-color:
-        rgba(245, 158, 11, 0.55);
-
-    box-shadow:
-        0 10px 24px rgba(0, 0, 0, 0.12);
 }
 
 .flash-books-row {
