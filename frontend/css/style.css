@@ -2901,7 +2901,7 @@ body.dark-mode #darkModeToggle {
     padding-bottom: 50px;
 }
 
-.footer-section about {
+.footer-section.about {
     margin-left: 10px;
 }
 
