@@ -454,12 +454,6 @@ body {
     transition: var(--transition);
 }
 
-.top-nav a:hover,
-.social-icons a:hover {
-    color: #fff;
-    transform: translateY(-1px);
-}
-
 .main-nav {
     position: sticky;
     top: 0;
@@ -540,20 +534,6 @@ body {
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 0.2px;
-
-    transition: var(--transition);
-}
-
-.main-menu a:hover,
-.main-menu a.active {
-    background: linear-gradient(135deg, #1D3557 0%, #274c77 100%);
-    color: #fff;
-
-    box-shadow:
-        0 8px 20px rgba(29, 53, 87, 0.25),
-        0 2px 4px rgba(29, 53, 87, 0.15);
-
-    transform: translateY(-1px);
 
     transition: var(--transition);
 }
