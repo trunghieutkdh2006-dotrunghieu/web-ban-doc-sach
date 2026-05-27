@@ -3135,6 +3135,22 @@ body.dark-mode #darkModeToggle {
     .footer-bottom {
         flex-direction: column;
         align-items: flex-start;
+        text-align: left;
+    }
+
+    .footer .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .footer-section,
+    .footer-payment,
+    .footer-bottom {
+        text-align: left;
+    }
+
+    .footer-socials {
+        justify-content: flex-start;
     }
 }
 
@@ -3216,7 +3232,7 @@ body.dark-mode #darkModeToggle {
         padding: 0 18px !important;
     }
 
-    .footer-content {
+    . .footer-content {
         grid-template-columns: 1fr;
         gap: 40px;
     }
