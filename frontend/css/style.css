@@ -80,6 +80,26 @@ html {
     scroll-behavior: smooth;
 }
 
+/* Toàn bộ trang web */
+body {
+
+    /* Font chữ chính của toàn site */
+    /* 'Inter' là font hiện đại, sạch, hay dùng trong UI/UX */
+    font-family: 'Inter', sans-serif;
+
+    /* Nền trang gồm 2 lớp:
+       - radial-gradient: ánh sáng loang từ góc trên trái (tạo hiệu ứng depth)
+       - linear-gradient: chuyển màu nền từ trên xuống dưới */
+    background:
+        radial-gradient(circle at top left, rgba(29, 53, 87, .05), transparent 25%),
+        linear-gradient(to bottom, #f8fbff, #f3f6fb);
+
+    /* Màu chữ chính lấy từ biến CSS (--text) */
+    color: var(--text);
+
+    /* Ẩn thanh cuộn ngang, tránh vỡ layout khi element tràn */
+    overflow-x: hidden;
+}
 
 /* Thanh cuộn (scrollbar) trên trình duyệt WebKit như Chrome, Edge, Safari */
 ::-webkit-scrollbar {
@@ -412,6 +432,13 @@ html {
     }
 }
 
+/* ============================================================
+   TOP BAR & NAVIGATION
+   ============================================================ */
+.top-bar {
+    background: linear-gradient(135deg, #10243f, #1D3557);
+    padding: 12px 0;
+}
 
 .top-bar .container {
     display: flex;
@@ -437,11 +464,20 @@ html {
     transition: var(--transition);
 }
 
+.top-nav a:hover,
+.social-icons a:hover {
+    color: #fff;
+    transform: translateY(-1px);
+}
+
 .main-nav {
     position: sticky;
     top: 0;
     z-index: 999;
-
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, .7);
+    box-shadow: 0 4px 20px rgba(15, 23, 42, .04);
 }
 
 .nav-wrapper {
@@ -707,7 +743,6 @@ html {
 
 .cart-btn i {
     font-size: 1.1rem;
-    color: var(--primary);
 }
 
 .cart-count,
@@ -1469,9 +1504,10 @@ html {
    FLASH SALE SECTION
    ============================================================ */
 .flash-sale-section {
-
+    background: linear-gradient(135deg, #0f0c29, #1e1b4b 40%, #111827);
     padding: 50px 0;
     position: relative;
+    overflow-x: auto;
 }
 
 .flash-sale-header {
@@ -2871,6 +2907,13 @@ html {
     transform: scale(1.1);
 }
 
+/* ============================================================
+   DARK MODE
+   ============================================================ */
+body.dark-mode {
+    background: #0f172a;
+    color: #e2e8f0;
+}
 
 body.dark-mode .book-card,
 body.dark-mode .trending-card,
@@ -2991,6 +3034,12 @@ body.dark-mode #darkModeToggle {
    FOOTER
    ============================================================ */
 .footer {
+    position: relative;
+    overflow: hidden;
+    background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.12), transparent 30%),
+        linear-gradient(135deg, #0f172a, #111827);
+    color: #f8fafc;
     padding-top: 80px;
     margin-top: 80px;
 }
@@ -3740,11 +3789,11 @@ body.dark-mode #darkModeToggle {
 
 /* ── BODY & FONTS ─────────────────────────────────────────── */
 body {
-    /* font-family: 'DM Sans', sans-serif !important; */
-    /* background:
+    font-family: 'DM Sans', sans-serif !important;
+    background:
         radial-gradient(ellipse 80% 60% at 10% 0%, rgba(29, 53, 87, 0.07) 0%, transparent 60%),
         radial-gradient(ellipse 60% 40% at 90% 100%, rgba(69, 123, 157, 0.05) 0%, transparent 50%),
-        linear-gradient(160deg, #f0f4fa 0%, #f8fbff 50%, #eef2f8 100%) !important; */
+        linear-gradient(160deg, #f0f4fa 0%, #f8fbff 50%, #eef2f8 100%) !important;
     min-height: 100vh;
 }
 
@@ -3778,6 +3827,11 @@ body {
     color: rgba(255, 255, 255, 0.75) !important;
 }
 
+.top-nav a:hover,
+.social-icons a:hover {
+    color: var(--gold-light) !important;
+}
+
 .social-icons a {
     width: 30px;
     height: 30px;
@@ -3789,6 +3843,11 @@ body {
     transition: var(--transition-smooth) !important;
 }
 
+.social-icons a:hover {
+    background: rgba(201, 168, 76, 0.2) !important;
+    border-color: var(--gold) !important;
+    transform: translateY(-2px) !important;
+}
 
 /* ── MAIN NAV ────────────────────────────────────────────── */
 .main-nav {
