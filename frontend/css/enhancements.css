@@ -1,35 +1,53 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
 :root {
+    /* Nâng cấp bảng màu sắc rực rỡ và sang xịn mịn hơn */
     --primary: #4F46E5;
+    /* Indigo hiện đại */
     --primary-dark: #3730A3;
+    /* Indigo đậm */
     --primary-light: #818CF8;
+    /* Indigo sáng */
     --accent: #EC4899;
+    /* Neon Pink làm điểm nhấn */
     --bg: #F8FAFC;
     --bg-secondary: #EEF2FF;
+    /* Sắc xanh dịu mát */
     --white: #FFFFFF;
     --text: #0F172A;
+    /* Đen Slate dịu mắt */
     --text-light: #64748B;
+
+    /* Hệ thống bóng đổ nâng cấp */
     --shadow-sm: 0 4px 20px rgba(79, 70, 229, 0.05);
     --shadow-md: 0 12px 36px rgba(79, 70, 229, 0.08);
     --shadow-lg: 0 24px 64px rgba(79, 70, 229, 0.15);
+
+    /* Bo góc mềm mại kiểu Apple */
     --radius-sm: 12px;
     --radius-md: 24px;
     --radius-lg: 36px;
+
+    /* Chuyển cảnh mượt mà */
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Glassmorphism chuẩn cao cấp */
     --glass-bg: rgba(255, 255, 255, 0.45);
     --glass-border: rgba(255, 255, 255, 0.5);
     --glass-blur: blur(20px) saturate(180%);
 }
 
-/* MAIN NAV GLASS */
+/* ============================================================
+   HEADER & FLOATING FROSTED GLASS MAIN NAV
+   ============================================================ */
 .main-nav {
     position: sticky !important;
     top: 16px !important;
-    margin: 0 24px 24px !important;
+    margin: 0 24px 24px 24px !important;
     border-radius: var(--radius-md) !important;
     background: var(--glass-bg) !important;
-    backdrop-filter: blur(18px) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
     border: 1px solid var(--glass-border) !important;
     box-shadow: 0 20px 40px rgba(15, 23, 42, 0.05) !important;
     z-index: 1000 !important;
@@ -69,6 +87,7 @@
     transform: translateY(-1px) !important;
 }
 
+/* Action button nổi bật */
 .action-btn {
     border-radius: var(--radius-sm) !important;
     border: 1px solid rgba(255, 255, 255, 0.6) !important;
@@ -85,7 +104,7 @@
     transform: translateY(-1px) !important;
 }
 
-/* DROPDOWNS GLASS */
+/* Dropdown Menu Glassmorphism */
 .cart-dropdown,
 .heart-dropdown,
 .user-dropdown,
@@ -95,8 +114,10 @@
     backdrop-filter: var(--glass-blur) !important;
     border: 1px solid var(--glass-border) !important;
     box-shadow: var(--shadow-lg) !important;
+
     overflow-y: auto !important;
     overflow-x: hidden !important;
+
     animation: slideDownIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
@@ -112,40 +133,174 @@
     }
 }
 
-/* FILTER BAR */
-.filter-bar {
-    background: rgba(255, 255, 255, 0.92) !important;
-    backdrop-filter: blur(24px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.7) !important;
-    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08), 0 1px 0 rgba(255, 255, 255, 0.9) inset !important;
-    border-radius: 28px !important;
-    padding: 24px 32px !important;
-    transition: none !important;
-    margin: 16px 0 !important;
+
+/* ============================================================
+   BANNER SLIDE OVERHAUL (HERO AREA)
+   ============================================================ */
+.enhanced-banner {
+    margin: 0 24px 36px 24px !important;
+    width: calc(100% - 48px) !important;
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--shadow-lg) !important;
+    overflow: hidden !important;
 }
 
-.filter-select,
-.price-range input {
-    border-radius: 12px !important;
-    border: 1px solid rgba(0, 0, 0, 0.05) !important;
-    background: rgba(255, 255, 255, 0.8) !important;
+.banner-slide-enhanced {
+    padding: 0 80px !important;
+    height: 450px !important;
 }
 
-.btn-filter-primary {
-    border-radius: 12px !important;
-    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.2) !important;
+.banner-tag-enhanced {
+    background: rgba(255, 255, 255, 0.15) !important;
+    backdrop-filter: blur(8px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: var(--radius-sm) !important;
+    text-transform: uppercase;
 }
 
-/* DAILY DEAL SECTION */
-.daily-deal-section {
+.banner-title-enhanced {
+    font-size: 2.8rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -1px !important;
+}
+
+.banner-cta-enhanced {
+    background: var(--white) !important;
+    color: var(--primary-dark) !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: 700 !important;
+    transition: var(--transition) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+.banner-cta-enhanced:hover {
+    transform: translateY(-3px) scale(1.03) !important;
+}
+
+.banner-badge-enhanced {
+    background: rgba(255, 255, 255, 0.1) !important;
+    backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.banner-progress-fill {
+    background: linear-gradient(90deg, var(--accent), var(--primary-light)) !important;
+}
+
+/* ============================================================
+   GRID & MODERN CARDS (THEME FOR ALL SIDES)
+   ============================================================ */
+.book-section-container,
+.new-releases-section,
+.trending-section,
+.favorites-section,
+.recently-viewed-section {
+    padding: 48px 0 !important;
+}
+
+.section-row,
+.new-releases-grid,
+.trending-grid,
+.fav-grid,
+.rv-grid,
+.daily-deal-grid {
+    gap: 30px !important;
+}
+
+.book-card,
+.new-release-card,
+.trending-card,
+.fav-card,
+.rv-card,
+.daily-deal-card {
+    border-radius: var(--radius-md) !important;
+    background: var(--white) !important;
+    border: 1px solid rgba(0, 0, 0, 0.04) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transition: var(--transition) !important;
     position: relative;
     overflow: hidden;
-    margin: 40px 24px !important;
-    padding: 60px 40px !important;
-    border-radius: var(--radius-lg) !important;
+}
+
+.book-card:hover,
+.new-release-card:hover,
+.trending-card:hover,
+.fav-card:hover,
+.rv-card:hover,
+.daily-deal-card:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: var(--shadow-lg) !important;
+    border-color: rgba(79, 70, 229, 0.1) !important;
+}
+
+/* Zoom nhẹ ảnh bìa */
+.book-card img,
+.new-img-wrap img,
+.trending-card img,
+.fav-img-wrap img,
+.rv-img-wrap img,
+.deal-img-wrap img {
+    border-radius: var(--radius-md) var(--radius-md) 0 0 !important;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+/* Badge giảm giá phong cách mác Neon */
+.discount-badge {
+    box-shadow: 0 6px 14px rgba(236, 72, 153, 0.35) !important;
+    border-radius: 8px !important;
+    font-weight: 800 !important;
+}
+
+/* Yêu thích button */
+.favorite-btn {
+    background: var(--white) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+    transition: var(--transition) !important;
+    color: var(--accent) !important;
+}
+
+.favorite-btn:hover {
+    background: var(--accent) !important;
+    color: var(--white) !important;
+    transform: scale(1.15) !important;
+}
+
+/* Nút mua hàng / Độc giả */
+.book-info h4 {
+    display: none !important;
+    /* Ẩn giá dạng tĩnh cũ để hiển thị trong price-row mới */
+}
+
+.price-sale,
+.deal-price-sale,
+.flash-price-sale {
+    color: var(--accent) !important;
+    font-weight: 800 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+/* Tinh chỉnh nhãn Tag cho các phần */
+.section-tag {
+    color: var(--primary) !important;
+    letter-spacing: 2px !important;
+    font-size: 0.85rem !important;
+    font-weight: 800 !important;
+}
+
+.section-header h2 {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 800 !important;
+}
+
+/* ============================================================
+   DAILY DEALS & FLASH SALE SECTIONS
+   ============================================================ */
+.daily-deal-section {
     background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.15), transparent 45%),
         linear-gradient(135deg, #0A0D1B 0%, #151A30 100%) !important;
-    color: #fff;
+    border-radius: var(--radius-lg) !important;
+    margin: 40px 24px !important;
+    padding: 60px 40px !important;
 }
 
 .daily-deal-timer {
@@ -175,7 +330,37 @@
     transform: translateY(-2px) !important;
 }
 
-/* MODALS GLASS */
+/* ============================================================
+   FILTER BAR GLOW
+   ============================================================ */
+.filter-bar {
+    margin: 20px 24px !important;
+    border-radius: var(--radius-md) !important;
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04) !important;
+}
+
+.filter-select,
+.price-range input {
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 0, 0, 0.05) !important;
+    background: rgba(255, 255, 255, 0.8) !important;
+}
+
+.btn-filter-primary {
+    border-radius: 12px !important;
+    box-shadow: 0 6px 16px rgba(79, 70, 229, 0.2) !important;
+}
+
+.btn-filter-secondary {
+    border-radius: 12px !important;
+}
+
+/* ============================================================
+   MODALS & POPUPS (GLASSMORPHISM OVERLAY)
+   ============================================================ */
 .login-panel,
 .review-modal,
 .reviews-modal,
@@ -209,15 +394,44 @@
     }
 }
 
-/* DARK MODE ENHANCEMENTS */
+.btn-auth,
+.btn-submit-review,
+.modal-btn-cart {
+    border-radius: var(--radius-sm) !important;
+    font-weight: 700 !important;
+    box-shadow: 0 10px 24px rgba(79, 70, 229, 0.2) !important;
+}
+
+.btn-auth:hover,
+.btn-submit-review:hover,
+.modal-btn-cart:hover {
+    box-shadow: 0 10px 24px rgba(236, 72, 153, 0.3) !important;
+    transform: translateY(-2px) !important;
+}
+
+.modal-category-badge {
+    background: rgba(79, 70, 229, 0.1) !important;
+    color: var(--primary) !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+/* ============================================================
+   COSMIC DARK MODE OVERRIDES (SLATE BLACK)
+   ============================================================ */
 body.dark-mode {
     background: #0B0F19 !important;
     color: #F1F5F9 !important;
 }
 
+body.dark-mode::before {
+    background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.12), transparent 45%),
+        radial-gradient(circle at bottom left, rgba(236, 72, 153, 0.08), transparent 35%) !important;
+}
+
 body.dark-mode .main-nav {
     background: rgba(15, 23, 42, 0.6) !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
 }
 
 body.dark-mode .main-nav:hover {
@@ -228,10 +442,45 @@ body.dark-mode .main-menu a {
     color: #CBD5E1 !important;
 }
 
+body.dark-mode .main-menu a:hover,
+body.dark-mode .main-menu a.active {
+    color: var(--white) !important;
+}
+
 body.dark-mode .action-btn {
     background: rgba(255, 255, 255, 0.08) !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
     color: #E2E8F0 !important;
+}
+
+body.dark-mode .book-card,
+body.dark-mode .new-release-card,
+body.dark-mode .trending-card,
+body.dark-mode .fav-card,
+body.dark-mode .rv-card,
+body.dark-mode .daily-deal-card {
+    background: rgba(21, 29, 50, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode .book-card:hover,
+body.dark-mode .new-release-card:hover,
+body.dark-mode .trending-card:hover,
+body.dark-mode .fav-card:hover,
+body.dark-mode .rv-card:hover,
+body.dark-mode .daily-deal-card:hover {
+    border-color: rgba(99, 102, 241, 0.3) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .book-info h3,
+body.dark-mode .new-title,
+body.dark-mode .trending-title,
+body.dark-mode .fav-title,
+body.dark-mode .rv-title,
+body.dark-mode .deal-title {
+    color: #F1F5F9 !important;
 }
 
 body.dark-mode .filter-bar {
@@ -252,6 +501,7 @@ body.dark-mode .reviews-modal-content,
 body.dark-mode .modal-content {
     background: rgba(21, 29, 50, 0.95) !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #F1F5F9 !important;
 }
 
 body.dark-mode .form-group input,
@@ -261,8 +511,28 @@ body.dark-mode .form-group textarea {
     border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
+body.dark-mode .toast {
+    background: rgba(21, 29, 50, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #F1F5F9 !important;
+}
+
+body.dark-mode .search-results {
+    background: rgba(21, 29, 50, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-mode .search-result-item:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-mode .search-result-title {
+    color: #F1F5F9 !important;
+}
+
 body.dark-mode .footer {
     background: #080B11 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.04) !important;
 }
 
 body.dark-mode #darkModeToggle {
@@ -270,7 +540,17 @@ body.dark-mode #darkModeToggle {
     color: #F59E0B !important;
 }
 
-/* SCROLL TOP & DARK MODE BUTTON */
+/* ============================================================
+   SCROLLBAR & MISCELLANEOUS
+   ============================================================ */
+::-webkit-scrollbar-track {
+    background: #F1F5F9 !important;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #0B0F19 !important;
+}
+
 #scrollTopBtn {
     box-shadow: 0 10px 24px rgba(79, 70, 229, 0.3) !important;
     border-radius: 50% !important;
@@ -306,7 +586,6 @@ body.dark-mode #darkModeToggle {
     transform: scale(1.1) rotate(15deg) !important;
 }
 
-/* LIVE NOTIFICATION */
 .live-notif-box {
     border-radius: 16px !important;
     background: rgba(255, 255, 255, 0.9) !important;
@@ -318,6 +597,16 @@ body.dark-mode #darkModeToggle {
     align-items: center !important;
     gap: 12px !important;
     animation: slideInNotif 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    transition: var(--transition) !important;
+}
+
+body.dark-mode .live-notif-box {
+    background: rgba(21, 29, 50, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+body.dark-mode .live-notif-box span {
+    color: #E2E8F0 !important;
 }
 
 @keyframes slideInNotif {
@@ -332,93 +621,259 @@ body.dark-mode #darkModeToggle {
     }
 }
 
-/* FLASH SALE GRID FIX - QUAN TRỌNG */
-.flash-sale-section .flash-books-row {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
-    gap: 24px !important;
-    overflow-x: visible !important;
-    padding: 0 !important;
+/* ============================================================
+   SECONDARY PAGES OVERRIDES (CART, REVIEW, CONTACT, SUPPORT)
+   ============================================================ */
+
+/* Đồng bộ hóa nền và gradient của các trang phụ */
+.page-header,
+.community-header,
+.support-hero {
+    background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.2), transparent 45%),
+        linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%) !important;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg) !important;
+    padding: 60px 20px !important;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
 }
 
-.flash-book-card {
-    width: 100% !important;
-    min-width: unset !important;
-    flex: none !important;
-}
-
-/* BADGES */
-.discount-badge {
-    box-shadow: 0 6px 14px rgba(236, 72, 153, 0.35) !important;
-    border-radius: 8px !important;
+.page-header h1,
+.community-header h1,
+.support-hero h1 {
+    font-size: 2.6rem !important;
     font-weight: 800 !important;
+
+    background: linear-gradient(135deg,
+            #FFF 60%,
+            var(--primary-light)) !important;
+
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+
+    -webkit-text-fill-color: transparent !important;
+
+    margin-bottom: 12px !important;
 }
 
-/* PRICE COLORS */
-.price-sale,
-.deal-price-sale,
-.flash-price-sale {
-    color: var(--accent) !important;
+/* Biến các Card thông thường thành Glassmorphic Apple-style */
+.cart-items-container,
+.summary-box,
+.stat-card,
+.toolbar,
+.review-card,
+.contact-card,
+.support-card,
+.support-item,
+.order-history-card,
+.tracking-section,
+.history-section,
+.faq-item {
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--shadow-md) !important;
+    border-radius: var(--radius-md) !important;
+    transition: var(--transition) !important;
 }
 
-/* SECTION TAGS */
-.section-tag {
+/* Hover của các Card */
+.stat-card:hover,
+.review-card:hover,
+.support-item:hover,
+.order-history-card:hover,
+.faq-item:hover {
+    transform: translateY(-6px) !important;
+    box-shadow: var(--shadow-lg) !important;
+    border-color: rgba(79, 70, 229, 0.2) !important;
+    background: rgba(255, 255, 255, 0.65) !important;
+}
+
+body.dark-mode .cart-items-container,
+body.dark-mode .summary-box,
+body.dark-mode .stat-card,
+body.dark-mode .toolbar,
+body.dark-mode .review-card,
+body.dark-mode .contact-card,
+body.dark-mode .support-card,
+body.dark-mode .support-item,
+body.dark-mode .order-history-card,
+body.dark-mode .tracking-section,
+body.dark-mode .history-section,
+body.dark-mode .faq-item {
+    background: rgba(21, 29, 50, 0.7) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Thiết lập các input trơn mịn */
+.coupon-box input,
+.address-box input,
+.form-group input,
+.form-group textarea,
+.search-box input,
+.filter-bar select {
+    border-radius: 12px !important;
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
+    background: rgba(255, 255, 255, 0.7) !important;
+    padding: 14px 18px !important;
+    transition: var(--transition) !important;
+    color: var(--text) !important;
+    font-family: 'Outfit', sans-serif !important;
+}
+
+.coupon-box input:focus,
+.address-box input:focus,
+.form-group input:focus,
+.form-group textarea:focus,
+.search-box input:focus,
+.filter-bar select:focus {
+    background: var(--white) !important;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12) !important;
+    outline: none !important;
+}
+
+body.dark-mode .coupon-box input,
+body.dark-mode .address-box input,
+body.dark-mode .form-group input,
+body.dark-mode .form-group textarea,
+body.dark-mode .search-box input,
+body.dark-mode .filter-bar select {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #F1F5F9 !important;
+}
+
+/* Các Button cao cấp dạng Gradient */
+.btn-checkout,
+.send-btn,
+.refresh-btn,
+.coupon-box button,
+.back-home,
+.btn-refresh {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+    color: var(--white) !important;
+    border-radius: 14px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.2) !important;
+    transition: var(--transition) !important;
+    border: none !important;
+    cursor: pointer !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+}
+
+.btn-checkout:hover,
+.send-btn:hover,
+.refresh-btn:hover,
+.coupon-box button:hover,
+.back-home:hover,
+.btn-refresh:hover {
+    box-shadow: 0 12px 28px rgba(236, 72, 153, 0.3) !important;
+    transform: translateY(-3px) !important;
+}
+
+/* Căn chỉnh cụ thể cho nút quay lại */
+.back-home {
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    z-index: 10000 !important;
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+    background: rgba(255, 255, 255, 0.9) !important;
     color: var(--primary) !important;
-    letter-spacing: 2px !important;
-    font-size: 0.85rem !important;
-    font-weight: 800 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid var(--glass-border) !important;
+    border-radius: 30px !important;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-    .flash-sale-section .flash-books-row {
-        gap: 16px !important;
-    }
-
-    .daily-deal-section {
-        margin: 20px 16px !important;
-        padding: 40px 20px !important;
-    }
-
-    .daily-deal-title {
-        font-size: 26px;
-    }
-
-    .daily-deal-icon {
-        width: 60px;
-        height: 60px;
-        font-size: 28px;
-    }
-
-    .daily-deal-timer {
-        padding: 12px 18px;
-        gap: 10px;
-    }
-
-    .timer-block span {
-        min-width: 60px;
-        font-size: 24px;
-    }
+body.dark-mode .back-home {
+    background: rgba(21, 29, 50, 0.9) !important;
+    color: #F1F5F9 !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
 }
 
-@media (max-width: 540px) {
-    .flash-sale-section .flash-books-row {
-        gap: 12px !important;
-    }
 
-    .flash-book-card {
-        min-height: 350px !important;
-    }
+/* Các nút xóa bỏ / phụ */
+.btn-clear {
+    border-radius: 14px !important;
+    background: rgba(0, 0, 0, 0.03) !important;
+    transition: var(--transition) !important;
+}
 
-    .flash-book-img-wrap {
-        height: 170px !important;
-    }
+.btn-clear:hover {
+    background: rgba(239, 68, 68, 0.1) !important;
+    color: #EF4444 !important;
+}
 
-    .flash-book-title {
-        font-size: 12px !important;
-    }
+body.dark-mode .btn-clear {
+    background: rgba(255, 255, 255, 0.05) !important;
+    color: #E2E8F0 !important;
+}
 
-    .flash-price-sale {
-        font-size: 14px !important;
-    }
+/* Phương thức thanh toán */
+.payment-option {
+    border-radius: 12px !important;
+    border: 1.5px solid rgba(0, 0, 0, 0.05) !important;
+    transition: var(--transition) !important;
+}
+
+.payment-option:hover {
+    border-color: var(--primary) !important;
+    background: rgba(79, 70, 229, 0.03) !important;
+}
+
+body.dark-mode .payment-option {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-mode .payment-option:hover {
+    border-color: var(--primary-light) !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+}
+
+/* Timeline và các bước */
+.timeline::before {
+    background: rgba(79, 70, 229, 0.15) !important;
+}
+
+.timeline-step .step-icon {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+    transition: var(--transition) !important;
+}
+
+.timeline-step.active .step-icon {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
+    border-color: transparent !important;
+}
+
+.timeline-step.completed .step-icon {
+    background: linear-gradient(135deg, #10B981, #34D399) !important;
+    border-color: transparent !important;
+}
+
+/* Trang FAQ và Accordion câu hỏi */
+.faq-question {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 700 !important;
+}
+
+.faq-item.active {
+    border-color: rgba(79, 70, 229, 0.2) !important;
+    background: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Custom các liên kết quay lại nhỏ phía dưới */
+.back-link {
+    color: var(--text-light) !important;
+}
+
+.back-link:hover {
+    color: var(--primary) !important;
+    text-shadow: 0 0 10px rgba(99, 102, 241, 0.2) !important;
 }
