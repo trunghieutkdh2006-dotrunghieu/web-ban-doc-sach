@@ -935,20 +935,28 @@ body {
 }
 
 .action-btn {
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
-    font-family: "Inter", sans-serif !important;
-    border-radius: var(--radius-sm) !important;
-
-    background: var(--surface) !important;
-    border: 1.5px solid var(--primary-light) !important;
-
-    transition: var(--transition) !important;
-
-    display: flex;
+    position: relative;
+    display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
 
+    height: 44px;
+    padding: 0 16px;
+
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    border: 1px solid var(--border);
+
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+
     cursor: pointer;
+    transition: var(--transition);
+
+    box-shadow: var(--shadow-sm);
 }
 
 .action-btn:hover {
@@ -3453,20 +3461,6 @@ body.dark-mode #darkModeToggle {
     }
 }
 
-.action-btn {
-    position: relative;
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-}
 
 .action-btn:hover {
     transform: translateY(-1px);
@@ -3931,16 +3925,6 @@ body {
 
 .search-container input:focus~i {
     opacity: 1;
-}
-
-/* ── ACTION BUTTONS ──────────────────────────────────────── */
-.action-btn {
-    border-radius: 14px !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    border: 1.5px solid rgba(29, 53, 87, 0.1) !important;
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
-    transition: var(--transition-smooth) !important;
-    font-family: 'DM Sans', sans-serif !important;
 }
 
 .action-btn:hover {
