@@ -4018,17 +4018,6 @@ body {
     padding-left: 20px !important;
 }
 
-
-.search-container input:focus {
-    background: #fff !important;
-
-    border-color: rgba(79, 70, 229, 0.28) !important;
-
-    box-shadow:
-        0 0 0 4px rgba(79, 70, 229, 0.10),
-        0 8px 24px rgba(15, 23, 42, 0.08) !important;
-}
-
 /* ── HERO SECTION ────────────────────────────────────────── */
 .hero {
     background:
