@@ -83,10 +83,6 @@ html {
 /* Toàn bộ trang web */
 body {
 
-    /* Font chữ chính của toàn site */
-    /* 'Inter' là font hiện đại, sạch, hay dùng trong UI/UX */
-    font-family: 'Inter', sans-serif;
-
     /* Nền trang gồm 2 lớp:
        - radial-gradient: ánh sáng loang từ góc trên trái (tạo hiệu ứng depth)
        - linear-gradient: chuyển màu nền từ trên xuống dưới */
@@ -3941,34 +3937,6 @@ body.dark-mode #darkModeToggle {
     .heart-dropdown.show {
         transform: translateX(50%) translateY(0);
     }
-}
-
-/* ============================================================
-   ✨ VIP PRO UPGRADE — LUXURY NAVY EDITORIAL SYSTEM
-   Giữ tone #1D3557, nâng cấp toàn diện typography + motion + depth
-   ============================================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap');
-
-:root {
-    --gold: #c9a84c;
-    --gold-light: #e8c97a;
-    --navy-glow: rgba(29, 53, 87, 0.15);
-    --glass: rgba(255, 255, 255, 0.88);
-    --glass-border: rgba(255, 255, 255, 0.6);
-    --card-shadow: 0 8px 32px rgba(15, 23, 42, 0.10), 0 1.5px 4px rgba(15, 23, 42, 0.06);
-    --card-shadow-hover: 0 24px 56px rgba(15, 23, 42, 0.18), 0 4px 12px rgba(29, 53, 87, 0.12);
-    --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ── BODY & FONTS ─────────────────────────────────────────── */
-body {
-    font-family: 'DM Sans', sans-serif !important;
-    background:
-        radial-gradient(ellipse 80% 60% at 10% 0%, rgba(29, 53, 87, 0.07) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 40% at 90% 100%, rgba(69, 123, 157, 0.05) 0%, transparent 50%),
-        linear-gradient(160deg, #f0f4fa 0%, #f8fbff 50%, #eef2f8 100%) !important;
-    min-height: 100vh;
 }
 
 /* ── SCROLLBAR VIP ───────────────────────────────────────── */
