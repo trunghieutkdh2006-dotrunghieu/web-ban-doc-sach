@@ -270,10 +270,17 @@ body {
 
 .highlight-text {
     background: linear-gradient(135deg, #fff500 0%, #ffb700 100%);
+
+    background-clip: text;
     -webkit-background-clip: text;
+
+    color: transparent;
     -webkit-text-fill-color: transparent;
+
     display: inline-block;
+
     filter: drop-shadow(0px 0px 12px rgba(255, 245, 0, 0.6));
+
     font-weight: 900;
     letter-spacing: 0.5px;
 }
@@ -1249,13 +1256,22 @@ body {
 .deal-title {
     font-size: 14px !important;
     font-weight: 800 !important;
+
     min-height: 42px !important;
     line-height: 1.4 !important;
+
     display: -webkit-box !important;
+    display: box !important;
+
     -webkit-box-orient: vertical !important;
+
+    line-clamp: 2 !important;
     -webkit-line-clamp: 2 !important;
+
     overflow: hidden !important;
+
     margin-bottom: 6px !important;
+
     cursor: pointer;
 }
 
@@ -1847,11 +1863,17 @@ body {
     font-weight: 700;
     line-height: 1.5;
     color: #fff;
+
     margin-bottom: 10px;
 
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    display: box;
+
     -webkit-box-orient: vertical;
+
+    line-clamp: 2;
+    -webkit-line-clamp: 2;
+
     overflow: hidden;
 
     min-height: 46px;
@@ -4635,9 +4657,13 @@ body {
 .toast::before {
     content: '' !important;
     position: absolute !important;
-    inset-y: 0 !important;
+
+    top: 0 !important;
+    bottom: 0 !important;
+
     left: 0 !important;
     width: 4px !important;
+
     border-radius: 16px 0 0 16px !important;
 }
 
