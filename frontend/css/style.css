@@ -4026,13 +4026,7 @@ body {
     transition: var(--transition-smooth) !important;
 }
 
-.main-menu a:hover,
-.main-menu a.active {
-    background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
-    color: #fff !important;
-    box-shadow: 0 8px 20px rgba(29, 53, 87, 0.25), 0 2px 4px rgba(29, 53, 87, 0.15) !important;
-    transform: translateY(-1px) !important;
-}
+
 
 /* ── DROPDOWN VIP ────────────────────────────────────────── */
 .dropdown {

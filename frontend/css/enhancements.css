@@ -95,6 +95,8 @@ h6 {
 .main-menu a.active {
     color: var(--white) !important;
     box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25) !important;
+    background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
+    transform: translateY(-1px) !important;
 }
 
 /* Khung tìm kiếm thông minh */
@@ -124,7 +126,9 @@ h6 {
 
 .action-btn:hover {
     color: var(--white) !important;
-    box-shadow: 0 10px 24px rgba(79, 70, 229, 0.25) !important;
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25) !important;
+    background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
+    transform: translateY(-1px) !important;
 }
 
 /* Dropdown Menu Glassmorphism */
