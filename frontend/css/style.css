@@ -1505,7 +1505,7 @@ body {
     background: #fff;
 }
 
-.filter-select,
+/* .filter-select,
 .price-range input,
 .search-container input,
 .input-wrapper input,
@@ -1525,7 +1525,7 @@ input {
     color: #1D3557;
 
     transition: all 0.25s ease;
-}
+} */
 
 .price-range input {
     width: 100px;
