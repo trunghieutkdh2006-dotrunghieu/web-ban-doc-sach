@@ -3987,15 +3987,6 @@ body {
     padding: 10px 0 !important;
 }
 
-.top-nav a,
-.social-icons a {
-    font-family: 'DM Sans', sans-serif !important;
-    font-size: 12px !important;
-    font-weight: 500 !important;
-    letter-spacing: 0.3px !important;
-    color: rgba(255, 255, 255, 0.75) !important;
-}
-
 .social-icons a {
     width: 30px;
     height: 30px;
