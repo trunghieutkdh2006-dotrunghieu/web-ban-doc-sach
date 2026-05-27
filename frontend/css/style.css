@@ -680,10 +680,10 @@ body {
     background: rgba(29, 53, 87, 0.08);
 }
 
-.search-container:focus-within {
+/* .search-container:focus-within {
     box-shadow: 0 0 0 3px var(--navy-glow), var(--shadow-md);
     transform: translateY(-1px);
-}
+} */
 
 .search-results {
     position: absolute;
