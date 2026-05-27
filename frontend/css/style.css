@@ -3232,7 +3232,7 @@ body.dark-mode #darkModeToggle {
         padding: 0 18px !important;
     }
 
-    . .footer-content {
+    .footer-content {
         grid-template-columns: 1fr;
         gap: 40px;
     }
