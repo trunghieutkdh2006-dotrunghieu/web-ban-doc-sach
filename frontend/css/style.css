@@ -935,23 +935,20 @@ body {
 }
 
 .action-btn {
-    position: relative;
-    min-height: 50px;
-    padding: 0 18px;
-    border: 1px solid rgba(255, 255, 255, .8);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, .95);
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
+    font-family: "Inter", sans-serif !important;
+    border-radius: var(--radius-sm) !important;
+
+    background: var(--surface) !important;
+    border: 1.5px solid var(--primary-light) !important;
+
+    transition: var(--transition) !important;
+
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
-    color: var(--text);
-    font-size: 15px;
-    font-weight: 700;
+
     cursor: pointer;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-    margin-right: 22px;
 }
 
 .action-btn:hover {
