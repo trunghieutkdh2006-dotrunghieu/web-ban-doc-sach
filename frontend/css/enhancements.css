@@ -272,7 +272,6 @@ h6 {
 
 /* Badge giảm giá phong cách mác Neon */
 .discount-badge {
-    background: linear-gradient(135deg, var(--accent), #FF2E93) !important;
     box-shadow: 0 6px 14px rgba(236, 72, 153, 0.35) !important;
     border-radius: 8px !important;
     font-weight: 800 !important;
