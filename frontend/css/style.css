@@ -2500,8 +2500,6 @@ body {
 
 .book-modal .close {
     position: absolute !important;
-    top: 15px !important;
-    right: 20px !important;
     font-size: 32px !important;
     cursor: pointer !important;
     color: #64748b !important;
@@ -2512,7 +2510,6 @@ body {
     align-items: center !important;
     justify-content: center !important;
     border-radius: 50% !important;
-    background: rgba(0, 0, 0, 0.05) !important;
     z-index: 10 !important;
 }
 
