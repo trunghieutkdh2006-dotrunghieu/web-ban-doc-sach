@@ -3068,20 +3068,6 @@ body.dark-mode #darkModeToggle {
     margin-top: 24px;
 }
 
-/* ============================================================
-   FOOTER
-   ============================================================ */
-.footer {
-    position: relative;
-    overflow: hidden;
-    background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 30%),
-        radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.12), transparent 30%),
-        linear-gradient(135deg, #0f172a, #111827);
-    color: #f8fafc;
-    padding-top: 80px;
-    margin-top: 80px;
-}
-
 .footer .container {
     max-width: 1440px !important;
     width: 100% !important;
@@ -4262,13 +4248,14 @@ body.dark-mode #darkModeToggle {
     background: linear-gradient(135deg, #1D3557 0%, #274c77 100%) !important;
     border-radius: 18px 18px 0 0 !important;
 }
-
-/* ── FOOTER VIP ──────────────────────────────────────────── */
 .footer {
     background: linear-gradient(150deg, #071524 0%, #0d1f38 40%, #1D3557 100%) !important;
     border-top: 1px solid rgba(201, 168, 76, 0.15) !important;
     position: relative !important;
     overflow: hidden !important;
+    color: #f8fafc;
+    padding-top: 80px;
+    margin-top: 80px;
 }
 
 .footer::before {
