@@ -4124,24 +4124,6 @@ body {
     opacity: 1;
 }
 
-/* ── ACTION BUTTONS ──────────────────────────────────────── */
-.action-btn {
-    border-radius: 14px !important;
-    background: rgba(255, 255, 255, 0.96) !important;
-    border: 1.5px solid rgba(29, 53, 87, 0.1) !important;
-    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
-    transition: var(--transition-smooth) !important;
-    font-family: 'DM Sans', sans-serif !important;
-}
-
-.action-btn:hover {
-    background: linear-gradient(135deg, #1D3557, #274c77) !important;
-    color: #fff !important;
-    border-color: transparent !important;
-    box-shadow: 0 12px 28px rgba(29, 53, 87, 0.28) !important;
-    transform: translateY(-2px) !important;
-}
-
 /* ── HERO SECTION ────────────────────────────────────────── */
 .hero {
     background:
