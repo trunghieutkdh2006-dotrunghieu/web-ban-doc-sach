@@ -3998,12 +3998,6 @@ body {
     transition: var(--transition-smooth) !important;
 }
 
-.social-icons a:hover {
-    background: rgba(201, 168, 76, 0.2) !important;
-    border-color: var(--gold) !important;
-    transform: translateY(-2px) !important;
-}
-
 .nav-wrapper {
     padding: 14px 0 !important;
 }
