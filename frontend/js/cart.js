@@ -245,7 +245,6 @@ function viewCartHistory() {
   });
 }
 
-// FIX: Không dùng Swal.close() + chuỗi .then() lồng nhau
 function deleteCartHistory(id) {
   Swal.fire({
     title: 'Xóa lịch sử?',
@@ -262,7 +261,6 @@ function deleteCartHistory(id) {
     history = history.filter(item => item.id !== id);
     localStorage.setItem(CART_HISTORY_KEY, JSON.stringify(history));
 
-    // Nếu còn lịch sử thì mở lại luôn, không dùng thông báo trung gian
     if (history.length > 0) {
       viewCartHistory();
     } else {
@@ -327,7 +325,6 @@ function saveForLater(id) {
   if (!item) return;
 
   const saved = JSON.parse(localStorage.getItem(SAVED_CARTS_KEY) || "[]");
-  // Tránh trùng lặp
   const alreadySaved = saved.find(i => i.id === id);
   if (!alreadySaved) {
     saved.unshift(item);
@@ -379,14 +376,12 @@ function viewSavedForLater() {
   });
 }
 
-// FIX: Xóa xong mở lại modal ngay, không dùng setTimeout
 function removeSavedItem(id) {
   const saved = JSON.parse(localStorage.getItem(SAVED_CARTS_KEY) || "[]");
   const newSaved = saved.filter(i => i.id !== id);
   localStorage.setItem(SAVED_CARTS_KEY, JSON.stringify(newSaved));
 
   if (newSaved.length > 0) {
-    // Còn item thì mở lại danh sách luôn
     viewSavedForLater();
   } else {
     Swal.fire({
@@ -783,7 +778,6 @@ function displayMyOrders(orders) {
   }).join('');
 }
 
-// FIX: Xóa local ngay, gọi server ngầm không block UI
 async function deleteOrderFromHistory(orderId) {
   const result = await Swal.fire({
     title: 'Xóa đơn hàng?',
@@ -823,13 +817,27 @@ function getStatusText(status) {
 }
 
 // ==================== SOCKET.IO ====================
+// ✅ SỬA LỖI: Dùng API_BASE_URL thay vì BASE_URL (BASE_URL không được định nghĩa)
 let socket;
 
 function connectSocket() {
   try {
-    socket = io(BASE_URL, {
+    if (typeof io === 'undefined') return;
+
+    // Lấy base URL từ API_BASE_URL (bỏ phần /api ở cuối)
+    const socketUrl = (typeof API_BASE_URL !== 'undefined')
+      ? API_BASE_URL.replace('/api', '')
+      : window.location.origin;
+
+    socket = io(socketUrl, {
       path: '/socket.io',
-      transports: ['websocket', 'polling']
+      transports: ['websocket', 'polling'],
+      extraHeaders: {
+        'ngrok-skip-browser-warning': '69420'
+      },
+      reconnection: true,
+      reconnectionDelay: 5000,
+      reconnectionAttempts: 5
     });
 
     socket.on('connect', () => console.log('✅ Đã kết nối realtime'));
@@ -848,6 +856,11 @@ function connectSocket() {
     });
 
     socket.on('disconnect', () => console.log('❌ Mất kết nối realtime'));
+
+    socket.on('connect_error', (err) => {
+      console.log('⚠️ Socket lỗi:', err.message);
+    });
+
   } catch (err) {
     console.error('Lỗi kết nối socket:', err);
   }
