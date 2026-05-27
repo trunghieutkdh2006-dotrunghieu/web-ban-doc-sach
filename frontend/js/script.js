@@ -255,7 +255,7 @@ async function loadCategories() {
     const filterSelect = document.getElementById("filterCategory");
     if (filterSelect && categoriesCache) filterSelect.innerHTML = `<option value="all">Tất cả</option>` + categoriesCache.map(cat => `<option value="${cat.name.replace(/'/g, "\\'")}">${escapeHtml(cat.name)}</option>`).join('');
     const dropdown = document.getElementById("categoryDropdown");
-    if (dropdown && categoriesCache) dropdown.innerHTML = `<li><a href="#" class="active" onclick="filterByCategory('Tất cả'); return false;">Tất cả</a></li>` + categoriesCache.map(cat => `<li><a href="#" onclick="filterByCategory('${cat.name.replace(/'/g, "\\'")}'); return false;">${escapeHtml(cat.name)}</a></li>`).join('');
+    if (dropdown && categoriesCache) dropdown.innerHTML = `<li><a href="#" onclick="filterByCategory('Tất cả'); return false;">Tất cả</a></li>` + categoriesCache.map(cat => `<li><a href="#" onclick="filterByCategory('${cat.name.replace(/'/g, "\\'")}'); return false;">${escapeHtml(cat.name)}</a></li>`).join('');
   } catch (err) { console.warn("Lỗi loadCategories:", err); }
 }
 
