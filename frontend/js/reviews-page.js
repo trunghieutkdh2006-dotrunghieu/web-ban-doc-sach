@@ -1,5 +1,4 @@
-(() => {
-            const API_BASE = API_BASE_URL;
+            const API_BASE = typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://web-ban-doc-sach.onrender.com/api';
             let allReviews = [];
             let filteredReviews = [];
             let currentPage = 1;
