@@ -109,7 +109,6 @@ h6 {
 
 .search-container input:focus {
     background: var(--white) !important;
-    border-color: var(--primary) !important;
     box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15) !important;
 }
 
