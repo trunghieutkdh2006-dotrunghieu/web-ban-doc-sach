@@ -1,7 +1,4 @@
-if (typeof API_BASE_URL === 'undefined') {
-    var API_BASE_URL = 'https://web-ban-doc-sach.onrender.com/api';
-}
-const API_BASE = API_BASE_URL;
+const API_BASE = (typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : 'https://web-ban-doc-sach.onrender.com/api');
 const USERS_API = `${API_BASE}/users`;
 const BOOKS_API = `${API_BASE}/books`;
 const CATEGORIES_API = `${API_BASE}/categories`;
