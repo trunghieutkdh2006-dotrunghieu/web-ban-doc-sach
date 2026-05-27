@@ -377,7 +377,6 @@ h6 {
 }
 
 .btn-filter-primary {
-    background: linear-gradient(135deg, var(--primary), var(--primary-light)) !important;
     border-radius: 12px !important;
     box-shadow: 0 6px 16px rgba(79, 70, 229, 0.2) !important;
 }
