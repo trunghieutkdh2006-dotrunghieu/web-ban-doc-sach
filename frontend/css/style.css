@@ -99,6 +99,11 @@ body {
 
     /* Ẩn thanh cuộn ngang, tránh vỡ layout khi element tràn */
     overflow-x: hidden;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+    letter-spacing: -0.01em !important;
 }
 
 /* Thanh cuộn (scrollbar) trên trình duyệt WebKit như Chrome, Edge, Safari */
@@ -4830,16 +4835,6 @@ body.dark-mode .price-range input {
 /* ============================================================
    ✦ TYPOGRAPHY SYSTEM — Inter + Sora, màu #1D3557
    ============================================================ */
-
-/* Body base */
-body {
-    font-family: 'Inter', sans-serif !important;
-    font-size: 15px !important;
-    line-height: 1.65 !important;
-    -webkit-font-smoothing: antialiased !important;
-    -moz-osx-font-smoothing: grayscale !important;
-    letter-spacing: -0.01em !important;
-}
 
 /* ── HEADINGS dùng Sora ───────────────────────────────────── */
 h1,
