@@ -105,22 +105,6 @@ h6 {
     transform: translateY(-1px) !important;
 }
 
-/* Khung tìm kiếm thông minh */
-.search-container input {
-    height: 46px !important;
-    border-radius: var(--radius-sm) !important;
-    background: rgba(255, 255, 255, 0.7) !important;
-    border: 1px solid rgba(0, 0, 0, 0.05) !important;
-    padding-left: 20px !important;
-    transition: var(--transition) !important;
-}
-
-.search-container input:focus {
-    background: var(--white) !important;
-    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15) !important;
-}
-
-
 /* Action button nổi bật */
 .action-btn {
     border-radius: var(--radius-sm) !important;
