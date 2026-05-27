@@ -714,21 +714,6 @@ body {
     position: relative;
 }
 
-.heart-btn,
-.cart-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 11px 16px;
-    border: none;
-    border-radius: 999px;
-    background: var(--white);
-    color: var(--text);
-    cursor: pointer;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-}
-
 .heart-btn:hover,
 .cart-btn:hover {
     transform: translateY(-2px);
@@ -925,26 +910,6 @@ body {
 .user-dropdown a:hover {
     background: linear-gradient(135deg, #1D3557, #274c77);
     color: #fff;
-}
-
-.action-btn {
-    position: relative;
-    min-height: 50px;
-    padding: 0 18px;
-    border: 1px solid rgba(255, 255, 255, .8);
-    border-radius: 18px;
-    background: rgba(255, 255, 255, .95);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    color: var(--text);
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-    margin-right: 22px;
 }
 
 .action-btn:hover {
