@@ -92,10 +92,10 @@ h6,
 .modal-content h2,
 .daily-deal-title,
 .book-section-container h2 {
-    font-family: 'Sora', sans-serif !important;
-    letter-spacing: -0.03em !important;
-    line-height: 1.18 !important;
-    color: var(--primary) !important;
+    font-family: 'DM Sans', sans-serif !important;
+    letter-spacing: -0.02em !important;
+    line-height: 1.2 !important;
+    font-weight: 700 !important;
 }
 
 /* ── CUSTOM SCROLLBAR ────────────────────────────────────── */
