@@ -718,12 +718,30 @@
     padding: 0 18px;
     display: flex;
     align-items: center;
+    gap: 12px;
+    /* thêm khoảng cách giữa icon và text */
     color: var(--text);
     text-decoration: none;
     font-family: 'Inter', sans-serif !important;
     font-weight: 600;
     transition: var(--transition);
     background: transparent;
+}
+
+.user-dropdown a i {
+    width: 20px;
+    /* cố định độ rộng cho icon */
+    font-size: 16px;
+    text-align: center;
+}
+
+.user-dropdown a:hover {
+    background: var(--primary) !important;
+    color: #fff !important;
+}
+
+.user-dropdown a:hover i {
+    color: #fff !important;
 }
 
 .user-dropdown a:hover {
