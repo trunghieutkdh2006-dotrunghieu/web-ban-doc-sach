@@ -154,7 +154,7 @@
 /* ── DROPDOWN PANEL ──────────────────────────────────────── */
 .dropdown {
     position: absolute;
-    top: calc(100% + 8px);
+    top: calc(100% + 10px);
     left: 0;
     min-width: 260px;
     background: #ffffff !important;
