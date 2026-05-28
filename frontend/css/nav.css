@@ -748,14 +748,16 @@
     color: var(--text);
     text-decoration: none;
     font-family: 'Inter', sans-serif !important;
+    font-size: 13px;
     font-weight: 600;
     transition: var(--transition);
     background: transparent;
     box-sizing: border-box;
+    line-height: 1;
 }
 
 .user-dropdown a i {
-    width: 20px;
+    width: 16px;
     font-size: 16px;
     text-align: center;
 }
