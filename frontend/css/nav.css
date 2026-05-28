@@ -184,8 +184,6 @@
     /* giảm từ 12px 18px xuống 6px 16px */
     margin: 0;
     font-family: 'Inter', sans-serif !important;
-    font-size: 13px;
-    /* giảm font size */
     font-weight: 500;
     color: var(--text);
     text-decoration: none;
