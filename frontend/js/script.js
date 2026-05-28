@@ -885,12 +885,22 @@ function updateUserUI() {
     const dropdown = document.getElementById("userDropdown");
     
     if (user && userBtn) {
-        userBtn.innerHTML = `<i class="far fa-user-circle"></i> ${user.username.substring(0, 10)}`;
+        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        const avatarUrl = userProfile.avatar || getUserAvatar();
+        const displayName = userProfile.fullName || user.username;
+        
+        userBtn.innerHTML = `
+            <img src="${avatarUrl}" class="navbar-avatar" 
+                 onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=32&length=2&name=${encodeURIComponent(user.username)}&bold=true'"
+                 style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 8px;">
+            <span>${displayName.substring(0, 12)}</span>
+        `;
+        
         if (dropdown) {
             const adminLink = user.role === 'admin' ? '<a href="dashboard.html">📊 Admin Dashboard</a>' : '';
             dropdown.innerHTML = `
-                <a href="#" onclick="openProfile()">👤 Hồ sơ</a>
-                <a href="#" onclick="openSettings()">⚙️ Cài đặt</a>
+                <a href="#" onclick="openProfile()">👤 Hồ sơ của tôi</a>
+                <a href="#" onclick="openEditProfile()">✏️ Chỉnh sửa hồ sơ</a>
                 <a href="#" onclick="openOrderHistory()">📦 Lịch sử đơn hàng</a>
                 ${adminLink}
                 <a href="#" onclick="logout()">🚪 Đăng xuất</a>
@@ -904,60 +914,177 @@ function updateUserUI() {
     }
 }
 
-function openProfile() {
+// ==================== CHỈNH SỬA HỒ SƠ VỚI UPLOAD AVATAR ====================
+let tempAvatarPreview = null; // Lưu avatar preview tạm thời
+
+function openEditProfile() {
     if (!user) {
         toggleAuth(true);
         return;
     }
 
-    const joinDate = user.createdAt
-        ? new Date(user.createdAt).toLocaleDateString('vi-VN')
-        : 'Chưa cập nhật';
-
+    // Lấy thông tin bổ sung từ localStorage
+    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const currentAvatar = userProfile.avatar || getUserAvatar(user._id || user.id);
+    
+    tempAvatarPreview = currentAvatar;
+    
     Swal.fire({
-        width: '650px',
+        title: '<span style="font-family: Sora, sans-serif;">✏️ Chỉnh sửa hồ sơ</span>',
+        width: '550px',
         showConfirmButton: false,
         showCloseButton: true,
         background: '#fff',
         customClass: {
-            popup: 'profile-popup'
+            popup: 'edit-profile-popup'
         },
         html: `
-            <div class="profile-modal">
-                <div class="profile-header">
-                    <div class="profile-avatar">
-                        ${getUserInitials(user.username)}
-                    </div>
-                    <h2>${escapeHtml(user.username)}</h2>
-                    <p>${escapeHtml(user.email)}</p>
-                    <span class="profile-role ${user.role}">
-                        ${user.role === 'admin' ? '👑 Quản trị viên' : '📚 Thành viên'}
-                    </span>
+            <div class="edit-profile-form">
+                <div class="avatar-upload-section">
+                    <img src="${currentAvatar}" class="profile-avatar-preview" id="avatarPreview" onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=${encodeURIComponent(user.username)}&bold=true'">
+                    <label class="avatar-upload-label" for="avatarFileInput">
+                        <i class="fas fa-camera"></i>
+                    </label>
+                    <input type="file" id="avatarFileInput" accept="image/jpeg,image/png,image/jpg,image/gif">
+                    <small style="display:block; margin-top:8px; color:#94a3b8; font-size:11px;">Nhấn vào camera để đổi avatar (JPG, PNG, tối đa 2MB)</small>
                 </div>
-                <div class="profile-body">
-                    <div class="profile-card">
-                        <div class="profile-label"><i class="fas fa-user"></i> Tên người dùng</div>
-                        <div class="profile-value">${escapeHtml(user.username)}</div>
+                <div class="edit-field">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="editEmail" value="${escapeHtml(user.email || '')}" readonly>
+                </div>
+                <div class="edit-field">
+                    <label><i class="fas fa-user"></i> Tên đăng nhập</label>
+                    <input type="text" id="editUsername" value="${escapeHtml(user.username || '')}" readonly>
+                </div>
+                <div class="edit-field">
+                    <label><i class="fas fa-user-circle"></i> Họ và tên</label>
+                    <input type="text" id="editFullName" placeholder="Nhập họ tên của bạn" value="${escapeHtml(userProfile.fullName || '')}">
+                </div>
+                <div class="edit-field-row">
+                    <div class="edit-field">
+                        <label><i class="fas fa-phone"></i> Số điện thoại</label>
+                        <input type="tel" id="editPhone" placeholder="Nhập số điện thoại" value="${escapeHtml(userProfile.phone || '')}">
                     </div>
-                    <div class="profile-card">
-                        <div class="profile-label"><i class="fas fa-envelope"></i> Email</div>
-                        <div class="profile-value">${escapeHtml(user.email)}</div>
-                    </div>
-                    <div class="profile-card">
-                        <div class="profile-label"><i class="fas fa-shield-alt"></i> Vai trò</div>
-                        <div class="profile-value">${user.role || 'user'}</div>
-                    </div>
-                    <div class="profile-card">
-                        <div class="profile-label"><i class="fas fa-calendar"></i> Ngày tham gia</div>
-                        <div class="profile-value">${joinDate}</div>
+                    <div class="edit-field">
+                        <label><i class="fas fa-calendar"></i> Ngày sinh</label>
+                        <input type="date" id="editBirthday" value="${userProfile.birthday || ''}">
                     </div>
                 </div>
-                <div class="profile-actions">
-                    <button class="profile-btn profile-btn-danger" onclick="logout(); Swal.close();"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
+                <div class="edit-field">
+                    <label><i class="fas fa-venus-mars"></i> Giới tính</label>
+                    <select id="editGender">
+                        <option value="">Chọn giới tính</option>
+                        <option value="nam" ${userProfile.gender === 'nam' ? 'selected' : ''}>Nam</option>
+                        <option value="nu" ${userProfile.gender === 'nu' ? 'selected' : ''}>Nữ</option>
+                        <option value="khac" ${userProfile.gender === 'khac' ? 'selected' : ''}>Khác</option>
+                    </select>
+                </div>
+                <div class="edit-field">
+                    <label><i class="fas fa-map-marker-alt"></i> Địa chỉ</label>
+                    <input type="text" id="editAddress" placeholder="Nhập địa chỉ của bạn" value="${escapeHtml(userProfile.address || '')}">
+                </div>
+                <div class="edit-buttons">
+                    <button class="btn-edit-save" onclick="saveUserProfileWithAvatar()">
+                        <i class="fas fa-save"></i> Lưu thay đổi
+                    </button>
+                    <button class="btn-edit-cancel" onclick="Swal.close()">
+                        <i class="fas fa-times"></i> Hủy
+                    </button>
                 </div>
             </div>
-        `
+        `,
+        didOpen: () => {
+            const avatarInput = document.getElementById('avatarFileInput');
+            if (avatarInput) {
+                avatarInput.addEventListener('change', handleAvatarPreview);
+            }
+        }
     });
+}
+
+function handleAvatarPreview(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    // Kiểm tra kích thước (tối đa 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+        showToast('Ảnh quá lớn! Tối đa 2MB', 'error');
+        event.target.value = '';
+        return;
+    }
+    
+    // Kiểm tra định dạng
+    if (!file.type.startsWith('image/')) {
+        showToast('Vui lòng chọn file ảnh!', 'error');
+        event.target.value = '';
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const preview = document.getElementById('avatarPreview');
+        if (preview) {
+            preview.src = e.target.result;
+            tempAvatarPreview = e.target.result;
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+function getUserAvatar(userId) {
+    // Lấy avatar từ localStorage nếu có
+    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    if (userProfile.avatar && userProfile.avatar !== 'undefined') {
+        return userProfile.avatar;
+    }
+    // Fallback về avatar mặc định từ UI Avatars API
+    const username = user?.username || 'User';
+    return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=${encodeURIComponent(username)}&bold=true`;
+}
+
+async function saveUserProfileWithAvatar() {
+    const fullName = document.getElementById('editFullName')?.value.trim() || '';
+    const phone = document.getElementById('editPhone')?.value.trim() || '';
+    const birthday = document.getElementById('editBirthday')?.value || '';
+    const gender = document.getElementById('editGender')?.value || '';
+    const address = document.getElementById('editAddress')?.value.trim() || '';
+    
+    // Validate số điện thoại (nếu có)
+    if (phone && !/^[0-9]{10,11}$/.test(phone)) {
+        showToast('Số điện thoại không hợp lệ! (10-11 số)', 'error');
+        return;
+    }
+    
+    const userProfile = {
+        fullName: fullName,
+        phone: phone,
+        birthday: birthday,
+        gender: gender,
+        address: address,
+        updatedAt: new Date().toISOString()
+    };
+    
+    // Nếu có avatar mới (base64)
+    if (tempAvatarPreview && tempAvatarPreview.startsWith('data:image')) {
+        userProfile.avatar = tempAvatarPreview;
+    } else {
+        // Giữ avatar cũ nếu có
+        const oldProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        if (oldProfile.avatar) {
+            userProfile.avatar = oldProfile.avatar;
+        }
+    }
+    
+    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+    
+    // Cập nhật avatar hiển thị trên navbar
+    updateNavbarAvatar();
+    
+    Swal.close();
+    showToast('Đã cập nhật hồ sơ thành công!', 'success');
+    
+    // Cập nhật lại profile đang hiển thị
+    setTimeout(() => openProfile(), 300);
 }
 
 function openSettings() {
@@ -1085,7 +1212,22 @@ function initStarRating() {
     }
   });
 }
-
+function updateNavbarAvatar() {
+    const userBtn = document.getElementById('userBtn');
+    if (!userBtn) return;
+    
+    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const avatarUrl = userProfile.avatar || getUserAvatar();
+    const displayName = userProfile.fullName || user?.username || 'User';
+    
+    // Tạo avatar nhỏ trên navbar
+    userBtn.innerHTML = `
+        <img src="${avatarUrl}" class="navbar-avatar" 
+             onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=32&length=2&name=${encodeURIComponent(user?.username || 'User')}&bold=true'"
+             style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 8px;">
+        <span>${displayName.substring(0, 12)}</span>
+    `;
+}
 async function uploadImageForBook(bookId, imageFile) {
     const formData = new FormData();
     formData.append('image', imageFile);
