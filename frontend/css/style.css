@@ -473,7 +473,7 @@
         align-items: center !important;
     }
 
-    main-menu a {
+    .main-menu a {
         position: relative !important;
         width: auto !important;
         height: 44px !important;
@@ -485,14 +485,10 @@
         align-items: center !important;
         justify-content: center !important;
         gap: 8px !important;
-
-        /* Màu nền xanh trơn phẳng lì theo yêu cầu của bạn */
-        background: #1D3557 !important;
+        background: rgba(255, 255, 255, 0.96) !important;
         border: none !important;
         box-shadow: none !important;
-
-        /* Chữ trắng nổi bật */
-        color: #ffffff !important;
+        color: #0f172a !important;
         font-size: 15px !important;
         font-weight: 600 !important;
         text-decoration: none !important;
