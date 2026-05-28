@@ -953,7 +953,6 @@ function openProfile() {
                     </div>
                 </div>
                 <div class="profile-actions">
-                    <button class="profile-btn profile-btn-primary" onclick="openSettings(); Swal.close();"><i class="fas fa-cog"></i> Cài đặt</button>
                     <button class="profile-btn profile-btn-danger" onclick="logout(); Swal.close();"><i class="fas fa-sign-out-alt"></i> Đăng xuất</button>
                 </div>
             </div>
