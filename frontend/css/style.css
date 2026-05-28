@@ -3585,21 +3585,17 @@
     }
 
     .dropdown {
-        border-radius: 20px !important;
         background: rgba(255, 255, 255, 0.97) !important;
-        backdrop-filter: blur(30px) saturate(200%) !important;
-        border: 1px solid rgba(29, 53, 87, 0.08) !important;
-        box-shadow: 0 20px 60px rgba(15, 23, 42, 0.16), 0 4px 16px rgba(15, 23, 42, 0.08) !important;
-        padding: 10px !important;
+        backdrop-filter: blur(30px) saturate(180%) !important;
+        border: 1px solid rgba(29, 53, 87, 0.07) !important;
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.15), 0 4px 16px rgba(15, 23, 42, 0.07) !important;
+        border-radius: 24px !important;
         position: absolute;
-        top: calc(100% + 12px);
-        left: 0;
-        width: 270px;
-        opacity: 0;
-        visibility: hidden;
-        transform: translateY(10px);
-        transition: var(--transition);
-        z-index: 100;
+        top: calc(100% + 14px);
+        right: 0;
+        overflow: hidden;
+        display: none;
+        z-index: 1000;
     }
 
     .dropdown a {
