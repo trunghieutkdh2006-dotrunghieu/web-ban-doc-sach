@@ -1078,25 +1078,25 @@
     }
 }
 
-.profile-modern {
+.profile-modal {
     max-width: 460px;
     width: 100%;
     background: var(--white);
     border-radius: 32px;
     overflow: hidden;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    animation: modalFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    animation: modalZoom 0.3s ease;
 }
 
-/* Header với gradient + avatar nổi */
-.profile-modern-header {
+/* Header gradient */
+.profile-header {
     background: linear-gradient(135deg, var(--primary) 0%, #274c77 100%);
     padding: 40px 24px 32px;
     text-align: center;
     position: relative;
 }
 
-.profile-modern-avatar {
+.profile-avatar {
     width: 100px;
     height: 100px;
     background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%);
@@ -1112,7 +1112,7 @@
     border: 3px solid rgba(255, 255, 255, 0.4);
 }
 
-.profile-modern-header h2 {
+.profile-header h2 {
     font-family: 'Sora', sans-serif;
     font-size: 26px;
     font-weight: 800;
@@ -1121,14 +1121,14 @@
     letter-spacing: -0.02em;
 }
 
-.profile-modern-header p {
+.profile-header p {
     font-family: 'Inter', sans-serif;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.8);
     margin: 0 0 16px;
 }
 
-.profile-modern-badge {
+.profile-role {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -1138,17 +1138,24 @@
     border-radius: 40px;
     font-size: 12px;
     font-weight: 700;
-    color: #fbbf24;
     border: 1px solid rgba(255, 255, 255, 0.25);
 }
 
+.profile-role.admin {
+    color: #fbbf24;
+}
+
+.profile-role.user {
+    color: #fff;
+}
+
 /* Body với card thông tin */
-.profile-modern-body {
+.profile-body {
     padding: 28px 24px 20px;
     background: var(--white);
 }
 
-.profile-modern-item {
+.profile-card {
     background: #f8fafc;
     border-radius: 20px;
     padding: 16px 20px;
@@ -1160,14 +1167,14 @@
     gap: 14px;
 }
 
-.profile-modern-item:hover {
+.profile-card:hover {
     background: #ffffff;
     border-color: rgba(29, 53, 87, 0.15);
     transform: translateX(4px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-.profile-modern-icon {
+.profile-card .profile-label {
     width: 44px;
     height: 44px;
     background: linear-gradient(135deg, rgba(29, 53, 87, 0.08), rgba(69, 123, 157, 0.08));
@@ -1177,23 +1184,13 @@
     justify-content: center;
     font-size: 20px;
     color: var(--primary);
+    margin: 0;
+    text-transform: none;
+    letter-spacing: normal;
 }
 
-.profile-modern-info {
+.profile-card .profile-value {
     flex: 1;
-}
-
-.profile-modern-label {
-    font-family: 'Inter', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--primary-light);
-    margin-bottom: 4px;
-}
-
-.profile-modern-value {
     font-family: 'Inter', sans-serif;
     font-size: 15px;
     font-weight: 700;
@@ -1202,7 +1199,7 @@
 }
 
 /* Footer actions */
-.profile-modern-actions {
+.profile-actions {
     display: flex;
     gap: 12px;
     padding: 8px 24px 28px;
@@ -1210,7 +1207,7 @@
     border-top: 1px solid #eef2ff;
 }
 
-.profile-modern-btn {
+.profile-btn {
     flex: 1;
     display: inline-flex;
     align-items: center;
@@ -1226,72 +1223,63 @@
     transition: all 0.25s ease;
 }
 
-.profile-modern-btn-primary {
+.profile-btn-primary {
     background: linear-gradient(135deg, var(--primary), #274c77);
     color: white;
     box-shadow: 0 6px 14px rgba(29, 53, 87, 0.2);
 }
 
-.profile-modern-btn-primary:hover {
+.profile-btn-primary:hover {
     transform: translateY(-2px);
     box-shadow: 0 10px 24px rgba(29, 53, 87, 0.3);
 }
 
-.profile-modern-btn-danger {
+.profile-btn-danger {
     background: #fff1f0;
     color: #e63946;
 }
 
-.profile-modern-btn-danger:hover {
+.profile-btn-danger:hover {
     background: #fee2e2;
     transform: translateY(-2px);
 }
 
+/* Swal2 override */
+.swal2-popup.profile-popup {
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border-radius: 32px !important;
+}
+
 /* Dark mode */
-body.dark-mode .profile-modern {
+body.dark-mode .profile-modal {
     background: #1e293b;
 }
 
-body.dark-mode .profile-modern-body,
-body.dark-mode .profile-modern-actions {
+body.dark-mode .profile-body,
+body.dark-mode .profile-actions {
     background: #1e293b;
 }
 
-body.dark-mode .profile-modern-item {
+body.dark-mode .profile-card {
     background: #0f172a;
     border-color: #334155;
 }
 
-body.dark-mode .profile-modern-value {
+body.dark-mode .profile-card .profile-value {
     color: #e2e8f0;
 }
 
-body.dark-mode .profile-modern-label {
-    color: #94a3b8;
-}
-
-body.dark-mode .profile-modern-actions {
-    border-top-color: #334155;
-}
-
-body.dark-mode .profile-modern-btn-danger {
-    background: #3b0a0a;
-    color: #f87171;
-}
-
-body.dark-mode .profile-modern-icon {
+body.dark-mode .profile-card .profile-label {
     background: rgba(255, 255, 255, 0.05);
 }
 
-/* Animation */
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: scale(0.96) translateY(20px);
-    }
+body.dark-mode .profile-actions {
+    border-top-color: #334155;
+}
 
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+body.dark-mode .profile-btn-danger {
+    background: #3b0a0a;
+    color: #f87171;
 }
