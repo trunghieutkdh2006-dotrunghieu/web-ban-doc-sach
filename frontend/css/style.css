@@ -638,12 +638,6 @@ html {
     transition: var(--transition);
 }
 
-.heart-btn:hover,
-.cart-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
 .cart-btn i {
     font-size: 1.1rem;
     color: var(--primary);
@@ -820,14 +814,6 @@ html {
     color: #fff;
 }
 
-
-
-.action-btn:hover {
-    background: linear-gradient(135deg, #1D3557, #274c77);
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 16px 28px rgba(29, 53, 87, .2);
-}
 
 .action-btn i {
     font-size: 18px;
@@ -3310,11 +3296,6 @@ body.dark-mode #darkModeToggle {
     }
 }
 
-.action-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.10);
-}
-
 /* ========== BADGES ========== */
 .cart-count,
 .heart-count {
@@ -3798,8 +3779,8 @@ body {
     background: linear-gradient(135deg, #1D3557, #274c77) !important;
     color: #fff !important;
     border-color: transparent !important;
-    box-shadow: 0 12px 28px rgba(29, 53, 87, 0.28) !important;
     transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px rgba(29, 53, 87, 0.25) !important;
 }
 
 .action-btn:hover i {
