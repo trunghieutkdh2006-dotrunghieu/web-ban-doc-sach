@@ -901,12 +901,13 @@ const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
         if (dropdown) {
             const adminLink = user.role === 'admin' ? '<a href="dashboard.html">📊 Admin Dashboard</a>' : '';
             dropdown.innerHTML = `
-                <a href="#" onclick="openProfile()">👤 Hồ sơ của tôi</a>
-                <a href="#" onclick="openEditProfile()">✏️ Chỉnh sửa hồ sơ</a>
-                <a href="#" onclick="openOrderHistory()">📦 Lịch sử đơn hàng</a>
-                ${adminLink}
-                <a href="#" onclick="logout()">🚪 Đăng xuất</a>
-            `;
+    <a href="#" onclick="openProfile()">👤 Hồ sơ của tôi</a>
+    <a href="#" onclick="openEditProfile()">✏️ Chỉnh sửa hồ sơ</a>
+    <a href="#" onclick="openSettings()">⚙️ Cài đặt</a>
+    <a href="#" onclick="openOrderHistory()">📦 Lịch sử đơn hàng</a>
+    ${adminLink}
+    <a href="#" onclick="logout()">🚪 Đăng xuất</a>
+`;
         }
     } else if (userBtn) {
         userBtn.innerHTML = `<i class="far fa-user-circle"></i>`;
