@@ -3802,6 +3802,10 @@ body {
     transform: translateY(-2px) !important;
 }
 
+.action-btn:hover i {
+    color: #fff !important;
+}
+
 /* ── HERO SECTION ────────────────────────────────────────── */
 .hero {
     background:
