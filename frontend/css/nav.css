@@ -136,6 +136,7 @@
 .main-menu>li>a:hover,
 .main-menu>li>a.active {
     background: var(--primary);
+    color: #fff !important;
 }
 
 /* ── HAS-DROPDOWN ────────────────────────────────────────── */
