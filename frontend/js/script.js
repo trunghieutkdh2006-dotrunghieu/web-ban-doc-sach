@@ -885,7 +885,9 @@ function updateUserUI() {
     const dropdown = document.getElementById("userDropdown");
     
     if (user && userBtn) {
-        const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        const userId = user._id || user.id || user.email;
+const profileKey = `userProfile_${userId}`;
+const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
         const avatarUrl = userProfile.avatar || getUserAvatar();
         const displayName = userProfile.fullName || user.username;
         
@@ -924,7 +926,9 @@ function openProfile() {
         ? new Date(user.createdAt).toLocaleDateString('vi-VN')
         : 'Chưa cập nhật';
     
-    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const userId = user._id || user.id || user.email;
+const profileKey = `userProfile_${userId}`;
+const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
     const fullName = userProfile.fullName || 'Chưa cập nhật';
     const phone = userProfile.phone || 'Chưa cập nhật';
     const address = userProfile.address || 'Chưa cập nhật';
@@ -1009,8 +1013,9 @@ function openEditProfile() {
         return;
     }
 
-    // Lấy thông tin bổ sung từ localStorage
-    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const userId = user._id || user.id || user.email;
+const profileKey = `userProfile_${userId}`;
+const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
     const currentAvatar = userProfile.avatar || getUserAvatar(user._id || user.id);
     
     tempAvatarPreview = currentAvatar;
@@ -1117,9 +1122,15 @@ function handleAvatarPreview(event) {
     reader.readAsDataURL(file);
 }
 
-function getUserAvatar(userId) {
+function getUserAvatar() {
     // Lấy avatar từ localStorage nếu có
-    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const userId = user?._id || user?.id || user?.email;
+if (!userId) {
+    const username = user?.username || 'User';
+    return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=${encodeURIComponent(username)}&bold=true`;
+}
+const profileKey = `userProfile_${userId}`;
+const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
     if (userProfile.avatar && userProfile.avatar !== 'undefined') {
         return userProfile.avatar;
     }
@@ -1135,11 +1146,14 @@ async function saveUserProfileWithAvatar() {
     const gender = document.getElementById('editGender')?.value || '';
     const address = document.getElementById('editAddress')?.value.trim() || '';
     
-    // Validate số điện thoại (nếu có)
     if (phone && !/^[0-9]{10,11}$/.test(phone)) {
         showToast('Số điện thoại không hợp lệ! (10-11 số)', 'error');
         return;
     }
+    
+    // Lấy userId để lưu riêng
+    const userId = user?._id || user?.id || user?.email;
+    const profileKey = `userProfile_${userId}`;
     
     const userProfile = {
         fullName: fullName,
@@ -1150,26 +1164,21 @@ async function saveUserProfileWithAvatar() {
         updatedAt: new Date().toISOString()
     };
     
-    // Nếu có avatar mới (base64)
     if (tempAvatarPreview && tempAvatarPreview.startsWith('data:image')) {
         userProfile.avatar = tempAvatarPreview;
     } else {
-        // Giữ avatar cũ nếu có
-        const oldProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+        const oldProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
         if (oldProfile.avatar) {
             userProfile.avatar = oldProfile.avatar;
         }
     }
     
-    localStorage.setItem('userProfile', JSON.stringify(userProfile));
+    localStorage.setItem(profileKey, JSON.stringify(userProfile));
     
-    // Cập nhật avatar hiển thị trên navbar
     updateNavbarAvatar();
     
     Swal.close();
     showToast('Đã cập nhật hồ sơ thành công!', 'success');
-    
-    // Cập nhật lại profile đang hiển thị
     setTimeout(() => openProfile(), 300);
 }
 
@@ -1302,7 +1311,9 @@ function updateNavbarAvatar() {
     const userBtn = document.getElementById('userBtn');
     if (!userBtn) return;
     
-    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const userId = user._id || user.id || user.email;
+const profileKey = `userProfile_${userId}`;
+const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
     const avatarUrl = userProfile.avatar || getUserAvatar();
     const displayName = userProfile.fullName || user?.username || 'User';
     
