@@ -716,7 +716,8 @@
     top: calc(100% + 4px);
     left: 0;
     right: auto;
-    width: 240px;
+    width: auto;
+    white-space: nowrap;
     background: rgba(255, 255, 255, 0.98) !important;
     backdrop-filter: blur(30px) saturate(180%) !important;
     border: 1px solid rgba(29, 53, 87, 0.07) !important;
