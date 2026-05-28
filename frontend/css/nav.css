@@ -328,28 +328,28 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     width: auto;
-    height: 44px;
-    padding: 0 14px;
+    height: 40px;
+    padding: 0 10px;
     white-space: nowrap;
-    margin-right: 6px;
+    margin-right: 4px;
 
     font-family: 'Inter', sans-serif !important;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: var(--text);
 
     background: rgba(255, 255, 255, 0.97) !important;
     border: 1.5px solid rgba(29, 53, 87, 0.10) !important;
-    border-radius: 14px !important;
+    border-radius: 12px !important;
     box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
     cursor: pointer;
     transition: var(--transition-smooth) !important;
 }
 
 .action-btn i {
-    font-size: 18px;
+    font-size: 15px;
 }
 
 .action-btn:hover {
@@ -777,13 +777,15 @@
 #userBtn {
     display: flex !important;
     align-items: center !important;
-    gap: 8px;
-    min-width: 130px;
+    gap: 6px;
+    min-width: 110px;
+    max-width: 170px;
+    padding: 0 8px;
 }
 
 #userBtn .navbar-avatar {
-    width: 32px !important;
-    height: 32px !important;
+    width: 28px !important;
+    height: 28px !important;
     border-radius: 50% !important;
     object-fit: cover !important;
     flex-shrink: 0;
@@ -791,6 +793,9 @@
 
 #userBtn span {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 90px;
 }
 
 /* ── RESPONSIVE ──────────────────────────────────────────── */
