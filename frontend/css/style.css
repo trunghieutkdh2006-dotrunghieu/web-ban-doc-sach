@@ -778,7 +778,7 @@ html {
     padding: 0 18px;
     display: flex;
     align-items: center;
-    color: var(--text);
+    color: var(--t);
     text-decoration: none;
     font-weight: 600;
     transition: var(--transition);
