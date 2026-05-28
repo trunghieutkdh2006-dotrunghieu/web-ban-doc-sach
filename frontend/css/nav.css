@@ -731,6 +731,23 @@
     color: #fff !important;
 }
 
+.right-actions .action-btn {
+    min-width: auto;
+    padding: 0 16px;
+}
+
+#userBtn {
+    max-width: 200px;
+}
+
+#userBtn span {
+    display: inline-block;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* ── RESPONSIVE ──────────────────────────────────────────── */
 @media (max-width: 480px) {
 
