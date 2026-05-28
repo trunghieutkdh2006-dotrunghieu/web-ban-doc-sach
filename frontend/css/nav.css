@@ -778,7 +778,7 @@
     display: flex !important;
     align-items: center !important;
     gap: 6px;
-    min-width: 110px;
+    min-width: 50px;
     max-width: 170px;
     padding: 0 8px;
 }
