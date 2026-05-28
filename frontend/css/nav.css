@@ -737,14 +737,13 @@
 }
 
 #userBtn {
-    max-width: 200px;
+    min-width: 160px;
+    /* thay max-width bằng min-width */
+    max-width: 220px;
 }
 
 #userBtn span {
     display: inline-block;
-    max-width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
     white-space: nowrap;
 }
 
