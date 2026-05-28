@@ -486,8 +486,8 @@ html {
     justify-content: center !important;
     gap: 8px !important;
     background: rgba(255, 255, 255, 0.96) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.4) !important;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+    border: none !important;
+    box-shadow: none !important;
     color: #0f172a !important;
     font-size: 15px !important;
     font-weight: 600 !important;
@@ -4073,10 +4073,6 @@ body.dark-mode .rv-card {
 
 body.dark-mode .section-header h2 {
     color: #f1f5f9 !important;
-}
-
-body.dark-mode .main-menu a {
-    color: #cbd5e1 !important;
 }
 
 body.dark-mode .filter-label {
