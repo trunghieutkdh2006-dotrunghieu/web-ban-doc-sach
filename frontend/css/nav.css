@@ -719,11 +719,12 @@
     font-family: 'Inter', sans-serif !important;
     font-weight: 600;
     transition: var(--transition);
+    background: transparent;
 }
 
 .user-dropdown a:hover {
-    background: linear-gradient(135deg, var(--primary), #274c77);
-    color: #fff;
+    background: var(--primary) !important;
+    color: #fff !important;
 }
 
 /* ── RESPONSIVE ──────────────────────────────────────────── */
