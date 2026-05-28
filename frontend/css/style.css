@@ -2189,6 +2189,7 @@ html {
     transform: translateY(-3px);
     background: #e2e8f0;
 }
+
 .reviews-modal-content {
     width: 900px;
     max-width: 95%;
@@ -3395,7 +3396,6 @@ body.dark-mode #darkModeToggle {
 .cart-title {
     font-size: 14px;
     font-weight: 700;
-    color: #111827;
     display: flex;
     align-items: center;
     gap: 6px;
