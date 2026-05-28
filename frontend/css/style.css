@@ -3658,23 +3658,29 @@ body {
     opacity: 1;
 }
 
-/* ── ACTION BUTTONS ──────────────────────────────────────── */
 .action-btn {
     border-radius: 14px !important;
     background: rgba(255, 255, 255, 0.96) !important;
     border: 1.5px solid rgba(29, 53, 87, 0.1) !important;
     box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
     transition: var(--transition-smooth) !important;
+
     position: relative;
-    width: 44px;
+
+    width: auto;
+    /* QUAN TRỌNG */
     height: 44px;
-    cursor: pointer;
+    /* giữ chiều cao nút */
+
+    padding: 0 14px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 50px;
-    padding: 0 18px;
     gap: 8px;
+
+    white-space: nowrap;
+
     color: var(--text);
     font-size: 15px;
     margin-right: 22px;
