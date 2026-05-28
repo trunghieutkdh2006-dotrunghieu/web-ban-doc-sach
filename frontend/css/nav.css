@@ -809,19 +809,3 @@
         transform: translateX(50%) translateY(0);
     }
 }
-
-/* ── RESPONSIVE ──────────────────────────────────────────── */
-@media (max-width: 480px) {
-
-    .cart-dropdown,
-    .heart-dropdown {
-        width: 92vw;
-        right: 50%;
-        transform: translateX(50%) translateY(-10px);
-    }
-
-    .cart-dropdown.show,
-    .heart-dropdown.show {
-        transform: translateX(50%) translateY(0);
-    }
-}
