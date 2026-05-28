@@ -193,8 +193,7 @@
     box-sizing: border-box;
 }
 
-.dropdown a:hover,
-.dropdown a.active {
+.dropdown a:hover {
     background: #1D3557 !important;
     color: #fff !important;
 }
