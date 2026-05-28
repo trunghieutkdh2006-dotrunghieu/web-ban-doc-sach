@@ -154,12 +154,12 @@
 /* ── DROPDOWN PANEL ──────────────────────────────────────── */
 .dropdown {
     position: absolute;
-    top: calc(100% + 10px);
+    top: calc(100% + 8px);
     left: 0;
     min-width: 260px;
     background: #ffffff !important;
     border: 1px solid #e2e8f0;
-    border-radius: 16px;
+    border-radius: 14px;
     box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     opacity: 0;
@@ -167,8 +167,9 @@
     transform: translateY(10px);
     transition: all 0.25s ease;
     z-index: 500;
+    padding: 6px 0;
+    /* thêm padding nhỏ */
 }
-
 
 .dropdown li {
     width: 100%;
@@ -179,21 +180,31 @@
     display: flex;
     align-items: center;
     width: 100%;
-    padding: 12px 18px;
+    padding: 6px 16px;
+    /* giảm từ 12px 18px xuống 6px 16px */
     margin: 0;
     font-family: 'Inter', sans-serif !important;
-    font-size: 13.5px;
-    font-weight: 600;
+    font-size: 13px;
+    /* giảm font size */
+    font-weight: 500;
     color: var(--text);
     text-decoration: none;
     transition: all 0.2s ease;
     box-sizing: border-box;
+    gap: 8px;
+    /* thêm gap giữa icon và text */
+}
+
+.dropdown a i {
+    width: 20px;
+    font-size: 14px;
+    color: #1D3557;
 }
 
 .dropdown a:hover,
 .dropdown a.active {
-    background: #1D3557 !important;
-    color: #fff !important;
+    background: #f1f5f9 !important;
+    color: #1D3557 !important;
 }
 
 /* ── SEARCH ──────────────────────────────────────────────── */
