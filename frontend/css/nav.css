@@ -711,7 +711,7 @@
 
 .user-dropdown {
     position: absolute;
-    top: calc(100% + 14px);
+    top: calc(100% + 4px);
     left: 0;
     /* căn trái với nút user */
     right: auto;
