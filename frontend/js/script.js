@@ -913,6 +913,92 @@ function updateUserUI() {
         }
     }
 }
+// ==================== PROFILE ====================
+function openProfile() {
+    if (!user) {
+        toggleAuth(true);
+        return;
+    }
+
+    const joinDate = user.createdAt
+        ? new Date(user.createdAt).toLocaleDateString('vi-VN')
+        : 'Chưa cập nhật';
+    
+    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const fullName = userProfile.fullName || 'Chưa cập nhật';
+    const phone = userProfile.phone || 'Chưa cập nhật';
+    const address = userProfile.address || 'Chưa cập nhật';
+    const gender = userProfile.gender || 'Chưa cập nhật';
+    const birthday = userProfile.birthday ? new Date(userProfile.birthday).toLocaleDateString('vi-VN') : 'Chưa cập nhật';
+    const avatarUrl = userProfile.avatar || getUserAvatar();
+
+    Swal.fire({
+        width: '550px',
+        showConfirmButton: false,
+        showCloseButton: true,
+        background: '#fff',
+        customClass: {
+            popup: 'profile-popup'
+        },
+        html: `
+            <div class="profile-modal">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <img src="${avatarUrl}" style="width: 88px; height: 88px; border-radius: 50%; object-fit: cover;" 
+                             onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=88&length=2&name=${encodeURIComponent(fullName !== 'Chưa cập nhật' ? fullName : user.username)}&bold=true'">
+                    </div>
+                    <h2>${escapeHtml(fullName !== 'Chưa cập nhật' ? fullName : user.username)}</h2>
+                    <p>${escapeHtml(user.email)}</p>
+                    <span class="profile-role ${user.role}">
+                        ${user.role === 'admin' ? '👑 Quản trị viên' : '📚 Thành viên'}
+                    </span>
+                </div>
+                <div class="profile-body">
+                    <div class="profile-card">
+                        <div class="profile-label"><i class="fas fa-user"></i> Tên đăng nhập</div>
+                        <div class="profile-value">${escapeHtml(user.username)}</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-label"><i class="fas fa-user-circle"></i> Họ và tên</div>
+                        <div class="profile-value">${escapeHtml(fullName)}</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-label"><i class="fas fa-envelope"></i> Email</div>
+                        <div class="profile-value">${escapeHtml(user.email)}</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-label"><i class="fas fa-phone"></i> Số điện thoại</div>
+                        <div class="profile-value">${escapeHtml(phone)}</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-label"><i class="fas fa-map-marker-alt"></i> Địa chỉ</div>
+                        <div class="profile-value">${escapeHtml(address)}</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-label"><i class="fas fa-venus-mars"></i> Giới tính</div>
+                        <div class="profile-value">${escapeHtml(gender === 'nam' ? 'Nam' : gender === 'nu' ? 'Nữ' : gender === 'khac' ? 'Khác' : 'Chưa cập nhật')}</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-label"><i class="fas fa-calendar"></i> Ngày sinh</div>
+                        <div class="profile-value">${escapeHtml(birthday)}</div>
+                    </div>
+                    <div class="profile-card">
+                        <div class="profile-label"><i class="fas fa-calendar-alt"></i> Ngày tham gia</div>
+                        <div class="profile-value">${joinDate}</div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="profile-btn profile-btn-primary" onclick="Swal.close(); openEditProfile();">
+                        <i class="fas fa-edit"></i> Chỉnh sửa hồ sơ
+                    </button>
+                    <button class="profile-btn profile-btn-danger" onclick="logout(); Swal.close();">
+                        <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </button>
+                </div>
+            </div>
+        `
+    });
+}
 
 // ==================== CHỈNH SỬA HỒ SƠ VỚI UPLOAD AVATAR ====================
 let tempAvatarPreview = null; // Lưu avatar preview tạm thời
