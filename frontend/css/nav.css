@@ -192,7 +192,7 @@
 .dropdown a.active {
     background: var(--primary);
     color: #fff;
-    padding-left: 22px;
+    /* padding-left: 11px 18px; */
 }
 
 /* ── SEARCH ──────────────────────────────────────────────── */
