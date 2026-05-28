@@ -1343,14 +1343,6 @@ html {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* ============================================================
-   FLASH SALE SECTION
-   ============================================================ */
-.flash-sale-section {
-
-    padding: 50px 0;
-    position: relative;
-}
 
 .flash-sale-header {
     display: flex;
@@ -4404,6 +4396,8 @@ body.dark-mode .price-range input {
     border-radius: 28px !important;
     margin: 16px 0 !important;
     overflow: hidden !important;
+    padding: 50px 0;
+    position: relative;
 }
 
 .flash-label {
