@@ -469,18 +469,29 @@ html {
 }
 
 .main-menu li {
-    display: flex;
-    align-items: center;
+    display: flex !important;
+    align-items: center !important;
 }
 
 .main-menu a {
-    min-height: 48px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    text-decoration: none;
-    color: var(--text);
+    min-height: 44px !important;
+    padding: 0 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    text-decoration: none !important;
+
+    border-radius: 14px !important;
+
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #0f172a !important;
+    font-family: 'DM Sans', sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .has-dropdown {
@@ -3572,7 +3583,6 @@ body {
     box-shadow: 0 8px 20px rgba(29, 53, 87, 0.2), 0 2px 4px rgba(29, 53, 87, 0.1) !important;
 }
 
-/* ── DROPDOWN VIP ────────────────────────────────────────── */
 .dropdown {
     border-radius: 20px !important;
     background: rgba(255, 255, 255, 0.97) !important;
