@@ -251,6 +251,7 @@
     border-top: 1px solid rgba(255, 255, 255, .08);
     border-bottom: 1px solid rgba(255, 255, 255, .08);
     margin-top: 10px;
+    color: rgba(255, 255, 255, .62) !important;
 }
 
 .payment-icons {
