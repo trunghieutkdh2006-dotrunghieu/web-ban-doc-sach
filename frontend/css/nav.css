@@ -1,0 +1,743 @@
+/* ============================================================
+   NAV.CSS — Top Bar · Main Nav · Logo · Menu · Search
+             Action Buttons · Cart/Wishlist/User Dropdowns
+   Tất cả màu sắc đồng bộ theo :root { --primary: #1D3557 }
+   ============================================================ */
+
+/* ── TOP BAR ─────────────────────────────────────────────── */
+.top-bar {
+    background: linear-gradient(135deg, #0d1f38 0%, var(--primary) 60%, #274c77 100%) !important;
+    border-bottom: 1px solid rgba(201, 168, 76, 0.20) !important;
+    padding: 10px 0 !important;
+}
+
+.top-bar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.top-nav,
+.social-icons {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    list-style: none;
+}
+
+.top-nav a,
+.social-icons a {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    letter-spacing: 0.3px !important;
+    color: rgba(255, 255, 255, 0.75) !important;
+    text-decoration: none;
+    transition: var(--transition-smooth) !important;
+}
+
+.top-nav a:hover {
+    color: #fff !important;
+}
+
+.social-icons a {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.18) !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.social-icons a:hover {
+    background: rgba(255, 255, 255, 0.14) !important;
+    border-color: rgba(255, 255, 255, 0.40) !important;
+    transform: translateY(-2px);
+}
+
+/* ── MAIN NAV ────────────────────────────────────────────── */
+.main-nav {
+    background: var(--white);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    border-bottom: 1px solid rgba(29, 53, 87, 0.06);
+}
+
+/* ── NAV WRAPPER & LAYOUT ────────────────────────────────── */
+.nav-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    gap: 20px;
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 42px;
+}
+
+/* ── LOGO ────────────────────────────────────────────────── */
+.logo {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+    margin-left: 24px;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.logo img {
+    height: 45px;
+    width: auto;
+    vertical-align: middle;
+}
+
+.logo span {
+    font-family: 'Sora', sans-serif !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: var(--primary) !important;
+    letter-spacing: -0.02em;
+}
+
+/* ── MAIN MENU ───────────────────────────────────────────── */
+.main-menu {
+    display: flex;
+    gap: 4px;
+    list-style: none;
+    align-items: center;
+}
+
+.main-menu li {
+    display: flex !important;
+    align-items: center !important;
+}
+
+.main-menu>li>a {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    letter-spacing: -0.01em !important;
+    color: var(--text) !important;
+    text-decoration: none;
+    padding: 8px 14px !important;
+    border-radius: var(--radius-sm) !important;
+    transition: var(--transition-smooth) !important;
+    white-space: nowrap;
+}
+
+.main-menu>li>a:hover,
+.main-menu>li>a.active {
+    background: rgba(29, 53, 87, 0.08) !important;
+    color: var(--primary) !important;
+}
+
+/* ── HAS-DROPDOWN ────────────────────────────────────────── */
+.has-dropdown {
+    position: relative;
+}
+
+.has-dropdown:hover .dropdown,
+.has-dropdown.open .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* ── DROPDOWN PANEL ──────────────────────────────────────── */
+.dropdown {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    min-width: 220px;
+
+    background: var(--glass-bg);
+    backdrop-filter: var(--glass-blur);
+
+    border: 1px solid rgba(29, 53, 87, 0.08);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: var(--transition-smooth);
+    z-index: 500;
+}
+
+.dropdown li {
+    list-style: none;
+}
+
+.dropdown a {
+    display: block;
+    padding: 11px 18px;
+    font-family: 'Inter', sans-serif !important;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.dropdown a:hover,
+.dropdown a.active {
+    background: var(--primary);
+    color: #fff;
+    padding-left: 22px;
+}
+
+/* ── SEARCH ──────────────────────────────────────────────── */
+.search-container {
+    position: relative;
+    width: 360px;
+}
+
+@media (max-width: 1100px) {
+    .search-container {
+        width: 100%;
+    }
+}
+
+.search-container input {
+    width: 100%;
+    height: 50px !important;
+    padding: 0 56px 0 20px !important;
+
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 13.5px !important;
+    color: var(--primary) !important;
+
+    background: rgba(248, 250, 252, 0.98) !important;
+    border: 1.5px solid rgba(29, 53, 87, 0.08) !important;
+    border-radius: 16px !important;
+
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.06) !important;
+    transition: var(--transition-smooth) !important;
+    outline: none !important;
+}
+
+.search-container input:focus {
+    background: #fff !important;
+    border-color: rgba(29, 53, 87, 0.28) !important;
+    box-shadow: 0 0 0 4px rgba(29, 53, 87, 0.08),
+        0 4px 16px rgba(15, 23, 42, 0.08) !important;
+}
+
+.search-container i {
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary) !important;
+    font-size: 15px !important;
+    opacity: 0.65;
+    cursor: pointer;
+    transition: var(--transition-smooth) !important;
+}
+
+.search-container input:focus~i {
+    opacity: 1;
+}
+
+/* Search results dropdown */
+.search-results {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 0;
+    right: 0;
+    border-radius: 24px;
+    overflow: hidden;
+    display: none;
+    z-index: 1000;
+    background: rgba(255, 255, 255, .96);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(29, 53, 87, 0.08);
+    box-shadow: var(--shadow-md);
+}
+
+.search-results.show {
+    display: block;
+}
+
+.search-result-item {
+    display: flex !important;
+    gap: 14px !important;
+    align-items: center !important;
+    padding: 16px !important;
+    border-radius: 12px !important;
+    cursor: pointer !important;
+    transition: var(--transition-smooth) !important;
+}
+
+.search-result-item:hover {
+    background: rgba(29, 53, 87, 0.04) !important;
+}
+
+.search-result-img {
+    width: 60px;
+    height: 78px;
+    object-fit: cover;
+    border-radius: 14px;
+}
+
+.search-result-title {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    color: var(--primary) !important;
+    margin: 0 0 4px !important;
+}
+
+.search-result-author {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.search-result-price {
+    font-family: 'Sora', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    color: var(--primary) !important;
+    margin-top: 8px !important;
+}
+
+/* ── RIGHT ACTIONS AREA ──────────────────────────────────── */
+.right-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+/* ── ACTION BUTTON (wrapper) ─────────────────────────────── */
+.action-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: auto;
+    height: 44px;
+    padding: 0 14px;
+    white-space: nowrap;
+    margin-right: 6px;
+
+    font-family: 'Inter', sans-serif !important;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+
+    background: rgba(255, 255, 255, 0.97) !important;
+    border: 1.5px solid rgba(29, 53, 87, 0.10) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 2px 12px rgba(15, 23, 42, 0.07) !important;
+    cursor: pointer;
+    transition: var(--transition-smooth) !important;
+}
+
+.action-btn i {
+    font-size: 18px;
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, var(--primary), #274c77) !important;
+    color: #fff !important;
+    border-color: transparent !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 12px 28px rgba(29, 53, 87, 0.25) !important;
+}
+
+.action-btn:hover i {
+    color: #fff !important;
+}
+
+/* ── HEART / CART BUTTONS ────────────────────────────────── */
+.heart-btn,
+.cart-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border: none;
+    border-radius: 999px;
+    background: var(--white);
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition);
+}
+
+.cart-btn i {
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+/* Badge count */
+.cart-count,
+.heart-count {
+    position: absolute !important;
+    top: -6px !important;
+    right: -6px !important;
+    z-index: 10;
+    min-width: 18px !important;
+    height: 18px !important;
+    padding: 0 4px !important;
+    border-radius: 999px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: linear-gradient(135deg, var(--danger), #dc2626) !important;
+    color: #fff !important;
+    box-shadow: 0 3px 8px rgba(239, 68, 68, 0.35) !important;
+    font-size: 10px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+}
+
+/* ── WRAPPERS ────────────────────────────────────────────── */
+.heart-wrapper,
+.cart-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+/* ── SHARED DROPDOWN BASE ────────────────────────────────── */
+.cart-dropdown,
+.heart-dropdown,
+.user-dropdown {
+    position: absolute;
+    top: calc(100% + 14px);
+    right: 0;
+    background: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(30px) saturate(180%) !important;
+    border: 1px solid rgba(29, 53, 87, 0.07) !important;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.15),
+        0 4px 16px rgba(15, 23, 42, 0.07) !important;
+    border-radius: 24px !important;
+    overflow: hidden;
+    display: none;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: var(--transition-smooth);
+}
+
+.cart-dropdown.show,
+.heart-dropdown.show,
+.user-dropdown.show {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+/* ── CART DROPDOWN ───────────────────────────────────────── */
+.cart-dropdown {
+    width: 360px;
+}
+
+.cart-dropdown-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 18px 20px !important;
+    font-weight: 800 !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, var(--primary) 0%, #274c77 100%) !important;
+    border-radius: 24px 24px 0 0 !important;
+}
+
+.cart-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #fff;
+}
+
+.cart-dropdown-items {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.cart-dropdown-empty {
+    text-align: center;
+    padding: 30px;
+    color: #9ca3af;
+}
+
+.cart-dropdown-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: var(--transition);
+}
+
+.cart-dropdown-item:hover {
+    background: #f3f4f6;
+}
+
+.cart-dropdown-item img {
+    width: 48px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.cart-item-info {
+    flex: 1;
+}
+
+.cart-item-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.cart-item-price {
+    font-family: 'Sora', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 13px !important;
+    color: #e63946 !important;
+    margin-top: 4px;
+}
+
+.cart-dropdown-footer {
+    padding: 12px 14px !important;
+    border-top: 1px solid #e5e7eb !important;
+    background: #fff !important;
+}
+
+.cart-dropdown-total {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    font-weight: 700 !important;
+    margin-bottom: 12px !important;
+}
+
+.cart-dropdown-view-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100%;
+    min-height: 46px !important;
+    padding: 10px 16px !important;
+    border-radius: 12px !important;
+    background: linear-gradient(135deg, var(--primary), #274c77) !important;
+    color: #fff !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    transition: var(--transition-smooth) !important;
+    border: none;
+    cursor: pointer;
+}
+
+.cart-dropdown-view-btn:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(29, 53, 87, 0.28) !important;
+    background: linear-gradient(135deg, #223e66, #2d588a) !important;
+}
+
+.remove-cart-item {
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--danger);
+    cursor: pointer;
+    padding: 0;
+    font-size: 18px;
+    transition: var(--transition);
+}
+
+.remove-cart-item:hover {
+    color: #d9363e;
+}
+
+.clear-cart-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .12);
+    transition: var(--transition);
+}
+
+.clear-cart-btn:hover {
+    background: rgba(255, 255, 255, .26);
+}
+
+/* ── HEART / WISHLIST DROPDOWN ───────────────────────────── */
+.heart-dropdown {
+    width: 320px;
+}
+
+.heart-dropdown-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 18px 20px !important;
+    font-weight: 800 !important;
+    color: #fff !important;
+    background: linear-gradient(135deg, var(--primary) 0%, #274c77 100%) !important;
+    border-radius: 24px 24px 0 0 !important;
+}
+
+.heart-dropdown-items {
+    max-height: 280px !important;
+    overflow-y: auto !important;
+    padding: 12px !important;
+}
+
+.heart-dropdown-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: var(--transition);
+}
+
+.heart-dropdown-item:hover {
+    background: #f3f4f6;
+}
+
+.heart-dropdown-item img {
+    width: 45px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.heart-empty {
+    padding: 45px 20px !important;
+    text-align: center !important;
+    color: #9ca3af !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+.heart-empty::before {
+    content: "💙";
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.heart-empty::after {
+    content: "Chưa có sách yêu thích";
+    font-weight: 600;
+    display: block;
+}
+
+.wishlist-item {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    transition: var(--transition);
+}
+
+.wishlist-item:hover {
+    background: #f3f4f6;
+}
+
+.wishlist-item img {
+    width: 45px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.wishlist-info {
+    flex: 1;
+}
+
+.wishlist-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.wishlist-price {
+    font-family: 'Sora', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 12px !important;
+    color: #e63946 !important;
+    margin-top: 4px;
+}
+
+.clear-wishlist-btn {
+    background: rgba(255, 255, 255, .12);
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.clear-wishlist-btn:hover {
+    background: rgba(255, 255, 255, .26);
+}
+
+/* ── USER DROPDOWN ───────────────────────────────────────── */
+.user-dropdown {
+    width: 240px;
+}
+
+.user-dropdown a {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    color: var(--text);
+    text-decoration: none;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.user-dropdown a:hover {
+    background: linear-gradient(135deg, var(--primary), #274c77);
+    color: #fff;
+}
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 480px) {
+
+    .cart-dropdown,
+    .heart-dropdown {
+        width: 92vw;
+        right: 50%;
+        transform: translateX(50%) translateY(-10px);
+    }
+
+    .cart-dropdown.show,
+    .heart-dropdown.show {
+        transform: translateX(50%) translateY(0);
+    }
+}

@@ -1,0 +1,317 @@
+/* ============================================================
+   UI.CSS — Toast Notifications · Scroll-to-Top · Dark Mode
+             Toggle · Live Notification · Dark Mode Overrides
+   ============================================================ */
+
+/* ── TOAST ───────────────────────────────────────────────── */
+#toastContainer {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, .97) !important;
+    backdrop-filter: blur(20px) !important;
+    border-radius: 16px !important;
+    padding: 14px 20px !important;
+    min-width: 300px;
+    max-width: 400px;
+    box-shadow: 0 16px 48px rgba(15, 23, 42, .16),
+        0 2px 8px rgba(15, 23, 42, .08) !important;
+    animation: slideInRight .3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    border-left: none !important;
+}
+
+/* Coloured left stripe */
+.toast::before {
+    content: '' !important;
+    position: absolute !important;
+    inset-y: 0 !important;
+    left: 0 !important;
+    width: 4px !important;
+    border-radius: 16px 0 0 16px !important;
+}
+
+.toast.success::before {
+    background: var(--success) !important;
+}
+
+.toast.error::before {
+    background: var(--danger) !important;
+}
+
+.toast.warning::before {
+    background: var(--warning) !important;
+}
+
+.toast.info::before {
+    background: var(--primary) !important;
+}
+
+/* Keep border for fallback */
+.toast.success {
+    border-left: 4px solid var(--success) !important;
+}
+
+.toast.error {
+    border-left: 4px solid var(--danger) !important;
+}
+
+.toast.warning {
+    border-left: 4px solid var(--warning) !important;
+}
+
+.toast.info {
+    border-left: 4px solid var(--primary) !important;
+}
+
+.toast-title {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    color: var(--primary) !important;
+    letter-spacing: -0.01em !important;
+}
+
+.toast-message {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 400 !important;
+    font-size: 12.5px !important;
+    color: #475569 !important;
+    margin-top: 2px !important;
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* ── SCROLL TO TOP ───────────────────────────────────────── */
+#scrollTopBtn {
+    position: fixed;
+    bottom: 28px;
+    right: 24px;
+    width: 48px !important;
+    height: 48px !important;
+    border-radius: 16px !important;
+    background: linear-gradient(135deg, var(--primary) 0%, #274c77 100%) !important;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    font-size: 18px;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(29, 53, 87, .40) !important;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all .3s;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+#scrollTopBtn.visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+#scrollTopBtn:hover {
+    transform: translateY(-4px) !important;
+    box-shadow: 0 16px 36px rgba(29, 53, 87, .50) !important;
+}
+
+/* ── DARK MODE TOGGLE ────────────────────────────────────── */
+#darkModeToggle {
+    position: fixed;
+    bottom: 28px;
+    left: 24px;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #1e293b;
+    color: var(--warning);
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, .25);
+    z-index: 9999;
+    transition: all .3s;
+}
+
+#darkModeToggle:hover {
+    transform: scale(1.1);
+}
+
+body.dark-mode #darkModeToggle {
+    background: var(--warning);
+    color: #1e293b;
+}
+
+/* ── LIVE NOTIFICATION ───────────────────────────────────── */
+.live-notif-box {
+    background: rgba(255, 255, 255, .97) !important;
+    backdrop-filter: blur(20px) !important;
+    border-radius: 16px !important;
+    border: 1px solid rgba(29, 53, 87, .08) !important;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, .15) !important;
+    padding: 12px 16px !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+.live-notif-box span:last-child {
+    font-family: 'Inter', sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    color: var(--primary) !important;
+}
+
+/* ── DARK MODE OVERRIDES ─────────────────────────────────── */
+body.dark-mode {
+    background: linear-gradient(160deg, #070f1c 0%, #0d1928 50%, #0a1520 100%) !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .main-nav {
+    background: rgba(13, 25, 40, .97) !important;
+    border-bottom: 1px solid rgba(255, 255, 255, .05) !important;
+}
+
+body.dark-mode .filter-bar,
+body.dark-mode .search-results,
+body.dark-mode .cart-dropdown,
+body.dark-mode .heart-dropdown,
+body.dark-mode .user-dropdown,
+body.dark-mode .dropdown {
+    background: rgba(17, 32, 50, .97) !important;
+    border-color: rgba(255, 255, 255, .07) !important;
+}
+
+body.dark-mode .section-row .book-card,
+body.dark-mode .new-release-card,
+body.dark-mode .trending-card,
+body.dark-mode .fav-card,
+body.dark-mode .rv-card {
+    background: rgba(20, 36, 56, .97) !important;
+    border-color: rgba(255, 255, 255, .06) !important;
+}
+
+body.dark-mode .trending-section,
+body.dark-mode .new-releases-section,
+body.dark-mode .recently-viewed-section {
+    background: #0f172a;
+}
+
+body.dark-mode .favorites-section {
+    background: #1e1b4b;
+}
+
+body.dark-mode .daily-deal-section {
+    background: linear-gradient(135deg, #0a0a1a, #16162e);
+}
+
+body.dark-mode .section-header h2,
+body.dark-mode .section-tag,
+body.dark-mode .book-modal .modal-right h2 {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .book-info p {
+    color: #94a3b8;
+}
+
+body.dark-mode .filter-label {
+    color: #93c5fd !important;
+}
+
+body.dark-mode .filter-select,
+body.dark-mode .price-range input {
+    background: rgba(29, 53, 87, .3) !important;
+    color: #e2e8f0 !important;
+    border-color: rgba(255, 255, 255, .1) !important;
+}
+
+body.dark-mode .rv-clear-btn {
+    background: #334155;
+    border-color: var(--danger);
+    color: #fca5a5;
+}
+
+body.dark-mode .rv-clear-btn:hover {
+    background: var(--danger);
+    color: #fff;
+}
+
+body.dark-mode .review-modal-header h3,
+body.dark-mode .reviews-modal-header h3,
+body.dark-mode .auth-header h2 {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .rating-section label,
+body.dark-mode .form-group label {
+    color: #cbd5e1;
+}
+
+body.dark-mode .comment-section textarea,
+body.dark-mode .input-wrapper input {
+    background: #334155;
+    border-color: #475569;
+    color: #e2e8f0;
+}
+
+body.dark-mode .auth-tab {
+    color: #94a3b8;
+}
+
+body.dark-mode .auth-tab.active {
+    color: var(--warning) !important;
+    border-bottom-color: var(--warning) !important;
+}
+
+body.dark-mode .book-modal .modal-price {
+    color: #f87171 !important;
+}
+
+body.dark-mode .book-modal .modal-description {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .book-modal .close {
+    background: rgba(255, 255, 255, .1) !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .book-modal .close:hover {
+    background: var(--danger) !important;
+    color: #fff !important;
+}
+
+body.dark-mode .review-modal-content,
+body.dark-mode .reviews-modal-content,
+body.dark-mode .login-box,
+body.dark-mode .book-modal .modal-content {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
