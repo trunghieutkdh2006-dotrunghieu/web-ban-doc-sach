@@ -459,13 +459,13 @@ html {
 }
 
 .main-menu {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    list-style: none;
-    flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    list-style: none !important;
+    flex-wrap: wrap !important;
+    margin: 0 !important;
+    padding: 0 !important;
 }
 
 .main-menu li {
