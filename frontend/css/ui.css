@@ -33,6 +33,10 @@
     border-left: none !important;
 }
 
+.toast-notification {
+    z-index: 99999 !important;
+}
+
 /* Coloured left stripe */
 .toast::before {
     content: '' !important;
