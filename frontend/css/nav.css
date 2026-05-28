@@ -110,7 +110,7 @@
 /* ── MAIN MENU ───────────────────────────────────────────── */
 .main-menu {
     display: flex;
-    gap: 4px;
+    gap: 0px;
     list-style: none;
     align-items: center;
 }
@@ -317,7 +317,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 6px;
+    gap: 3px;
 }
 
 /* ── ACTION BUTTON (wrapper) ─────────────────────────────── */
