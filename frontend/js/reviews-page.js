@@ -12,38 +12,71 @@
 
             // ==================== LẤY AVATAR NGƯỜI DÙNG ====================
             function getCurrentUser() {
-                return JSON.parse(localStorage.getItem('user') || 'null');
-            }
+    const user = JSON.parse(localStorage.getItem('user') || 'null');
+    if (!user) return null;
+    return {
+        id: user._id || user.id,
+        username: user.username,
+        email: user.email
+    };
+}
+function getUserAvatar(userId, username) {
+    if (!userId) {
+        const initial = username ? username.charAt(0).toUpperCase() : 'U';
+        return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=${initial}&bold=true`;
+    }
+    
+    const profileKey = `userProfile_${userId}`;
+    const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+    
+    if (userProfile.avatar && userProfile.avatar.startsWith('http')) {
+        return userProfile.avatar;
+    }
+    
+    if (userProfile.avatar && userProfile.avatar.startsWith('data:image')) {
+        return userProfile.avatar;
+    }
+    
+    const initial = username ? username.charAt(0).toUpperCase() : 'U';
+    return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=${initial}&bold=true`;
+}
 
-            function getUserAvatar(userId, username) {
-                if (!userId) {
-                    const initial = username ? username.charAt(0).toUpperCase() : 'U';
-                    return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=${initial}&bold=true`;
-                }
-                
-                const profileKey = `userProfile_${userId}`;
-                const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
-                
-                if (userProfile.avatar && userProfile.avatar.startsWith('http')) {
-                    return userProfile.avatar;
-                }
-                
-                const initial = username ? username.charAt(0).toUpperCase() : 'U';
-                return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=${initial}&bold=true`;
-            }
-
-            function getAvatarForReview(userName, userId) {
-                const currentUser = getCurrentUser();
-                const isCurrentUser = currentUser && (currentUser.username === userName || currentUser._id === userId);
-                
-                if (isCurrentUser && currentUser) {
-                    const avatar = getUserAvatar(currentUser._id || currentUser.id, currentUser.username);
-                    return `<img src="${avatar}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=U&bold=true'">`;
-                }
-                
-                const initial = userName ? userName.charAt(0).toUpperCase() : 'U';
-                return `<div style="width: 42px; height: 42px; border-radius: 50%; background: #1D3557; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">${initial}</div>`;
-            }
+            function getAvatarForReview(userName, reviewUserId) {
+    const currentUser = getCurrentUser();
+    
+    // Lấy userId từ review (có thể là object hoặc string)
+    let reviewUserIdStr = null;
+    if (reviewUserId) {
+        if (typeof reviewUserId === 'object') {
+            reviewUserIdStr = reviewUserId._id || reviewUserId.id;
+        } else {
+            reviewUserIdStr = reviewUserId;
+        }
+    }
+    
+    // So sánh với user hiện tại
+    const isCurrentUser = currentUser && (
+        currentUser.id === reviewUserIdStr ||
+        currentUser.username === userName ||
+        currentUser.email === userName
+    );
+    
+    console.log('🔍 Kiểm tra avatar:', {
+        userName,
+        reviewUserIdStr,
+        currentUserId: currentUser?.id,
+        isCurrentUser
+    });
+    
+    if (isCurrentUser && currentUser) {
+        const avatar = getUserAvatar(currentUser.id, currentUser.username);
+        console.log('✅ Avatar của chính user:', avatar);
+        return `<img src="${avatar}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=U&bold=true'">`;
+    }
+    
+    const initial = userName ? userName.charAt(0).toUpperCase() : 'U';
+    return `<div style="width: 42px; height: 42px; border-radius: 50%; background: #1D3557; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">${initial}</div>`;
+}
 
             function getInteractions(reviewId) {
                 if (!interactionsMap.has(reviewId)) {
@@ -140,6 +173,11 @@
                             const data = await res.json();
                             const reviews = data.reviews || data.data || [];
                             if (reviews.length > 0) {
+                                reviews.forEach(r => {
+    console.log('📝 Review từ API:', r);
+    console.log('📝 userId:', r.userId);
+    console.log('📝 userId._id:', r.userId?._id);
+});
                                 realReviews.push(...reviews.map(r => ({
                                     id: r._id,
                                     rating: Number(r.rating || 0),
