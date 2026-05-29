@@ -312,8 +312,8 @@
 }
 
 .banner-thumb {
-    width: 60px;
-    height: 60px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     background: rgba(255, 255, 255, .3);
     backdrop-filter: blur(5px);
@@ -322,7 +322,7 @@
     justify-content: center;
     cursor: pointer;
     transition: all .3s;
-    font-size: 30px;
+    font-size: 20px;
     border: 2px solid transparent;
 }
 
