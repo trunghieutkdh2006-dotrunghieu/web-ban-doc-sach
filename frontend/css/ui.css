@@ -681,3 +681,15 @@ body.dark-mode .toast-title {
 body.dark-mode .toast-message {
     color: #94a3b8 !important;
 }
+
+body.dark-mode .dropdown a {
+    color: #ffffff !important;
+}
+
+body.dark-mode .has-dropdown>a {
+    color: #ffffff !important;
+}
+
+body.dark-mode #categoryChevron {
+    color: #ffffff !important;
+}
