@@ -1,4 +1,14 @@
 // ==================== TOAST ====================
+// Kiểm tra và định nghĩa API_BASE_URL nếu chưa có
+if (typeof API_BASE_URL === 'undefined') {
+    window.API_BASE_URL = 'https://web-ban-doc-sach.onrender.com/api';
+    window.BASE_URL = 'https://web-ban-doc-sach.onrender.com';
+    window.API = `${window.BASE_URL}/api/books`;
+    window.CATEGORY_API = `${window.BASE_URL}/api/categories`;
+    window.AUTH_API = `${window.BASE_URL}/api/auth`;
+    window.PLACEHOLDER_SVG = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='280' viewBox='0 0 200 280'%3E%3Crect width='200' height='280' fill='%23e2e8f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%2394a3b8' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E`;
+    console.log('⚠️ API_BASE_URL tự động được định nghĩa (fallback)');
+}
 function showToast(message, type = 'success', title = '') {
   const container = document.getElementById('toastContainer');
   if (!container) return;
