@@ -20,25 +20,35 @@
         email: user.email
     };
 }
-function getUserAvatar(userId, username) {
-    if (!userId) {
-        const initial = username ? username.charAt(0).toUpperCase() : 'U';
-        return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=${initial}&bold=true`;
+function applyFilters() {
+    let data = [...allReviews];
+
+    const search = document.getElementById("searchInput")?.value.toLowerCase() || "";
+    if (search) {
+        data = data.filter(r =>
+            (r.bookTitle || "").toLowerCase().includes(search) ||
+            (r.comment || "").toLowerCase().includes(search)
+        );
     }
-    
-    const profileKey = `userProfile_${userId}`;
-    const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
-    
-    if (userProfile.avatar && userProfile.avatar.startsWith('http')) {
-        return userProfile.avatar;
+
+    const ratingFilter = document.getElementById("ratingFilter")?.value || "all";
+    if (ratingFilter !== "all") {
+        const minRating = parseInt(ratingFilter);
+        data = data.filter(r => r.rating >= minRating);
     }
-    
-    if (userProfile.avatar && userProfile.avatar.startsWith('data:image')) {
-        return userProfile.avatar;
+
+    const sort = document.getElementById("sortSelect")?.value || "newest";
+    if (sort === "newest") {
+        data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+    } else if (sort === "oldest") {
+        data.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+    } else if (sort === "rating-high") {
+        data.sort((a, b) => b.rating - a.rating);
     }
-    
-    const initial = username ? username.charAt(0).toUpperCase() : 'U';
-    return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=${initial}&bold=true`;
+
+    filteredReviews = data;
+    currentPage = 1;
+    displayReviews();
 }
 
             function getAvatarForReview(userName, reviewUserId) {
