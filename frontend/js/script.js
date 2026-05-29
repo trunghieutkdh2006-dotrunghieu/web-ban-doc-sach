@@ -233,6 +233,9 @@ async function loadBooks() {
         retryCount = 0;
         applyFilters();
         
+        // === THÊM DÒNG NÀY ĐỂ HIỂN THỊ LỊCH SỬ XEM ===
+        if (typeof renderRecentlyViewed === 'function') renderRecentlyViewed();
+        
     } catch (err) {
         console.error("Lỗi tải sách:", err);
         if (retryCount < MAX_RETRY) {
@@ -1906,6 +1909,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (authPanel && authPanel.classList.contains('active')) toggleAuth(false);
     }
   });
+
+  // === THÊM ĐOẠN NÀY VÀO ĐÂY ===
+  setTimeout(() => {
+      if (typeof renderRecentlyViewed === 'function') {
+          renderRecentlyViewed();
+          console.log('✅ Đã gọi renderRecentlyViewed sau 1.5s');
+      }
+  }, 1500);
 });
 
 // Thêm CSS động cho các nút
