@@ -382,7 +382,14 @@ function selectSearchResult(bookId) {
 
 // ==================== BOOK MODAL - FIXED ====================
 async function openBookDetail(id) {
-  // Fetch fresh data từ API để luôn có galleryImages mới nhất
+   try {
+    let rv = JSON.parse(localStorage.getItem('httvbooks_recently_viewed') || '[]');
+    rv = rv.filter(bookId => bookId !== id);
+    rv.unshift(id);
+    if (rv.length > 8) rv = rv.slice(0, 8);
+    localStorage.setItem('httvbooks_recently_viewed', JSON.stringify(rv));
+    if (typeof renderRecentlyViewed === 'function') renderRecentlyViewed();
+  } catch(e) {}
   let book;
   try {
     const res = await fetch(`${BASE_URL}/api/books/${id}`, {
@@ -531,6 +538,62 @@ function openLightbox(src) {
 
   document.addEventListener('keydown', escHandler);
   document.body.appendChild(lb);
+}
+  function renderRecentlyViewed() {
+    const section = document.getElementById('recentlyViewedSection');
+    if (!section) return;
+    
+    try {
+        const rv = JSON.parse(localStorage.getItem('httvbooks_recently_viewed') || '[]');
+        
+        if (rv.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+        
+        // Lấy thông tin sách từ cache
+        const books = rv.map(id => booksCache.find(b => b._id === id)).filter(Boolean);
+        
+        if (books.length === 0) {
+            section.style.display = 'none';
+            return;
+        }
+        
+        section.style.display = 'block';
+        const grid = section.querySelector('.rv-grid');
+        if (!grid) return;
+        
+        grid.innerHTML = books.map(book => {
+            const img = getBookImage(book);
+            const discountPct = typeof getDiscountPct === 'function' ? getDiscountPct(book.price) : 0;
+            const origPrice = discountPct > 0 ? Math.round(book.price / (1 - discountPct / 100) / 1000) * 1000 : book.price;
+            
+            return `
+                <div class="rv-card" onclick="openBookDetail('${book._id}')">
+                    <div class="rv-img-wrap">
+                        <img src="${img}" onerror="this.src=PLACEHOLDER_SVG" alt="${escapeHtml(book.title)}">
+                        ${discountPct > 0 ? `<div class="discount-badge">-${discountPct}%</div>` : ''}
+                    </div>
+                    <div class="rv-info">
+                        <div class="rv-title">${escapeHtml(book.title)}</div>
+                        <div class="price-row">
+                            <span class="price-sale">${formatPrice(book.price)}</span>
+                            ${discountPct > 0 ? `<span class="price-orig">${formatPrice(origPrice)}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    } catch(e) {
+        console.warn('renderRecentlyViewed error:', e);
+        section.style.display = 'none';
+    }
+}
+
+function clearRecentlyViewed() {
+    localStorage.removeItem('httvbooks_recently_viewed');
+    renderRecentlyViewed();
+    showToast('Đã xóa lịch sử xem', 'info');
 }
 
 function closeBookModal() {
