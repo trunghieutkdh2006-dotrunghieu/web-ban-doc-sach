@@ -4,12 +4,46 @@
             let filteredReviews = [];
             let currentPage = 1;
             let booksList = [];
-            let useMockData = true; // Mặc định dùng dữ liệu mẫu
+            let useMockData = true;
             const ITEMS_PER_PAGE = 5;
 
-            // Interactions storage
             let interactionsMap = new Map();
             let openCommentsState = new Map();
+
+            // ==================== LẤY AVATAR NGƯỜI DÙNG ====================
+            function getCurrentUser() {
+                return JSON.parse(localStorage.getItem('user') || 'null');
+            }
+
+            function getUserAvatar(userId, username) {
+                if (!userId) {
+                    const initial = username ? username.charAt(0).toUpperCase() : 'U';
+                    return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=${initial}&bold=true`;
+                }
+                
+                const profileKey = `userProfile_${userId}`;
+                const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+                
+                if (userProfile.avatar && userProfile.avatar.startsWith('http')) {
+                    return userProfile.avatar;
+                }
+                
+                const initial = username ? username.charAt(0).toUpperCase() : 'U';
+                return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=${initial}&bold=true`;
+            }
+
+            function getAvatarForReview(userName, userId) {
+                const currentUser = getCurrentUser();
+                const isCurrentUser = currentUser && (currentUser.username === userName || currentUser._id === userId);
+                
+                if (isCurrentUser && currentUser) {
+                    const avatar = getUserAvatar(currentUser._id || currentUser.id, currentUser.username);
+                    return `<img src="${avatar}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=1&name=U&bold=true'">`;
+                }
+                
+                const initial = userName ? userName.charAt(0).toUpperCase() : 'U';
+                return `<div style="width: 42px; height: 42px; border-radius: 50%; background: #1D3557; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">${initial}</div>`;
+            }
 
             function getInteractions(reviewId) {
                 if (!interactionsMap.has(reviewId)) {
@@ -112,6 +146,7 @@
                                     comment: r.comment || "",
                                     createdAt: r.createdAt || new Date(),
                                     userName: (r.userId?.username || r.userId?.name || r.userName || r.userId || "Độc giả"),
+                                    userId: r.userId?._id || r.userId,
                                     bookId: book._id,
                                     bookTitle: book.title,
                                     bookAuthor: book.author,
@@ -128,19 +163,10 @@
                     useMockData = false;
                     allReviews = realReviews;
                 } else {
-                    // KHÔNG DÙNG MOCK DATA
                     useMockData = false;
                     allReviews = [];
                 }
 
-                allReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                updateStats();
-                applyFilters();
-            }
-
-            function loadMockData() {
-                useMockData = true;
-                allReviews = [...mockReviews];
                 allReviews.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 updateStats();
                 applyFilters();
@@ -152,13 +178,11 @@
                 const todaySpan = document.getElementById("todayReviews");
 
                 if (totalSpan) totalSpan.innerText = allReviews.length;
-
                 if (avgSpan) {
                     const avg = allReviews.length ?
                         (allReviews.reduce((s, r) => s + r.rating, 0) / allReviews.length).toFixed(1) : 0;
                     avgSpan.innerText = avg;
                 }
-
                 if (todaySpan) {
                     const today = new Date().toDateString();
                     const todayCount = allReviews.filter(r => {
@@ -168,26 +192,6 @@
                     todaySpan.innerText = todayCount;
                 }
             }
-            function fixUserDisplay() {
-                // Tìm tất cả tên người dùng đang hiển thị "Độc giả"
-                const userNames = document.querySelectorAll('.post-username');
-
-                userNames.forEach(el => {
-                    if (el.textContent === 'Độc giả' || el.textContent === 'undefined') {
-                        // Thử lấy từ localStorage nếu có
-                        const user = JSON.parse(localStorage.getItem('user') || '{}');
-                        if (user.username) {
-                            el.textContent = user.username;
-                        } else {
-                            el.textContent = 'Người dùng đã đánh giá';
-                        }
-                    }
-                });
-
-                console.log("✅ Đã cập nhật tên người dùng!");
-            }
-
-            fixUserDisplay();
 
             function applyFilters() {
                 let data = [...allReviews];
@@ -232,7 +236,6 @@
                         <div class="empty">
                             <i class="fas fa-comment-slash"></i>
                             <p>📭 Không có review nào phù hợp</p>
-                            ${useMockData ? '<p style="margin-top:10px;">👉 Đang hiển thị dữ liệu mẫu. Nhấn "Tải dữ liệu thật" để xem từ API.</p>' : ''}
                         </div>
                     `;
                     const paginationDiv = document.getElementById("pagination");
@@ -242,6 +245,8 @@
 
                 container.innerHTML = pageData.map(r => {
                     const displayName = r.userName || "Độc giả";
+                    const avatarHtml = getAvatarForReview(displayName, r.userId);
+                    
                     const imgUrl = r.bookImage ?
                         (r.bookImage.startsWith("http") ? r.bookImage : `${API_BASE}/${r.bookImage.replace(/^\/+/, "")}`) :
                         `https://ui-avatars.com/api/?background=1D3557&color=fff&bold=true&size=120&name=${encodeURIComponent(r.bookTitle || "Book")}`;
@@ -262,7 +267,9 @@
                     return `
                         <div class="review-card" data-review-id="${r.id}">
                             <div class="post-header">
-                                <div class="post-avatar">${escapeHtml((displayName[0] || "Đ").toUpperCase())}</div>
+                                <div class="post-avatar">
+                                    ${avatarHtml}
+                                </div>
                                 <div>
                                     <div class="post-username">${escapeHtml(displayName)}</div>
                                     <div class="post-date"><i class="far fa-calendar-alt"></i> ${formatDate(r.createdAt)}</div>
@@ -370,19 +377,13 @@
                 loadRealReviews();
             };
 
-            // Event listeners
             document.getElementById("refreshBtn")?.addEventListener("click", () => {
-                if (useMockData) {
-                    loadRealReviews();
-                } else {
-                    loadRealReviews();
-                }
+                loadRealReviews();
             });
             document.getElementById("searchInput")?.addEventListener("input", applyFilters);
             document.getElementById("sortSelect")?.addEventListener("change", applyFilters);
             document.getElementById("ratingFilter")?.addEventListener("change", applyFilters);
 
-            // Load interactions và khởi tạo với dữ liệu mẫu
             loadInteractions();
             loadRealReviews();
         })();
