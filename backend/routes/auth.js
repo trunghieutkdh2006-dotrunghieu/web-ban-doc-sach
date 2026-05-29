@@ -213,3 +213,94 @@ router.post("/change-password", async (req, res) => {
 });
 
 module.exports = router;
+// =========================
+// FORGOT PASSWORD - Gửi token
+// =========================
+router.post("/forgot-password", async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ success: false, message: "Vui lòng nhập email" });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user) {
+            // Trả về thành công để tránh lộ thông tin email có tồn tại không
+            return res.json({ success: true, message: "Nếu email tồn tại, mã xác nhận đã được tạo" });
+        }
+
+        // Tạo token 6 chữ số
+        const crypto = require("crypto");
+        const resetToken = crypto.randomInt(100000, 999999).toString();
+        const hashedToken = await bcrypt.hash(resetToken, 10);
+
+        user.resetPasswordToken = hashedToken;
+        user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 phút
+        await user.save();
+
+        // TODO: Gửi email thật với nodemailer
+        // Hiện tại trả về token trong response (chỉ dùng khi dev/test)
+        // Trong production, xóa dòng resetToken bên dưới và gửi qua email
+        console.log(`🔑 Reset token cho ${email}: ${resetToken}`);
+
+        res.json({
+            success: true,
+            message: "Mã xác nhận đã được tạo (xem console server). Mã có hiệu lực 15 phút.",
+            // ⚠️ XÓA DÒNG NÀY TRONG PRODUCTION - chỉ để test:
+            devToken: resetToken
+        });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, message: "Lỗi server" });
+    }
+});
+
+// =========================
+// RESET PASSWORD - Đặt mật khẩu mới
+// =========================
+router.post("/reset-password", async (req, res) => {
+    try {
+        const { email, token, newPassword } = req.body;
+
+        if (!email || !token || !newPassword) {
+            return res.status(400).json({ success: false, message: "Vui lòng nhập đầy đủ thông tin" });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ success: false, message: "Mật khẩu mới phải có ít nhất 6 ký tự" });
+        }
+
+        const user = await User.findOne({ email });
+        if (!user || !user.resetPasswordToken || !user.resetPasswordExpires) {
+            return res.status(400).json({ success: false, message: "Yêu cầu không hợp lệ hoặc đã hết hạn" });
+        }
+
+        // Kiểm tra hết hạn
+        if (user.resetPasswordExpires < new Date()) {
+            user.resetPasswordToken = null;
+            user.resetPasswordExpires = null;
+            await user.save();
+            return res.status(400).json({ success: false, message: "Mã xác nhận đã hết hạn. Vui lòng thử lại" });
+        }
+
+        // Xác minh token
+        const isValid = await bcrypt.compare(token, user.resetPasswordToken);
+        if (!isValid) {
+            return res.status(400).json({ success: false, message: "Mã xác nhận không đúng" });
+        }
+
+        // Đặt mật khẩu mới
+        user.password = await bcrypt.hash(newPassword, 10);
+        user.resetPasswordToken = null;
+        user.resetPasswordExpires = null;
+        await user.save();
+
+        res.json({ success: true, message: "Đặt lại mật khẩu thành công! Vui lòng đăng nhập" });
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ success: false, message: "Lỗi server" });
+    }
+});

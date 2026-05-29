@@ -331,6 +331,9 @@
           </div>
         </div>
         <button type="submit" class="btn-auth">Đăng nhập</button>
+        <div style="text-align:center; margin-top:10px;">
+          <a href="#" onclick="openForgotPassword(event)" style="font-size:13px; color:#6c63ff; text-decoration:none;">Quên mật khẩu?</a>
+        </div>
       </form>
       <form id="registerForm" style="display: none;">
         <div class="form-group">
@@ -354,6 +357,75 @@
         </div>
         <button type="submit" class="btn-auth">Tạo tài khoản</button>
       </form>
+    </div>
+  </div>
+
+  <!-- Modal Quên Mật Khẩu -->
+  <div id="forgotPasswordModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:16px; padding:32px 28px; width:100%; max-width:420px; margin:16px; box-shadow:0 20px 60px rgba(0,0,0,0.2); position:relative;">
+      <button onclick="closeForgotPassword()" style="position:absolute; top:12px; right:16px; background:none; border:none; font-size:20px; cursor:pointer; color:#666;">✕</button>
+
+      <!-- Bước 1: Nhập email -->
+      <div id="fpStep1">
+        <div style="text-align:center; margin-bottom:20px;">
+          <div style="font-size:40px; margin-bottom:8px;">🔑</div>
+          <h3 style="margin:0; font-size:20px; color:#1a1a2e;">Quên mật khẩu?</h3>
+          <p style="margin:6px 0 0; color:#666; font-size:14px;">Nhập email đăng ký để nhận mã xác nhận</p>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label style="font-size:13px; font-weight:600; color:#444; display:block; margin-bottom:6px;">Địa chỉ Email</label>
+          <input type="email" id="fpEmail" placeholder="example@email.com"
+            style="width:100%; box-sizing:border-box; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; outline:none; transition:border-color 0.2s;"
+            onfocus="this.style.borderColor='#6c63ff'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+        <button onclick="sendForgotPasswordCode()"
+          style="width:100%; padding:12px; background:linear-gradient(135deg,#6c63ff,#5a52e0); color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer; transition:opacity 0.2s;"
+          onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          Gửi mã xác nhận
+        </button>
+      </div>
+
+      <!-- Bước 2: Nhập mã + mật khẩu mới -->
+      <div id="fpStep2" style="display:none;">
+        <div style="text-align:center; margin-bottom:20px;">
+          <div style="font-size:40px; margin-bottom:8px;">📬</div>
+          <h3 style="margin:0; font-size:20px; color:#1a1a2e;">Đặt mật khẩu mới</h3>
+          <p style="margin:6px 0 0; color:#666; font-size:14px;">Nhập mã xác nhận và mật khẩu mới của bạn</p>
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:13px; font-weight:600; color:#444; display:block; margin-bottom:6px;">Mã xác nhận (6 chữ số)</label>
+          <input type="text" id="fpToken" placeholder="Nhập mã 6 chữ số" maxlength="6"
+            style="width:100%; box-sizing:border-box; padding:10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:18px; letter-spacing:6px; text-align:center; outline:none;"
+            onfocus="this.style.borderColor='#6c63ff'" onblur="this.style.borderColor='#e0e0e0'">
+        </div>
+        <div style="margin-bottom:12px;">
+          <label style="font-size:13px; font-weight:600; color:#444; display:block; margin-bottom:6px;">Mật khẩu mới</label>
+          <div style="position:relative;">
+            <input type="password" id="fpNewPass" placeholder="Tối thiểu 6 ký tự"
+              style="width:100%; box-sizing:border-box; padding:10px 40px 10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; outline:none;"
+              onfocus="this.style.borderColor='#6c63ff'" onblur="this.style.borderColor='#e0e0e0'">
+            <i class="fas fa-eye toggle-pass" onclick="togglePass('fpNewPass', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#999;"></i>
+          </div>
+        </div>
+        <div style="margin-bottom:16px;">
+          <label style="font-size:13px; font-weight:600; color:#444; display:block; margin-bottom:6px;">Xác nhận mật khẩu mới</label>
+          <div style="position:relative;">
+            <input type="password" id="fpConfirmPass" placeholder="Nhập lại mật khẩu"
+              style="width:100%; box-sizing:border-box; padding:10px 40px 10px 14px; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; outline:none;"
+              onfocus="this.style.borderColor='#6c63ff'" onblur="this.style.borderColor='#e0e0e0'">
+            <i class="fas fa-eye toggle-pass" onclick="togglePass('fpConfirmPass', this)" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); cursor:pointer; color:#999;"></i>
+          </div>
+        </div>
+        <button onclick="submitResetPassword()"
+          style="width:100%; padding:12px; background:linear-gradient(135deg,#6c63ff,#5a52e0); color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;"
+          onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          Đặt lại mật khẩu
+        </button>
+        <button onclick="document.getElementById('fpStep1').style.display='block'; document.getElementById('fpStep2').style.display='none';"
+          style="width:100%; padding:10px; margin-top:8px; background:none; border:1.5px solid #e0e0e0; border-radius:8px; font-size:14px; color:#666; cursor:pointer;">
+          ← Quay lại
+        </button>
+      </div>
     </div>
   </div>
 

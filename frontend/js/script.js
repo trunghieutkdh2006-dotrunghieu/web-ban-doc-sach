@@ -1952,3 +1952,99 @@ deleteButtonStyle.textContent = `
   }
 `;
 document.head.appendChild(deleteButtonStyle);
+// =========================
+// QUÊN MẬT KHẨU
+// =========================
+let fpEmailGlobal = '';
+
+function openForgotPassword(e) {
+  if (e) e.preventDefault();
+  toggleAuth(false); // đóng panel đăng nhập
+  const modal = document.getElementById('forgotPasswordModal');
+  if (modal) {
+    modal.style.display = 'flex';
+    document.getElementById('fpStep1').style.display = 'block';
+    document.getElementById('fpStep2').style.display = 'none';
+    document.getElementById('fpEmail').value = '';
+    document.getElementById('fpToken') && (document.getElementById('fpToken').value = '');
+    document.getElementById('fpNewPass') && (document.getElementById('fpNewPass').value = '');
+    document.getElementById('fpConfirmPass') && (document.getElementById('fpConfirmPass').value = '');
+  }
+}
+
+function closeForgotPassword() {
+  const modal = document.getElementById('forgotPasswordModal');
+  if (modal) modal.style.display = 'none';
+}
+
+async function sendForgotPasswordCode() {
+  const email = document.getElementById('fpEmail').value.trim();
+  if (!email) { showToast('Vui lòng nhập email', 'warning'); return; }
+
+  try {
+    const res = await fetch(`${AUTH_API}/forgot-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      fpEmailGlobal = email;
+      document.getElementById('fpStep1').style.display = 'none';
+      document.getElementById('fpStep2').style.display = 'block';
+      showToast('Mã xác nhận đã được tạo!', 'success');
+
+      // Chỉ dành cho môi trường dev - điền tự động nếu server trả về devToken
+      if (data.devToken) {
+        document.getElementById('fpToken').value = data.devToken;
+        showToast(`[DEV] Token: ${data.devToken}`, 'info');
+      }
+    } else {
+      showToast(data.message || 'Có lỗi xảy ra', 'error');
+    }
+  } catch (err) {
+    showToast('Không thể kết nối server', 'error');
+  }
+}
+
+async function submitResetPassword() {
+  const token = document.getElementById('fpToken').value.trim();
+  const newPassword = document.getElementById('fpNewPass').value;
+  const confirmPass = document.getElementById('fpConfirmPass').value;
+
+  if (!token || !newPassword || !confirmPass) {
+    showToast('Vui lòng nhập đầy đủ thông tin', 'warning'); return;
+  }
+  if (newPassword !== confirmPass) {
+    showToast('Mật khẩu xác nhận không khớp', 'error'); return;
+  }
+  if (newPassword.length < 6) {
+    showToast('Mật khẩu phải có ít nhất 6 ký tự', 'warning'); return;
+  }
+
+  try {
+    const res = await fetch(`${AUTH_API}/reset-password`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: fpEmailGlobal, token, newPassword })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      showToast('Đặt lại mật khẩu thành công! Vui lòng đăng nhập', 'success');
+      closeForgotPassword();
+      setTimeout(() => toggleAuth(true), 500);
+    } else {
+      showToast(data.message || 'Mã không đúng hoặc đã hết hạn', 'error');
+    }
+  } catch (err) {
+    showToast('Không thể kết nối server', 'error');
+  }
+}
+
+// Đóng modal khi click ra ngoài
+document.addEventListener('click', function(e) {
+  const modal = document.getElementById('forgotPasswordModal');
+  if (modal && e.target === modal) closeForgotPassword();
+});
