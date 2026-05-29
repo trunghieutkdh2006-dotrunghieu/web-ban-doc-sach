@@ -312,5 +312,23 @@ router.get("/", async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+router.get('/:userId/avatar', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.userId).select('avatar username');
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
+        }
+        
+        let avatarUrl = user.avatar;
+        if (avatarUrl && avatarUrl.startsWith('http://')) {
+            avatarUrl = avatarUrl.replace('http://', 'https://');
+        }
+        
+        res.json({ success: true, avatar: avatarUrl, username: user.username });
+    } catch (err) {
+        console.error('Lỗi lấy avatar:', err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
 
 module.exports = router;
