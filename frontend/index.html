@@ -444,6 +444,16 @@
 
       const _orig = window.openBookDetail;
       window.openBookDetail = async function (id) {
+        // Lưu lịch sử xem
+        try {
+          const RV_KEY = 'httvbooks_recently_viewed';
+          let rv = JSON.parse(localStorage.getItem(RV_KEY) || '[]');
+          rv = rv.filter(bookId => bookId !== id);
+          rv.unshift(id);
+          if (rv.length > 8) rv = rv.slice(0, 8);
+          localStorage.setItem(RV_KEY, JSON.stringify(rv));
+          if (typeof renderRecentlyViewed === 'function') renderRecentlyViewed();
+        } catch (e) { }
         let book;
         try {
           const res = await fetch(BASE_URL + '/api/books/' + id, { headers: { 'ngrok-skip-browser-warning': '69420' } });
