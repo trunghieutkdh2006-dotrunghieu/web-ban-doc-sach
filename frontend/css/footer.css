@@ -43,7 +43,7 @@
     align-items: center;
     gap: 14px;
     margin-bottom: 22px;
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 22px !important;
     font-weight: 700 !important;
     letter-spacing: 0.5px !important;
@@ -64,6 +64,7 @@
 }
 
 .footer-logo span {
+    font-family: 'Inter', sans-serif !important;
     font-size: 20px !important;
     font-weight: 700 !important;
     color: #fff !important;

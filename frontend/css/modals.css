@@ -81,7 +81,7 @@
 }
 
 .book-modal .modal-right h2 {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 34px !important;
     font-weight: 800 !important;
     margin-bottom: 10px !important;
@@ -91,7 +91,7 @@
 }
 
 .book-modal .modal-price {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 32px !important;
     font-weight: 800 !important;
     color: var(--danger) !important;
@@ -201,7 +201,7 @@
 }
 
 .modal-right h2 {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 24px !important;
     font-weight: 800 !important;
     color: var(--primary) !important;
@@ -216,7 +216,7 @@
 }
 
 .modal-price {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 26px !important;
     font-weight: 800 !important;
     color: var(--primary) !important;
@@ -493,7 +493,7 @@
 
 .review-modal-header h3,
 .reviews-modal-header h3 {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 28px;
     font-weight: 800;
     margin-bottom: 10px;
@@ -925,7 +925,7 @@
 }
 
 .auth-header h2 {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 26px !important;
     font-weight: 800 !important;
     color: var(--primary) !important;
@@ -1125,7 +1125,7 @@
 }
 
 .profile-header h2 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Inter', sans-serif !important;
     font-size: 24px;
     font-weight: 800;
     color: #fff;
@@ -1513,7 +1513,7 @@ body.dark-mode .btn-edit-cancel:hover {
 }
 
 .settings-header h2 {
-    font-family: 'Sora', sans-serif;
+    font-family: 'Inter', sans-serif !important;
     font-size: 22px;
     font-weight: 800;
     color: #fff;

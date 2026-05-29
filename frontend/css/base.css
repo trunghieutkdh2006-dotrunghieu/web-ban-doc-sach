@@ -2,7 +2,7 @@
    BASE.CSS — Variables · Reset · Scrollbar · Container
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@600;700;800&family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 /* ── CSS CUSTOM PROPERTIES ───────────────────────────────── */
 :root {
@@ -77,7 +77,7 @@ body {
     min-height: 100vh;
 }
 
-/* ── HEADINGS — Sora ─────────────────────────────────────── */
+/* ── HEADINGS — Chỉ dùng Inter ───────────────────────────── */
 h1,
 h2,
 h3,
@@ -91,8 +91,11 @@ h6,
 .auth-header h2,
 .modal-content h2,
 .daily-deal-title,
-.book-section-container h2 {
-    font-family: 'DM Sans', sans-serif !important;
+.book-section-container h2,
+.logo span,
+.profile-header h2,
+.settings-header h2 {
+    font-family: 'Inter', sans-serif !important;
     letter-spacing: -0.02em !important;
     line-height: 1.2 !important;
     font-weight: 700 !important;

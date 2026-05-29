@@ -100,7 +100,7 @@
 }
 
 .logo span {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-size: 20px !important;
     font-weight: 700 !important;
     color: var(--primary) !important;
@@ -307,7 +307,7 @@
 }
 
 .search-result-price {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-weight: 700 !important;
     font-size: 13px !important;
     color: var(--primary) !important;
@@ -513,7 +513,7 @@
 }
 
 .cart-item-price {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-weight: 800 !important;
     font-size: 13px !important;
     color: #e63946 !important;
@@ -683,7 +683,7 @@
 }
 
 .wishlist-price {
-    font-family: 'Sora', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
     font-weight: 800 !important;
     font-size: 12px !important;
     color: #e63946 !important;
