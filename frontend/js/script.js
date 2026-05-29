@@ -1231,13 +1231,13 @@ async function saveUserProfile() {
         updatedAt: new Date().toISOString()
     };
     
-    // XỬ LÝ UPLOAD AVATAR
+    // XỬ LÝ UPLOAD AVATAR LÊN SERVER
     const avatarInput = document.getElementById('avatarFileInput');
     const avatarFile = avatarInput?.files?.[0];
     
     if (avatarFile) {
         Swal.fire({
-            title: 'Đang upload ảnh...',
+            title: 'Đang upload ảnh lên server...',
             allowOutsideClick: false,
             didOpen: () => Swal.showLoading()
         });
@@ -1257,8 +1257,10 @@ async function saveUserProfile() {
             const result = await response.json();
             
             if (result.success) {
+                // Lưu URL từ server vào localStorage
                 userProfile.avatar = result.avatarUrl;
                 showToast('Cập nhật avatar thành công!', 'success');
+                console.log('✅ Avatar đã được lưu trên server:', result.avatarUrl);
             } else {
                 throw new Error(result.message);
             }
