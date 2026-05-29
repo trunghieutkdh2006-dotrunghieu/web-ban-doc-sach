@@ -1,5 +1,6 @@
 const BASE_URL = 'https://web-ban-doc-sach.onrender.com';
 const API = `${BASE_URL}/api/books`;
+const AVATAR_API = `${API_BASE_URL}/users/avatar`; 
 const CATEGORY_API = `${BASE_URL}/api/categories`;
 const AUTH_API = `${BASE_URL}/api/auth`;
 const API_BASE_URL = `${BASE_URL}/api`;

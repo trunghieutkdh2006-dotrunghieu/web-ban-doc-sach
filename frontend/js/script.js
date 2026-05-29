@@ -62,8 +62,6 @@ function removeCartItem(itemId) { let cart = getCart(); cart = cart.filter(item 
 function clearCartDropdown() { const cart = getCart(); if (cart.length === 0) { showToast('Giỏ hàng đã trống', 'info'); return; } Swal.fire({ title: 'Xóa toàn bộ giỏ hàng?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#e53e3e', confirmButtonText: 'Xóa tất cả' }).then((result) => { if (result.isConfirmed) { localStorage.setItem('shoppingCart', JSON.stringify([])); renderCartDropdown(); updateCartBadge(); showToast('Đã xóa toàn bộ giỏ hàng', 'success'); } }); }
 
 // ==================== CONFIG (từ config.js) ====================
-// BASE_URL, API, CATEGORY_API, AUTH_API, API_BASE_URL, PLACEHOLDER_SVG đã định nghĩa trong config.js
-
 let booksCache = [], categoriesCache = [], wishlist = [], user = null;
 let currentReviewBookId = null, currentReviewsBookId = null, currentReviewsBookTitle = '';
 let _modalImgs = [], _modalImgIdx = 0;
@@ -233,7 +231,6 @@ async function loadBooks() {
         retryCount = 0;
         applyFilters();
         
-        // === THÊM DÒNG NÀY ĐỂ HIỂN THỊ LỊCH SỬ XEM ===
         if (typeof renderRecentlyViewed === 'function') renderRecentlyViewed();
         
     } catch (err) {
@@ -335,24 +332,19 @@ function renderBookCard(book) {
 }
 
 function filterByCategory(category) {
-  // Set filter value
   if (category === 'Tất cả') document.getElementById('filterCategory').value = 'all';
   else document.getElementById('filterCategory').value = category;
 
-  // Update active state in dropdown
   document.querySelectorAll('#categoryDropdown a').forEach(a => {
     a.classList.remove('active');
     if (a.textContent.trim() === category) a.classList.add('active');
   });
 
-  // Close the dropdown
   const categoryMenu = document.getElementById('categoryMenu');
   if (categoryMenu) categoryMenu.classList.remove('open');
 
-  // Apply filters first
   applyFilters();
 
-  // Scroll to filter bar
   const filterBar = document.getElementById('filter-bar');
   const navHeight = document.querySelector('.main-nav')?.offsetHeight || 70;
 
@@ -383,7 +375,7 @@ function selectSearchResult(bookId) {
   } 
 }
 
-// ==================== BOOK MODAL - FIXED ====================
+// ==================== BOOK MODAL ====================
 async function openBookDetail(id) {
    try {
     let rv = JSON.parse(localStorage.getItem('httvbooks_recently_viewed') || '[]');
@@ -400,12 +392,10 @@ async function openBookDetail(id) {
     });
     if (res.ok) {
       book = await res.json();
-      // Cập nhật lại cache
       const idx = booksCache.findIndex(b => b._id === id);
       if (idx !== -1) booksCache[idx] = { ...booksCache[idx], ...book };
     }
   } catch (e) {}
-  // Fallback về cache nếu fetch lỗi
   if (!book) book = booksCache.find(b => b._id === id);
   if (!book) return;
 
@@ -418,7 +408,6 @@ async function openBookDetail(id) {
   const existingModal = document.querySelector('.book-modal');
   if (existingModal) existingModal.remove();
 
-  // Render thumbnail strip nếu có nhiều ảnh
   const thumbsHtml = allImgs.length > 1 ? `
     <div class="modal-thumbs" id="modalThumbs_${id}">
       ${allImgs.map((src, i) => `
@@ -454,7 +443,6 @@ async function openBookDetail(id) {
           <button class="modal-btn modal-btn-wish ${isWishlisted(id) ? 'active' : ''}" onclick="toggleWishlist('${id}')">
             <i class="${isWishlisted(id) ? 'fas' : 'far'} fa-heart"></i>
           </button>
-          
         </div>
         ${book.description ? `<hr><h4>📖 Nội dung sách</h4><div class="modal-description">${escapeHtml(book.description)}</div>` : ""}
       </div>
@@ -523,7 +511,6 @@ function openLightbox(src) {
       document.removeEventListener('keydown', escHandler);
     }
   }
-  // Ẩn modal để lightbox hiện lên trên
   const bookModal = document.querySelector('.book-modal');
   if (bookModal) bookModal.style.visibility = 'hidden';
 
@@ -542,7 +529,8 @@ function openLightbox(src) {
   document.addEventListener('keydown', escHandler);
   document.body.appendChild(lb);
 }
-  function renderRecentlyViewed() {
+
+function renderRecentlyViewed() {
     const section = document.getElementById('recentlyViewedSection');
     if (!section) return;
     
@@ -554,7 +542,6 @@ function openLightbox(src) {
             return;
         }
         
-        // Lấy thông tin sách từ cache
         const books = rv.map(id => booksCache.find(b => b._id === id)).filter(Boolean);
         
         if (books.length === 0) {
@@ -937,11 +924,13 @@ function togglePass(inputId, icon) {
 }
 
 function loginSuccess(userObj, token) {
-  user = { id: userObj.id, username: userObj.username, email: userObj.email, role: userObj.role, token };
-  localStorage.setItem("user", JSON.stringify(user));
-  toggleAuth(false);
-  updateUserUI();
-  showToast(`Đăng nhập thành công! Xin chào ${user.username}!`, 'success');
+    user = { id: userObj.id, username: userObj.username, email: userObj.email, role: userObj.role, token };
+    localStorage.setItem("user", JSON.stringify(user));
+    toggleAuth(false);
+    updateUserUI();
+    showToast(`Đăng nhập thành công! Xin chào ${user.username}!`, 'success');
+  
+    loadAvatarFromServer();
 }
 
 function logout() { localStorage.removeItem("user"); user = null; updateUserUI(); showToast('Đã đăng xuất khỏi hệ thống', 'info'); }
@@ -952,8 +941,8 @@ function updateUserUI() {
     
     if (user && userBtn) {
         const userId = user._id || user.id || user.email;
-const profileKey = `userProfile_${userId}`;
-const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+        const profileKey = `userProfile_${userId}`;
+        const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
         const avatarUrl = userProfile.avatar || getUserAvatar();
         const displayName = userProfile.fullName || user.username;
         
@@ -982,6 +971,7 @@ const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
         }
     }
 }
+
 // ==================== PROFILE ====================
 function openProfile() {
     if (!user) {
@@ -994,8 +984,8 @@ function openProfile() {
         : 'Chưa cập nhật';
     
     const userId = user._id || user.id || user.email;
-const profileKey = `userProfile_${userId}`;
-const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+    const profileKey = `userProfile_${userId}`;
+    const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
     const fullName = userProfile.fullName || 'Chưa cập nhật';
     const phone = userProfile.phone || 'Chưa cập nhật';
     const address = userProfile.address || 'Chưa cập nhật';
@@ -1071,8 +1061,8 @@ const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
     });
 }
 
-// ==================== CHỈNH SỬA HỒ SƠ VỚI UPLOAD AVATAR ====================
-let tempAvatarPreview = null; // Lưu avatar preview tạm thời
+// ==================== CHỈNH SỬA HỒ SƠ ====================
+let tempAvatarPreview = null;
 
 function openEditProfile() {
     if (!user) {
@@ -1081,9 +1071,9 @@ function openEditProfile() {
     }
 
     const userId = user._id || user.id || user.email;
-const profileKey = `userProfile_${userId}`;
-const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
-    const currentAvatar = userProfile.avatar || getUserAvatar(user._id || user.id);
+    const profileKey = `userProfile_${userId}`;
+    const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+    const currentAvatar = userProfile.avatar || getUserAvatar();
     
     tempAvatarPreview = currentAvatar;
     
@@ -1142,7 +1132,7 @@ const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
                     <input type="text" id="editAddress" placeholder="Nhập địa chỉ của bạn" value="${escapeHtml(userProfile.address || '')}">
                 </div>
                 <div class="edit-buttons">
-                    <button class="btn-edit-save" onclick="saveUserProfileWithAvatar()">
+                    <button class="btn-edit-save" onclick="saveUserProfile()">
                         <i class="fas fa-save"></i> Lưu thay đổi
                     </button>
                     <button class="btn-edit-cancel" onclick="Swal.close()">
@@ -1164,14 +1154,12 @@ function handleAvatarPreview(event) {
     const file = event.target.files[0];
     if (!file) return;
     
-    // Kiểm tra kích thước (tối đa 2MB)
     if (file.size > 2 * 1024 * 1024) {
         showToast('Ảnh quá lớn! Tối đa 2MB', 'error');
         event.target.value = '';
         return;
     }
     
-    // Kiểm tra định dạng
     if (!file.type.startsWith('image/')) {
         showToast('Vui lòng chọn file ảnh!', 'error');
         event.target.value = '';
@@ -1190,23 +1178,26 @@ function handleAvatarPreview(event) {
 }
 
 function getUserAvatar() {
-    // Lấy avatar từ localStorage nếu có
     const userId = user?._id || user?.id || user?.email;
-if (!userId) {
-    const username = user?.username || 'User';
-    return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=${encodeURIComponent(username)}&bold=true`;
-}
-const profileKey = `userProfile_${userId}`;
-const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
-    if (userProfile.avatar && userProfile.avatar !== 'undefined') {
+    if (!userId) {
+        const username = user?.username || 'User';
+        return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=${encodeURIComponent(username)}&bold=true`;
+    }
+    
+    const profileKey = `userProfile_${userId}`;
+    const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+    
+    // Nếu có avatar URL từ server
+    if (userProfile.avatar && userProfile.avatar.startsWith('http')) {
         return userProfile.avatar;
     }
-    // Fallback về avatar mặc định từ UI Avatars API
+    
+    // Fallback avatar mặc định
     const username = user?.username || 'User';
     return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=${encodeURIComponent(username)}&bold=true`;
 }
 
-async function saveUserProfileWithAvatar() {
+async function saveUserProfile() {
     const fullName = document.getElementById('editFullName')?.value.trim() || '';
     const phone = document.getElementById('editPhone')?.value.trim() || '';
     const birthday = document.getElementById('editBirthday')?.value || '';
@@ -1218,8 +1209,7 @@ async function saveUserProfileWithAvatar() {
         return;
     }
     
-    // Lấy userId để lưu riêng
-    const userId = user?._id || user?.id || user?.email;
+    const userId = user?._id || user?.id;
     const profileKey = `userProfile_${userId}`;
     
     const userProfile = {
@@ -1231,8 +1221,47 @@ async function saveUserProfileWithAvatar() {
         updatedAt: new Date().toISOString()
     };
     
-    if (tempAvatarPreview && tempAvatarPreview.startsWith('data:image')) {
-        userProfile.avatar = tempAvatarPreview;
+    // XỬ LÝ UPLOAD AVATAR
+    const avatarInput = document.getElementById('avatarFileInput');
+    const avatarFile = avatarInput?.files?.[0];
+    
+    if (avatarFile) {
+        Swal.fire({
+            title: 'Đang upload ảnh...',
+            allowOutsideClick: false,
+            didOpen: () => Swal.showLoading()
+        });
+        
+        const formData = new FormData();
+        formData.append('avatar', avatarFile);
+        
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/avatar`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${user.token}`
+                },
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (result.success) {
+                userProfile.avatar = result.avatarUrl;
+                showToast('Cập nhật avatar thành công!', 'success');
+            } else {
+                throw new Error(result.message);
+            }
+        } catch (err) {
+            console.error('Upload avatar lỗi:', err);
+            showToast('Upload avatar thất bại, giữ ảnh cũ', 'error');
+            const oldProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+            if (oldProfile.avatar) {
+                userProfile.avatar = oldProfile.avatar;
+            }
+        }
+        
+        Swal.close();
     } else {
         const oldProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
         if (oldProfile.avatar) {
@@ -1241,10 +1270,8 @@ async function saveUserProfileWithAvatar() {
     }
     
     localStorage.setItem(profileKey, JSON.stringify(userProfile));
-    
     updateNavbarAvatar();
     
-    Swal.close();
     showToast('Đã cập nhật hồ sơ thành công!', 'success');
     setTimeout(() => openProfile(), 300);
 }
@@ -1374,17 +1401,17 @@ function initStarRating() {
     }
   });
 }
+
 function updateNavbarAvatar() {
     const userBtn = document.getElementById('userBtn');
     if (!userBtn) return;
     
     const userId = user._id || user.id || user.email;
-const profileKey = `userProfile_${userId}`;
-const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+    const profileKey = `userProfile_${userId}`;
+    const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
     const avatarUrl = userProfile.avatar || getUserAvatar();
     const displayName = userProfile.fullName || user?.username || 'User';
     
-    // Tạo avatar nhỏ trên navbar
     userBtn.innerHTML = `
         <img src="${avatarUrl}" class="navbar-avatar" 
              onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=32&length=2&name=${encodeURIComponent(user?.username || 'User')}&bold=true'"
@@ -1392,6 +1419,7 @@ const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
         <span>${displayName.substring(0, 12)}</span>
     `;
 }
+
 async function uploadImageForBook(bookId, imageFile) {
     const formData = new FormData();
     formData.append('image', imageFile);
@@ -1770,7 +1798,6 @@ async function changeAdminPassword() {
     }
 }
 
-
 // ==================== OPEN READER ====================
 function openReader(bookId) {
   if (!user) {
@@ -1910,7 +1937,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // === THÊM ĐOẠN NÀY VÀO ĐÂY ===
   setTimeout(() => {
       if (typeof renderRecentlyViewed === 'function') {
           renderRecentlyViewed();
@@ -1952,6 +1978,7 @@ deleteButtonStyle.textContent = `
   }
 `;
 document.head.appendChild(deleteButtonStyle);
+
 // =========================
 // QUÊN MẬT KHẨU
 // =========================
@@ -1959,7 +1986,7 @@ let fpEmailGlobal = '';
 
 function openForgotPassword(e) {
   if (e) e.preventDefault();
-  toggleAuth(false); // đóng panel đăng nhập
+  toggleAuth(false);
   const modal = document.getElementById('forgotPasswordModal');
   if (modal) {
     modal.style.display = 'flex';
@@ -1995,7 +2022,6 @@ async function sendForgotPasswordCode() {
       document.getElementById('fpStep2').style.display = 'block';
       showToast('Mã xác nhận đã được tạo!', 'success');
 
-      // Chỉ dành cho môi trường dev - điền tự động nếu server trả về devToken
       if (data.devToken) {
         document.getElementById('fpToken').value = data.devToken;
         showToast(`[DEV] Token: ${data.devToken}`, 'info');
@@ -2043,8 +2069,37 @@ async function submitResetPassword() {
   }
 }
 
-// Đóng modal khi click ra ngoài
 document.addEventListener('click', function(e) {
   const modal = document.getElementById('forgotPasswordModal');
   if (modal && e.target === modal) closeForgotPassword();
 });
+// ==================== LẤY AVATAR TỪ SERVER ====================
+async function loadAvatarFromServer() {
+    if (!user?.token) return;
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/users/profile`, {
+            headers: {
+                'Authorization': `Bearer ${user.token}`,
+                'ngrok-skip-browser-warning': '69420'
+            }
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            console.log('📸 Avatar từ server:', data.avatar);
+            
+            if (data.avatar) {
+                const userId = user._id || user.id;
+                const profileKey = `userProfile_${userId}`;
+                const profile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+                profile.avatar = data.avatar;
+                localStorage.setItem(profileKey, JSON.stringify(profile));
+                updateNavbarAvatar();
+                console.log('✅ Đã đồng bộ avatar từ server');
+            }
+        }
+    } catch (err) {
+        console.error('Lỗi load avatar từ server:', err);
+    }
+}

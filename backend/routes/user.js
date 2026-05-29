@@ -231,5 +231,88 @@ router.put('/:userId/password', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+// ==================== UPLOAD AVATAR API ====================
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
+const auth = require('../middleware/auth');
+
+// Tạo thư mục uploads/avatars nếu chưa có
+const avatarDir = path.join(__dirname, '../uploads', 'avatars');
+if (!fs.existsSync(avatarDir)) {
+    fs.mkdirSync(avatarDir, { recursive: true });
+}
+
+// Cấu hình multer cho avatar
+const avatarStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/avatars/');
+    },
+    filename: (req, file, cb) => {
+        const userId = req.user.id;
+        const ext = path.extname(file.originalname);
+        cb(null, `avatar_${userId}_${Date.now()}${ext}`);
+    }
+});
+
+const uploadAvatar = multer({ 
+    storage: avatarStorage,
+    limits: { fileSize: 2 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const allowed = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+        cb(null, allowed.includes(file.mimetype));
+    }
+});
+
+// API upload avatar
+router.post('/avatar', auth, uploadAvatar.single('avatar'), async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'Không có file được upload' });
+        }
+        
+        const avatarUrl = `${req.protocol}://${req.get('host')}/uploads/avatars/${req.file.filename}`;
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.id, 
+            { avatar: avatarUrl },
+            { new: true }
+        );
+        
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
+        }
+        
+        console.log(`✅ Avatar uploaded for user ${req.user.id}: ${avatarUrl}`);
+        res.json({ success: true, avatarUrl });
+    } catch (err) {
+        console.error('Upload avatar error:', err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// API lấy thông tin user (bao gồm avatar)
+router.get('/profile', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
+        }
+        
+        res.json({
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            avatar: user.avatar || null,
+            fullname: user.fullname || '',
+            phone: user.phone || '',
+            address: user.address || ''
+        });
+    } catch (err) {
+        console.error('Get profile error:', err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
 
 module.exports = router;
