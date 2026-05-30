@@ -1474,7 +1474,7 @@ function editBook(id) {
         document.getElementById('coverPreviewContainer').innerHTML = `
             <div class="preview-item" data-is-old-cover="true">
                 <img src="${coverUrl}" style="max-width:120px; max-height:160px; object-fit:cover; border-radius:6px;">
-                <button class="remove-img" onclick="clearCoverImage()" style="background:#e53e3e; color:white;">✖</button>
+                <button type="button" class="remove-img" onclick="clearCoverImage()" style="background:#e53e3e; color:white;">✖</button>
                 <span style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); color:white; font-size:10px; text-align:center;">Ảnh hiện tại</span>
             </div>
         `;
@@ -1617,6 +1617,7 @@ function previewCoverImage(event) {
 
                 <!-- Nút xóa ảnh -->
                 <button
+                    type="button"
                     class="remove-img"
                     onclick="clearCoverImage()"
                 >
@@ -1739,7 +1740,7 @@ function renderGalleryPreviews() {
         return `
             <div class="preview-item" data-is-old="${isOldImage}" data-old-url="${oldUrl}" data-gallery-idx="${idx}">
                 <img src="${src}" style="width:80px; height:100px; object-fit:cover; border-radius:8px; border:2px solid ${isOldImage ? '#e53e3e' : '#10b981'};">
-                <button class="remove-img" onclick="removeGalleryImage(${idx})" style="${isOldImage ? 'background:#e53e3e; color:white;' : 'background:#64748b; color:white;'}" title="${isOldImage ? 'Xóa ảnh khỏi server' : 'Xóa ảnh này'}">
+                <button type="button" class="remove-img" onclick="removeGalleryImage(${idx})" style="${isOldImage ? 'background:#e53e3e; color:white;' : 'background:#64748b; color:white;'}" title="${isOldImage ? 'Xóa ảnh khỏi server' : 'Xóa ảnh này'}">
                     ✖
                 </button>
                 ${isOldImage ? '<span style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:white; font-size:10px; text-align:center; padding:2px;">Đã lưu</span>' : '<span style="position:absolute; bottom:0; left:0; right:0; background:rgba(16,185,129,0.8); color:white; font-size:10px; text-align:center; padding:2px;">Mới</span>'}
