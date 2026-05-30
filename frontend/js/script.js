@@ -387,80 +387,111 @@ function selectSearchResult(bookId) {
 
 // ==================== BOOK MODAL ====================
 async function openBookDetail(id) {
-   try {
-    let rv = JSON.parse(localStorage.getItem('httvbooks_recently_viewed') || '[]');
-    rv = rv.filter(bookId => bookId !== id);
-    rv.unshift(id);
-    if (rv.length > 8) rv = rv.slice(0, 8);
-    localStorage.setItem('httvbooks_recently_viewed', JSON.stringify(rv));
-    if (typeof renderRecentlyViewed === 'function') renderRecentlyViewed();
-  } catch(e) {}
-  let book;
-  try {
-    const res = await fetch(`${BASE_URL}/api/books/${id}`, {
-      headers: { 'ngrok-skip-browser-warning': '69420' }
-    });
-    if (res.ok) {
-      book = await res.json();
-      const idx = booksCache.findIndex(b => b._id === id);
-      if (idx !== -1) booksCache[idx] = { ...booksCache[idx], ...book };
+    try {
+        // Lưu lịch sử xem
+        let rv = JSON.parse(localStorage.getItem('httvbooks_recently_viewed') || '[]');
+        rv = rv.filter(bookId => bookId !== id);
+        rv.unshift(id);
+        if (rv.length > 8) rv = rv.slice(0, 8);
+        localStorage.setItem('httvbooks_recently_viewed', JSON.stringify(rv));
+        if (typeof renderRecentlyViewed === 'function') renderRecentlyViewed();
+    } catch(e) {}
+    
+    let book;
+    try {
+        // Lấy dữ liệu sách từ API
+        const res = await fetch(`${BASE_URL}/api/books/${id}`, {
+            headers: { 'ngrok-skip-browser-warning': '69420' }
+        });
+        if (res.ok) {
+            book = await res.json();
+        }
+    } catch (e) {}
+    
+    // Nếu không lấy được từ API, dùng cache
+    if (!book) book = booksCache.find(b => b._id === id);
+    if (!book) return;
+
+    // ========== THÊM: LẤY REVIEW TRỰC TIẾP TỪ API REVIEWS ==========
+    try {
+        const reviewRes = await fetch(`${BASE_URL}/api/reviews/book/${id}`, {
+            headers: { 'ngrok-skip-browser-warning': '69420' }
+        });
+        if (reviewRes.ok) {
+            const reviewData = await reviewRes.json();
+            let reviews = [];
+            if (Array.isArray(reviewData)) reviews = reviewData;
+            else if (reviewData.reviews) reviews = reviewData.reviews;
+            else if (reviewData.data) reviews = reviewData.data;
+            
+            const realCount = reviews.length;
+            const realAvg = realCount > 0 
+                ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / realCount 
+                : 0;
+            
+            // Ghi đè dữ liệu cũ bằng dữ liệu thật
+            book.reviewCount = realCount;
+            book.avgRating = parseFloat(realAvg.toFixed(1));
+            
+            console.log(`📊 ${book.title}: ${realCount} đánh giá, ${realAvg.toFixed(1)} sao`);
+        }
+    } catch (err) {
+        console.warn('Không thể lấy review chi tiết:', err);
     }
-  } catch (e) {}
-  if (!book) book = booksCache.find(b => b._id === id);
-  if (!book) return;
+    // ===============================================================
 
-  const coverImg = getBookImage(book);
-  const gallery = Array.isArray(book.galleryImages) ? book.galleryImages.filter(Boolean) : [];
-  const allImgs = [coverImg, ...gallery.map(g => g.startsWith('http') ? g : BASE_URL + g)];
+    const coverImg = getBookImage(book);
+    const gallery = Array.isArray(book.galleryImages) ? book.galleryImages.filter(Boolean) : [];
+    const allImgs = [coverImg, ...gallery.map(g => g.startsWith('http') ? g : BASE_URL + g)];
 
-  const pdfButton = book.samplePdf ? `<button class="modal-btn modal-btn-sample" onclick="openPdfPreview('${id}')">📖 Đọc thử</button>` : "";
+    const pdfButton = book.samplePdf ? `<button class="modal-btn modal-btn-sample" onclick="openPdfPreview('${id}')">📖 Đọc thử</button>` : "";
 
-  const existingModal = document.querySelector('.book-modal');
-  if (existingModal) existingModal.remove();
+    const existingModal = document.querySelector('.book-modal');
+    if (existingModal) existingModal.remove();
 
-  const thumbsHtml = allImgs.length > 1 ? `
-    <div class="modal-thumbs" id="modalThumbs_${id}">
-      ${allImgs.map((src, i) => `
-        <img src="${src}" class="modal-thumb ${i === 0 ? 'active' : ''}"
-          onclick="switchModalImg('${id}', '${src}', this)"
-          onerror="this.style.display='none'">
-      `).join('')}
-    </div>` : '';
+    const thumbsHtml = allImgs.length > 1 ? `
+        <div class="modal-thumbs" id="modalThumbs_${id}">
+            ${allImgs.map((src, i) => `
+                <img src="${src}" class="modal-thumb ${i === 0 ? 'active' : ''}"
+                    onclick="switchModalImg('${id}', '${src}', this)"
+                    onerror="this.style.display='none'">
+            `).join('')}
+        </div>` : '';
 
-  const modal = document.createElement("div");
-  modal.className = "book-modal";
-  modal.innerHTML = `
-    <div class="modal-content">
-      <span class="close" onclick="closeBookModal()">&times;</span>
-      <div class="modal-left">
-        <img src="${coverImg}" id="modalMainImg_${id}" class="modal-main-img" style="cursor:zoom-in" onclick="openLightbox(this.src)" onerror="this.src=PLACEHOLDER_SVG">
-        ${thumbsHtml}
-      </div>
-      <div class="modal-right">
-        ${book.category ? `<div class="modal-category-badge">${escapeHtml(book.category)}</div>` : ""}
-        <h2>${escapeHtml(book.title)}</h2>
-        <p class="modal-author">Tác giả: <strong>${escapeHtml(book.author || "Không rõ")}</strong></p>
-        <div class="modal-price">${formatPrice(book.price)}</div>
-        <div class="modal-rating">
-          <div class="stars">${renderStars(book.avgRating || 0)}</div>
-          <span>(${book.reviewCount || 0} đánh giá)</span>
-          <button class="view-reviews-link" onclick="viewReviews('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}')">Xem tất cả</button>
+    const modal = document.createElement("div");
+    modal.className = "book-modal";
+    modal.innerHTML = `
+        <div class="modal-content">
+            <span class="close" onclick="closeBookModal()">&times;</span>
+            <div class="modal-left">
+                <img src="${coverImg}" id="modalMainImg_${id}" class="modal-main-img" style="cursor:zoom-in" onclick="openLightbox(this.src)" onerror="this.src=PLACEHOLDER_SVG">
+                ${thumbsHtml}
+            </div>
+            <div class="modal-right">
+                ${book.category ? `<div class="modal-category-badge">${escapeHtml(book.category)}</div>` : ""}
+                <h2>${escapeHtml(book.title)}</h2>
+                <p class="modal-author">Tác giả: <strong>${escapeHtml(book.author || "Không rõ")}</strong></p>
+                <div class="modal-price">${formatPrice(book.price)}</div>
+                <div class="modal-rating">
+                    <div class="stars">${renderStars(book.avgRating || 0)}</div>
+                    <span>(${book.reviewCount || 0} đánh giá)</span>
+                    <button class="view-reviews-link" onclick="viewReviews('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}')">Xem tất cả</button>
+                </div>
+                <div class="modal-actions-row">
+                    <button class="modal-btn modal-btn-cart" onclick="addToCart('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}', ${book.price}, '${coverImg}')">🛒 Thêm giỏ</button>
+                    <button class="modal-btn modal-btn-review" onclick="openReviewModal('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}')">⭐ Đánh giá</button>
+                    ${pdfButton}
+                    <button class="modal-btn modal-btn-wish ${isWishlisted(id) ? 'active' : ''}" onclick="toggleWishlist('${id}')">
+                        <i class="${isWishlisted(id) ? 'fas' : 'far'} fa-heart"></i>
+                    </button>
+                </div>
+                ${book.description ? `<hr><h4>📖 Nội dung sách</h4><div class="modal-description">${escapeHtml(book.description)}</div>` : ""}
+            </div>
         </div>
-        <div class="modal-actions-row">
-          <button class="modal-btn modal-btn-cart" onclick="addToCart('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}', ${book.price}, '${coverImg}')">🛒 Thêm giỏ</button>
-          <button class="modal-btn modal-btn-review" onclick="openReviewModal('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}')">⭐ Đánh giá</button>
-          ${pdfButton}
-          <button class="modal-btn modal-btn-wish ${isWishlisted(id) ? 'active' : ''}" onclick="toggleWishlist('${id}')">
-            <i class="${isWishlisted(id) ? 'fas' : 'far'} fa-heart"></i>
-          </button>
-        </div>
-        ${book.description ? `<hr><h4>📖 Nội dung sách</h4><div class="modal-description">${escapeHtml(book.description)}</div>` : ""}
-      </div>
-    </div>
-  `;
+    `;
 
-  document.body.appendChild(modal);
-  document.body.style.overflow = 'hidden';
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
 }
 
 function switchModalImg(bookId, src, thumbEl) {
