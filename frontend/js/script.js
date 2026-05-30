@@ -1285,7 +1285,11 @@ async function saveUserProfile() {
     localStorage.setItem(profileKey, JSON.stringify(userProfile));
     updateNavbarAvatar();
     
-    showToast('Đã cập nhật hồ sơ thành công!', 'success');
+    if (avatarUploadFailed) {
+        showToast('Đã lưu hồ sơ, nhưng upload avatar thất bại!', 'warning');
+    } else {
+        showToast('Đã cập nhật hồ sơ thành công!', 'success');
+    }
     setTimeout(() => openProfile(), 300);
 }
 

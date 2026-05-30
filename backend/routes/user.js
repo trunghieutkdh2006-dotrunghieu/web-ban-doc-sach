@@ -71,7 +71,17 @@ router.get('/profile', auth, async (req, res) => {
 
 // API upload avatar
 // FIX: Lưu URL từ Cloudinary (URL cố định, không bao giờ mất dù restart/redeploy server)
-router.post('/avatar', auth, uploadAvatar.single('avatar'), async (req, res) => {
+router.post('/avatar', auth, (req, res, next) => {
+    // Wrap multer để bắt lỗi (vd: Cloudinary lỗi, file quá lớn, sai định dạng)
+    // và trả về JSON thay vì HTML 500
+    uploadAvatar.single('avatar')(req, res, (err) => {
+        if (err) {
+            console.error('Multer/Cloudinary error:', err);
+            return res.status(500).json({ success: false, message: err.message || 'Upload thất bại' });
+        }
+        next();
+    });
+}, async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'Không có file được upload' });
