@@ -6,31 +6,42 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const auth = require('../middleware/auth');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// ==================== TẠO THƯ MỤC UPLOADS ====================
-const avatarDir = path.join(__dirname, '../uploads', 'avatars');
-if (!fs.existsSync(avatarDir)) {
-    fs.mkdirSync(avatarDir, { recursive: true });
-}
+// ==================== CẤU HÌNH CLOUDINARY ====================
+// Đọc thông tin từ file .env
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
-// ==================== CẤU HÌNH MULTER CHO AVATAR ====================
-const avatarStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, 'uploads/avatars/');
-    },
-    filename: (req, file, cb) => {
-        const userId = req.user.id;
-        const ext = path.extname(file.originalname);
-        cb(null, `avatar_${userId}_${Date.now()}${ext}`);
+// ==================== CẤU HÌNH MULTER + CLOUDINARY CHO AVATAR ====================
+// Ảnh sẽ được upload thẳng lên Cloudinary, không lưu trên server
+const avatarStorage = new CloudinaryStorage({
+    cloudinary,
+    params: async (req, file) => {
+        return {
+            folder: 'avatars',                          // Thư mục trên Cloudinary
+            public_id: `avatar_${req.user.id}`,         // Tên file cố định theo userId → tự ghi đè ảnh cũ
+            overwrite: true,
+            allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+            transformation: [{ width: 300, height: 300, crop: 'fill', gravity: 'face' }] // Tự crop vuông 300x300
+        };
     }
 });
 
-const uploadAvatar = multer({ 
+const uploadAvatar = multer({
     storage: avatarStorage,
-    limits: { fileSize: 2 * 1024 * 1024 },
+    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
     fileFilter: (req, file, cb) => {
-        const allowed = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
-        cb(null, allowed.includes(file.mimetype));
+        const allowed = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+        if (allowed.includes(file.mimetype)) {
+            cb(null, true);
+        } else {
+            cb(new Error('Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WEBP)'), false);
+        }
     }
 });
 
@@ -59,24 +70,26 @@ router.get('/profile', auth, async (req, res) => {
 });
 
 // API upload avatar
+// FIX: Lưu URL từ Cloudinary (URL cố định, không bao giờ mất dù restart/redeploy server)
 router.post('/avatar', auth, uploadAvatar.single('avatar'), async (req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ success: false, message: 'Không có file được upload' });
         }
-        
-        const avatarUrl = `${req.protocol}://${req.get('host')}/uploads/avatars/${req.file.filename}`;
-        
+
+        // Cloudinary trả về URL ảnh đã upload trong req.file.path
+        const avatarUrl = req.file.path;
+
         const updatedUser = await User.findByIdAndUpdate(
-            req.user.id, 
+            req.user.id,
             { avatar: avatarUrl },
             { new: true }
         );
-        
+
         if (!updatedUser) {
             return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
         }
-        
+
         console.log(`✅ Avatar uploaded for user ${req.user.id}: ${avatarUrl}`);
         res.json({ success: true, avatarUrl });
     } catch (err) {
@@ -153,10 +166,10 @@ router.post("/", async (req, res) => {
         const userResponse = newUser.toObject();
         delete userResponse.password;
 
-        res.status(201).json({ 
-            success: true, 
-            message: "Tạo người dùng thành công", 
-            user: userResponse 
+        res.status(201).json({
+            success: true,
+            message: "Tạo người dùng thành công",
+            user: userResponse
         });
     } catch (err) {
         res.status(500).json({ message: err.message });
@@ -167,27 +180,27 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
     try {
         const { username, email, role, fullName, phone, address, password } = req.body;
-        
+
         const updateData = { username, email, role, fullName, phone, address };
-        
+
         if (password && password.trim() !== "") {
             updateData.password = await bcrypt.hash(password, 10);
         }
-        
+
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
             updateData,
             { new: true, runValidators: true }
         ).select("-password");
-        
+
         if (!updatedUser) {
             return res.status(404).json({ message: "Không tìm thấy người dùng" });
         }
-        
-        res.json({ 
-            success: true, 
-            message: "Cập nhật thành công", 
-            user: updatedUser 
+
+        res.json({
+            success: true,
+            message: "Cập nhật thành công",
+            user: updatedUser
         });
     } catch (err) {
         console.error("Lỗi cập nhật user:", err);
@@ -244,36 +257,36 @@ router.put('/:userId/password', async (req, res) => {
     try {
         const { userId } = req.params;
         const { currentPassword, newPassword } = req.body;
-        
+
         console.log('🔐 Đang đổi mật khẩu cho user:', userId);
-        
+
         if (!currentPassword || !newPassword) {
             return res.status(400).json({ message: 'Vui lòng nhập đầy đủ mật khẩu!' });
         }
-        
+
         if (newPassword.length < 6) {
             return res.status(400).json({ message: 'Mật khẩu mới phải có ít nhất 6 ký tự!' });
         }
-        
+
         const user = await User.findById(userId);
         if (!user) {
             return res.status(404).json({ message: 'Không tìm thấy người dùng!' });
         }
-        
+
         const isMatch = await bcrypt.compare(currentPassword, user.password);
         if (!isMatch) {
             return res.status(401).json({ message: 'Mật khẩu hiện tại không đúng!' });
         }
-        
+
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);
-        
+
         user.password = hashedPassword;
         await user.save();
-        
+
         console.log('✅ Đổi mật khẩu thành công cho user:', userId);
         res.json({ message: 'Đổi mật khẩu thành công!' });
-        
+
     } catch (err) {
         console.error('❌ Lỗi đổi mật khẩu:', err);
         res.status(500).json({ message: err.message });
@@ -292,6 +305,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 // ==================== ROUTE /:id PHẢI ĐỂ CUỐI CÙNG ====================
+
 // GET single user
 router.get("/:id", async (req, res) => {
     try {
@@ -303,7 +317,7 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-// GET all users (để cuối cùng)
+// GET all users
 router.get("/", async (req, res) => {
     try {
         const users = await User.find().select("-password");
@@ -312,19 +326,15 @@ router.get("/", async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+// GET avatar của user theo userId
 router.get('/:userId/avatar', async (req, res) => {
     try {
         const user = await User.findById(req.params.userId).select('avatar username');
         if (!user) {
             return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
         }
-        
-        let avatarUrl = user.avatar;
-        if (avatarUrl && avatarUrl.startsWith('http://')) {
-            avatarUrl = avatarUrl.replace('http://', 'https://');
-        }
-        
-        res.json({ success: true, avatar: avatarUrl, username: user.username });
+        res.json({ success: true, avatar: user.avatar || null, username: user.username });
     } catch (err) {
         console.error('Lỗi lấy avatar:', err);
         res.status(500).json({ success: false, message: err.message });
