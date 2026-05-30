@@ -857,123 +857,67 @@ function resetBookForm() {
     // ============================================
     // RESET ID SÁCH
     // ============================================
-
-    // bookId thường dùng khi edit
-    // Reset rỗng để chuyển về mode thêm mới
     document.getElementById('bookId').value = '';
-
-
 
     // ============================================
     // RESET TÊN SÁCH
     // ============================================
-
     document.getElementById('bookTitle').value = '';
-
-
 
     // ============================================
     // RESET TÁC GIẢ
     // ============================================
-
     document.getElementById('bookAuthor').value = '';
-
-
 
     // ============================================
     // RESET GIÁ
     // ============================================
-
     document.getElementById('bookPrice').value = '';
-
-
 
     // ============================================
     // RESET CATEGORY
     // ============================================
-
-    // Đưa select về option mặc định
     document.getElementById('bookCategorySelect').value = '';
-
-
 
     // ============================================
     // RESET MÔ TẢ
     // ============================================
-
     document.getElementById('bookDescription').value = '';
-
-
 
     // ============================================
     // XÓA ẢNH BÌA
     // ============================================
-
-    // Hàm custom dùng để:
-    // - xóa preview
-    // - reset base64 cover
     clearCoverImage();
-
-
 
     // ============================================
     // RESET GALLERY
     // ============================================
-
-    // Xóa toàn bộ ảnh gallery khỏi mảng
     galleryBase64List = [];
-
-
-
-    // Render lại preview gallery rỗng
     renderGalleryPreviews();
-
-
 
     // ============================================
     // RESET INPUT URL GALLERY
     // ============================================
-
-    // Xóa danh sách URL ảnh
     document.getElementById('bookGalleryUrls').value = '';
-
-
 
     // ============================================
     // XÓA FILE PDF ĐỌC THỬ
     // ============================================
-
     clearSamplePdf();
-
-
 
     // ============================================
     // XÓA FILE EBOOK CHÍNH
     // ============================================
-
-    // Hàm này dùng để:
-    // - xóa file ebook
-    // - reset preview/tên file
-    //
-    // Ghi chú:
-    // comment cho biết hàm đã được fix lỗi trước đó
     clearEbookPdf();
-
-
 
     // ============================================
     // RESET FILE ĐÃ CHỌN
     // ============================================
-
-    // selectedPdfFile:
-    // lưu file PDF đọc thử
     window.selectedPdfFile = null;
-
-
-
-    // selectedEbookFile:
-    // lưu file ebook chính
     window.selectedEbookFile = null;
+
+    // 👇👇👇 THÊM MỚI: Reset danh sách ảnh cần xóa 👇👇👇
+    window.imagesToDelete = [];
 }
 
 // ============================================
@@ -1048,7 +992,6 @@ function fileToBase64(file) {
 // LƯU SÁCH (THÊM / CẬP NHẬT)
 // ============================================
 
-// Hàm thêm hoặc cập nhật sách
 async function saveBook() {
 
     // ============================================
@@ -1154,6 +1097,16 @@ async function saveBook() {
 
 
     // ============================================
+    // 👇👇👇 THÊM MỚI: DANH SÁCH ẢNH CẦN XÓA 👇👇👇
+    // ============================================
+    if (window.imagesToDelete && window.imagesToDelete.length > 0) {
+        formData.append('imagesToDelete', JSON.stringify(window.imagesToDelete));
+        console.log('📋 Ảnh cần xóa:', window.imagesToDelete);
+    }
+
+
+
+    // ============================================
     // LẤY INPUT ẢNH BÌA
     // ============================================
 
@@ -1188,22 +1141,22 @@ async function saveBook() {
     // UPLOAD ẢNH GALLERY
     // ============================================
 
-const oldImagesToKeep = galleryBase64List
-    .filter(item => typeof item === 'object' && item.isOld === true)
-    .map(item => item.oldUrl);  // URL gốc từ server
+    const oldImagesToKeep = galleryBase64List
+        .filter(item => typeof item === 'object' && item.isOld === true)
+        .map(item => item.oldUrl);  // URL gốc từ server
 
-// 2. Gửi danh sách ảnh cũ cần giữ (để backend không xóa chúng)
-if (oldImagesToKeep.length > 0) {
-    formData.append('existingImages', JSON.stringify(oldImagesToKeep));
-}
-
-// 3. Upload ảnh mới (có file)
-galleryBase64List.forEach(item => {
-    // Chỉ upload ảnh mới có thuộc tính file
-    if (item && item.file) {
-        formData.append('images', item.file);
+    // 2. Gửi danh sách ảnh cũ cần giữ (để backend không xóa chúng)
+    if (oldImagesToKeep.length > 0) {
+        formData.append('existingImages', JSON.stringify(oldImagesToKeep));
     }
-});
+
+    // 3. Upload ảnh mới (có file)
+    galleryBase64List.forEach(item => {
+        // Chỉ upload ảnh mới có thuộc tính file
+        if (item && item.file) {
+            formData.append('images', item.file);
+        }
+    });
 
 
 
@@ -1308,6 +1261,11 @@ galleryBase64List.forEach(item => {
                     ? 'Cập nhật thành công!'
                     : 'Thêm sách thành công!'
             );
+
+
+
+            // 👇👇👇 THÊM MỚI: Reset danh sách ảnh cần xóa 👇👇👇
+            window.imagesToDelete = [];
 
 
 
@@ -1794,80 +1752,33 @@ async function removeGalleryImage(idx) {
     const item = galleryBase64List[idx];
     if (!item) return;
     
-    // Kiểm tra xem có phải ảnh cũ từ server không
     const isOldImage = typeof item === 'object' && item.isOld === true;
     const oldImageUrl = typeof item === 'object' ? item.oldUrl : null;
     
+    const result = await Swal.fire({
+        title: 'Xóa ảnh?',
+        text: isOldImage ? 'Ảnh sẽ bị xóa khi bạn lưu sách' : 'Xóa ảnh này khỏi danh sách',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+    });
+    
+    if (!result.isConfirmed) return;
+    
+    // LUÔN XÓA LOCAL - KHÔNG GỌI API
+    galleryBase64List.splice(idx, 1);
+    renderGalleryPreviews();
+    
     if (isOldImage && oldImageUrl) {
-        // ========================================
-        // XÓA ẢNH CŨ TRÊN SERVER
-        // ========================================
-        
-        const bookId = document.getElementById('bookId').value;
-        if (!bookId) {
-            // Nếu chưa có bookId (đang thêm mới), chỉ xóa local
-            galleryBase64List.splice(idx, 1);
-            renderGalleryPreviews();
-            showToast('Đã xóa ảnh khỏi danh sách', 'success');
-            return;
+        // Đánh dấu ảnh cần xóa khi lưu sách
+        if (!window.imagesToDelete) window.imagesToDelete = [];
+        if (!window.imagesToDelete.includes(oldImageUrl)) {
+            window.imagesToDelete.push(oldImageUrl);
         }
-        
-        // Hiển thị xác nhận xóa ảnh trên server
-        const result = await Swal.fire({
-            title: 'Xóa ảnh khỏi gallery?',
-            text: 'Ảnh này sẽ bị xóa vĩnh viễn khỏi server!',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#dc2626',
-            confirmButtonText: 'Xóa',
-            cancelButtonText: 'Hủy'
-        });
-        
-        if (!result.isConfirmed) return;
-        
-        try {
-            // Gọi API xóa ảnh gallery
-            const res = await apiFetch(
-                `${BOOKS_API}/${bookId}/gallery`,
-                {
-                    method: 'DELETE',
-                    body: JSON.stringify({ imageUrl: oldImageUrl })
-                }
-            );
-            
-            if (res.ok) {
-                // Xóa khỏi mảng local
-                galleryBase64List.splice(idx, 1);
-                renderGalleryPreviews();
-                showToast('Đã xóa ảnh khỏi gallery!', 'success');
-                
-                // ❌ XÓA DÒNG NÀY - KHÔNG RELOAD
-                // await loadBooks();
-                
-                // ✅ THAY BẰNG: Chỉ cập nhật lại thông tin sách trong allBooks
-                // (cập nhật lại galleryImages của sách hiện tại trong allBooks)
-                const currentBook = allBooks.find(b => b._id === bookId);
-                if (currentBook && currentBook.galleryImages) {
-                    currentBook.galleryImages = currentBook.galleryImages.filter(img => img !== oldImageUrl);
-                }
-            } else {
-                const error = await res.text();
-                showToast('Xóa thất bại: ' + error.substring(0, 100), 'error');
-            }
-        } catch (err) {
-            console.error('Lỗi xóa ảnh gallery:', err);
-            showToast('Lỗi kết nối!', 'error');
-        }
+        showToast('Đã đánh dấu xóa ảnh (sẽ xóa khi lưu sách)', 'success');
     } else {
-        // Xóa ảnh mới (chưa upload lên server)
-        galleryBase64List.splice(idx, 1);
-        renderGalleryPreviews();
-        
-        // Cập nhật input hidden
-        document.getElementById('bookGalleryUrls').value = JSON.stringify(
-            galleryBase64List.filter(item => typeof item === 'string' || !item.isOld)
-        );
-        
         showToast('Đã xóa ảnh khỏi danh sách', 'success');
     }
 }
