@@ -1777,7 +1777,6 @@ async function removeGalleryImage(idx) {
         if (!window.imagesToDelete.includes(oldImageUrl)) {
             window.imagesToDelete.push(oldImageUrl);
         }
-        showToast('Đã đánh dấu xóa ảnh (sẽ xóa khi lưu sách)', 'success');
     } else {
         showToast('Đã xóa ảnh khỏi danh sách', 'success');
     }
