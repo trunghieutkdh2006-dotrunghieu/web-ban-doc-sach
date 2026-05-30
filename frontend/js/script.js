@@ -106,6 +106,7 @@ function renderStars(rating) {
     const fullStars = Math.floor(numRating);
     const decimal = numRating - fullStars;
     let stars = '';
+    let extraStar = 0;
     
     for (let i = 0; i < fullStars; i++) {
         stars += '<span style="color: #f59e0b;">★</span>';
@@ -113,11 +114,13 @@ function renderStars(rating) {
     
     if (decimal >= 0.5) {
         stars += '<span style="color: #f59e0b;">★</span>';
+        extraStar = 1;
     } else if (decimal > 0 && decimal < 0.5) {
         stars += '<span style="color: #fbbf24;">★</span>';
+        extraStar = 1;
     }
     
-    const emptyCount = 5 - fullStars - (decimal >= 0.5 ? 1 : 0);
+    const emptyCount = 5 - fullStars - extraStar;
     for (let i = 0; i < emptyCount; i++) {
         stars += '<span style="color: #d1d5db;">☆</span>';
     }
@@ -432,6 +435,13 @@ async function openBookDetail(id) {
             // Ghi đè dữ liệu cũ bằng dữ liệu thật
             book.reviewCount = realCount;
             book.avgRating = parseFloat(realAvg.toFixed(1));
+            
+            // Đồng bộ lại vào booksCache để card ngoài cũng hiển thị đúng
+            const cachedBook = booksCache.find(b => b._id === id);
+            if (cachedBook) {
+                cachedBook.reviewCount = realCount;
+                cachedBook.avgRating = parseFloat(realAvg.toFixed(1));
+            }
             
             console.log(`📊 ${book.title}: ${realCount} đánh giá, ${realAvg.toFixed(1)} sao`);
         }
