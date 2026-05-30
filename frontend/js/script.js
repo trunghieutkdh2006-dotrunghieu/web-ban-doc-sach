@@ -1234,6 +1234,7 @@ async function saveUserProfile() {
     // XỬ LÝ UPLOAD AVATAR LÊN SERVER
     const avatarInput = document.getElementById('avatarFileInput');
     const avatarFile = avatarInput?.files?.[0];
+    let avatarUploadFailed = false;
     
     if (avatarFile) {
         Swal.fire({
@@ -1259,13 +1260,13 @@ async function saveUserProfile() {
             if (result.success) {
                 // Lưu URL từ server vào localStorage
                 userProfile.avatar = result.avatarUrl;
-                showToast('Cập nhật avatar thành công!', 'success');
                 console.log('✅ Avatar đã được lưu trên server:', result.avatarUrl);
             } else {
                 throw new Error(result.message);
             }
         } catch (err) {
             console.error('Upload avatar lỗi:', err);
+            avatarUploadFailed = true;
             showToast('Upload avatar thất bại, giữ ảnh cũ', 'error');
             const oldProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
             if (oldProfile.avatar) {
