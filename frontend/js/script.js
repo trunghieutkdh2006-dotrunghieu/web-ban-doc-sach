@@ -833,7 +833,7 @@ function renderReviewItem(review, index, bookId) {
   const isVerified = review.isVerifiedPurchase || false;
   const reviewId = review._id || review.id || `review_${index}`;
   
-  // ========== KIỂM TRA XEM REVIEW NÀY CÓ PHẢI CỦA USER HIỆN TẠI KHÔNG ==========
+  // Kiểm tra quyền sở hữu
   let isOwner = false;
   try {
     const storedUser = localStorage.getItem('user');
@@ -847,18 +847,24 @@ function renderReviewItem(review, index, bookId) {
     isOwner = false;
   }
   
-  // Kiểm tra xem review đã được chỉnh sửa chưa
+  // Kiểm tra đã chỉnh sửa chưa
   const hasBeenEdited = review.updatedAt && review.updatedAt !== review.createdAt;
   const editedBadge = hasBeenEdited ? '<span class="edited-badge"><i class="fas fa-pen"></i> Đã chỉnh sửa</span>' : '';
   
-  // Nút chỉnh sửa - CHỈ HIỆN NẾU LÀ CHỦ SỞ HỮU
-  const editButton = isOwner ? `
-    <button class="review-action-btn" onclick="openEditReviewModal('${reviewId}', ${review.rating || 0}, '${escapeHtml(review.comment || review.content || '').replace(/'/g, "\\'")}', '${bookId}', '${escapeHtml(currentReviewsBookTitle || '').replace(/'/g, "\\'")}')">
-      <i class="fas fa-edit"></i> Chỉnh sửa
+  // Nút chỉnh sửa
+const editButton = isOwner ? `
+  <button class="review-action-btn" onclick="openEditReviewModal('${reviewId}', ${review.rating || 0}, '${escapeHtml(review.comment || review.content || '').replace(/'/g, "\\'")}', '${bookId}', '${escapeHtml(currentReviewsBookTitle || '').replace(/'/g, "\\'")}', '${review.createdAt}')">
+    <i class="fas fa-edit"></i> Chỉnh sửa
+  </button>
+` : '';
+  
+  // ========== THÊM NÚT XÓA ==========
+  const deleteButton = isOwner ? `
+    <button class="review-action-btn delete-review-btn" onclick="deleteReviewById('${reviewId}', '${bookId}')">
+      <i class="fas fa-trash-alt"></i> Xóa
     </button>
   ` : '';
   
-  // Kiểm tra user có đăng nhập để hiện nút trả lời
   const isLoggedIn = localStorage.getItem('user') ? true : false;
   
   return `
@@ -888,6 +894,7 @@ function renderReviewItem(review, index, bookId) {
             <i class="far fa-thumbs-up"></i> Hữu ích (${review.likes || review.helpful || 0})
           </button>
           ${editButton}
+          ${deleteButton}
           ${isLoggedIn ? `<button class="review-action-btn" onclick="replyToReview('${reviewId}', '${escapeHtml(userName).replace(/'/g, "\\'")}')">
             <i class="far fa-comment"></i> Trả lời
           </button>` : ''}
@@ -2150,3 +2157,313 @@ async function loadAvatarFromServer() {
         console.error('Lỗi load avatar từ server:', err);
     }
 }
+// ==================== CHỈNH SỬA ĐÁNH GIÁ ====================
+let currentEditReviewId = null;
+let currentEditBookId = null;
+let currentEditBookTitle = '';
+
+function openEditReviewModal(reviewId, currentRating, currentComment, bookId, bookTitle, createdAt) {
+    console.log('📝 openEditReviewModal được gọi', { reviewId, currentRating, currentComment, bookId, bookTitle });
+    
+    // Kiểm tra đăng nhập
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+        showToast('Vui lòng đăng nhập để chỉnh sửa đánh giá!', 'warning');
+        toggleAuth(true);
+        return;
+    }
+    
+    // ========== KIỂM TRA THỜI GIAN (30 ngày) ==========
+    const MAX_EDIT_DAYS = 30;
+    const reviewCreatedDate = new Date(createdAt);
+    const now = new Date();
+    const diffDays = Math.floor((now - reviewCreatedDate) / (1000 * 60 * 60 * 24));
+    
+    if (diffDays > MAX_EDIT_DAYS) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Không thể chỉnh sửa',
+            html: `Đánh giá này đã được tạo <strong>${diffDays} ngày trước</strong>.<br>Chỉ có thể chỉnh sửa trong vòng ${MAX_EDIT_DAYS} ngày kể từ khi tạo.`,
+            confirmButtonColor: '#1D3557'
+        });
+        return;
+    }
+    
+    // Hiển thị cảnh báo nếu sắp hết hạn
+    if (diffDays > MAX_EDIT_DAYS - 5) {
+        showToast(`⚠️ Còn ${MAX_EDIT_DAYS - diffDays} ngày để chỉnh sửa đánh giá này!`, 'warning');
+    }
+    
+    // Lưu thông tin
+    currentEditReviewId = reviewId;
+    currentEditBookId = bookId;
+    currentEditBookTitle = bookTitle;
+    
+    // Đổ dữ liệu vào modal
+    const titleEl = document.getElementById('editReviewBookTitle');
+    const ratingEl = document.getElementById('editReviewRating');
+    const commentEl = document.getElementById('editReviewComment');
+    
+    if (titleEl) titleEl.innerHTML = `<strong>${escapeHtml(bookTitle)}</strong>`;
+    if (ratingEl) ratingEl.value = currentRating;
+    if (commentEl) commentEl.value = currentComment;
+    
+    // Thêm thông tin thời gian còn lại
+    const timeInfo = document.getElementById('editTimeInfo');
+    if (timeInfo) {
+        timeInfo.innerHTML = `<small style="color:#e53e3e;">⏰ Còn ${MAX_EDIT_DAYS - diffDays} ngày để chỉnh sửa</small>`;
+    }
+    
+    // Cập nhật giao diện sao
+    const stars = document.querySelectorAll('#editStarRating .star');
+    stars.forEach(star => {
+        const val = parseInt(star.getAttribute('data-value'));
+        star.style.color = val <= currentRating ? '#fbbf24' : '#cbd5e1';
+        star.classList.toggle('selected', val <= currentRating);
+        
+        star.onclick = () => {
+            const value = parseInt(star.getAttribute('data-value'));
+            const ratingInput = document.getElementById('editReviewRating');
+            if (ratingInput) ratingInput.value = value;
+            stars.forEach(s => {
+                const sv = parseInt(s.getAttribute('data-value'));
+                s.style.color = sv <= value ? '#fbbf24' : '#cbd5e1';
+                s.classList.toggle('selected', sv <= value);
+            });
+        };
+    });
+    
+    // Hiển thị modal
+    const modal = document.getElementById('editReviewModal');
+    if (modal) {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    } else {
+        console.error('❌ KHÔNG TÌM THẤY modal editReviewModal');
+        showToast('Lỗi: Thiếu modal chỉnh sửa', 'error');
+    }
+}
+
+function closeEditReviewModal() {
+    const modal = document.getElementById('editReviewModal');
+    if (modal) modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    
+    // Reset biến
+    currentEditReviewId = null;
+    currentEditBookId = null;
+    currentEditBookTitle = null;
+}
+
+async function submitEditReview() {
+    // Lấy dữ liệu
+    const rating = parseInt(document.getElementById('editReviewRating')?.value || 0);
+    const comment = document.getElementById('editReviewComment')?.value.trim() || '';
+    const reviewId = currentEditReviewId;
+    const bookId = currentEditBookId;
+    const bookTitle = currentEditBookTitle;
+    
+    // Validate
+    if (!rating || rating < 1 || rating > 5) {
+        showToast('Vui lòng chọn số sao (1-5 sao)!', 'warning');
+        return;
+    }
+    
+    if (!comment || comment.length < 5) {
+        showToast('Nhận xét phải có ít nhất 5 ký tự!', 'warning');
+        return;
+    }
+    
+    // Lấy user và token
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+        showToast('Vui lòng đăng nhập lại!', 'error');
+        toggleAuth(true);
+        return;
+    }
+    
+    const userData = JSON.parse(storedUser);
+    if (!userData.token) {
+        showToast('Vui lòng đăng nhập lại!', 'error');
+        toggleAuth(true);
+        return;
+    }
+    
+    // Hiệu ứng loading
+    const submitBtn = document.querySelector('#editReviewModal .btn-submit-review');
+    const originalText = submitBtn?.innerHTML || 'Cập nhật';
+    if (submitBtn) {
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang cập nhật...';
+        submitBtn.disabled = true;
+    }
+    
+    try {
+        const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${userData.token}`,
+                'ngrok-skip-browser-warning': '69420'
+            },
+            body: JSON.stringify({ rating: rating, comment: comment })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+            showToast('✅ Đã cập nhật đánh giá thành công!', 'success');
+            closeEditReviewModal();
+            
+            // Refresh lại dữ liệu
+            await loadBooks();
+            if (bookId) {
+                await viewReviews(bookId, bookTitle);
+            }
+            applyFilters();
+        } else {
+            showToast(data.message || 'Cập nhật thất bại!', 'error');
+        }
+    } catch (err) {
+        console.error('Lỗi submitEditReview:', err);
+        showToast('Lỗi kết nối server!', 'error');
+    } finally {
+        if (submitBtn) {
+            submitBtn.innerHTML = originalText;
+            submitBtn.disabled = false;
+        }
+    }
+}
+
+// Export ra window để có thể gọi từ HTML onclick
+window.openEditReviewModal = openEditReviewModal;
+window.closeEditReviewModal = closeEditReviewModal;
+window.submitEditReview = submitEditReview;
+// ==================== XÓA ĐÁNH GIÁ ====================
+async function deleteReviewById(reviewId, bookId) {
+  const storedUser = localStorage.getItem('user');
+  if (!storedUser) {
+    showToast('Vui lòng đăng nhập để xóa đánh giá!', 'warning');
+    toggleAuth(true);
+    return;
+  }
+  
+  const result = await Swal.fire({
+    title: 'Xóa đánh giá?',
+    text: 'Bạn có chắc chắn muốn xóa đánh giá này? Hành động này không thể hoàn tác.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#dc2626',
+    confirmButtonText: 'Xóa',
+    cancelButtonText: 'Hủy'
+  });
+  
+  if (!result.isConfirmed) return;
+  
+  const userData = JSON.parse(storedUser);
+  
+  try {
+    const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${userData.token}`,
+        'ngrok-skip-browser-warning': '69420'
+      }
+    });
+    
+    if (response.ok) {
+      showToast('✅ Đã xóa đánh giá thành công!', 'success');
+      
+      // Refresh lại dữ liệu
+      await loadBooks();
+      if (bookId) {
+        await viewReviews(bookId, currentReviewsBookTitle);
+      }
+      applyFilters();
+    } else {
+      const data = await response.json();
+      showToast(data.message || 'Xóa thất bại!', 'error');
+    }
+  } catch (err) {
+    console.error('Lỗi xóa review:', err);
+    showToast('Lỗi kết nối server!', 'error');
+  }
+}
+
+// Export ra window
+window.deleteReviewById = deleteReviewById;
+// ==================== XEM LỊCH SỬ CHỈNH SỬA ====================
+async function viewEditHistory(reviewId) {
+    const storedUser = localStorage.getItem('user');
+    if (!storedUser) {
+        showToast('Vui lòng đăng nhập!', 'warning');
+        return;
+    }
+    
+    const userData = JSON.parse(storedUser);
+    
+    try {
+        const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}/history`, {
+            headers: {
+                'Authorization': `Bearer ${userData.token}`,
+                'ngrok-skip-browser-warning': '69420'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (!data.success || !data.history.length) {
+            Swal.fire({
+                icon: 'info',
+                title: 'Không có lịch sử',
+                text: 'Đánh giá này chưa được chỉnh sửa lần nào.'
+            });
+            return;
+        }
+        
+        let historyHtml = '<div style="max-height: 400px; overflow-y: auto;">';
+        
+        data.history.forEach((item, index) => {
+            const editDate = new Date(item.editedAt).toLocaleString('vi-VN');
+            historyHtml += `
+                <div style="border-bottom: 1px solid #e2e8f0; padding: 12px; margin-bottom: 8px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <strong>✏️ Lần ${index + 1}</strong>
+                        <small style="color: #64748b;">📅 ${editDate}</small>
+                    </div>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <div>
+                            <span style="color: #64748b;">⭐ Cũ:</span>
+                            <span>${'★'.repeat(item.oldRating)}${'☆'.repeat(5 - item.oldRating)}</span>
+                            <span style="margin-left: 12px; color: #64748b;">📝 Mới:</span>
+                            <span>${'★'.repeat(item.newRating)}${'☆'.repeat(5 - item.newRating)}</span>
+                        </div>
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <div style="color: #64748b; font-size: 12px;">Nhận xét cũ:</div>
+                        <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; font-size: 13px;">"${escapeHtml(item.oldComment)}"</div>
+                    </div>
+                    <div style="margin-top: 8px;">
+                        <div style="color: #64748b; font-size: 12px;">Nhận xét mới:</div>
+                        <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; font-size: 13px;">"${escapeHtml(item.newComment)}"</div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        historyHtml += '</div>';
+        
+        Swal.fire({
+            title: '📜 Lịch sử chỉnh sửa',
+            html: historyHtml,
+            width: '700px',
+            confirmButtonColor: '#1D3557'
+        });
+        
+    } catch (err) {
+        console.error('Lỗi lấy lịch sử:', err);
+        showToast('Lỗi tải lịch sử chỉnh sửa!', 'error');
+    }
+}
+
+window.viewEditHistory = viewEditHistory;

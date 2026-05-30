@@ -1718,3 +1718,100 @@ body.dark-mode .settings-btn-cancel {
 body.dark-mode .settings-btn-cancel:hover {
     background: #475569;
 }
+
+/* ============================================================
+   BADGE CHO REVIEW ĐÃ CHỈNH SỬA
+   ============================================================ */
+
+.edited-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #e2e8f0;
+    color: #64748b;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 10px;
+    letter-spacing: 0.3px;
+}
+
+.edited-badge i {
+    font-size: 9px;
+    color: #64748b;
+}
+
+/* Hover effect */
+.review-item:hover .edited-badge {
+    background: #cbd5e1;
+    color: #475569;
+}
+
+.review-item:hover .edited-badge i {
+    color: #475569;
+}
+
+/* ============================================================
+   DARK MODE - BADGE ĐÃ CHỈNH SỬA
+   ============================================================ */
+
+body.dark-mode .edited-badge {
+    background: #334155;
+    color: #94a3b8;
+}
+
+body.dark-mode .edited-badge i {
+    color: #94a3b8;
+}
+
+body.dark-mode .review-item:hover .edited-badge {
+    background: #475569;
+    color: #cbd5e1;
+}
+
+body.dark-mode .review-item:hover .edited-badge i {
+    color: #cbd5e1;
+}
+
+/* ============================================================
+   NÚT CHỈNH SỬA REVIEW
+   ============================================================ */
+
+.review-action-btn.edit-review-btn {
+    background: rgba(29, 53, 87, 0.08);
+    color: #1D3557;
+}
+
+.review-action-btn.edit-review-btn:hover {
+    background: rgba(29, 53, 87, 0.15);
+    transform: translateY(-1px);
+}
+
+body.dark-mode .review-action-btn.edit-review-btn {
+    background: rgba(69, 123, 157, 0.2);
+    color: #93c5fd;
+}
+
+body.dark-mode .review-action-btn.edit-review-btn:hover {
+    background: rgba(69, 123, 157, 0.35);
+}
+
+/* Nút xóa review */
+.delete-review-btn {
+    color: #dc2626 !important;
+}
+
+.delete-review-btn:hover {
+    background: #fee2e2 !important;
+    color: #dc2626 !important;
+}
+
+body.dark-mode .delete-review-btn {
+    color: #f87171 !important;
+}
+
+body.dark-mode .delete-review-btn:hover {
+    background: #3b0a0a !important;
+    color: #f87171 !important;
+}
