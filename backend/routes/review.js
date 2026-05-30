@@ -81,7 +81,7 @@ router.get('/book/:bookId', async (req, res) => {
     }
 });
 
-// ==================== CHỈNH SỬA ĐÁNH GIÁ (THÊM MỚI) ====================
+// ==================== CHỈNH SỬA ĐÁNH GIÁ ====================
 router.put('/:reviewId', auth, async (req, res) => {
     try {
         const { rating, comment } = req.body;
@@ -243,6 +243,153 @@ router.get('/:reviewId/history', auth, async (req, res) => {
 
     } catch (error) {
         console.error('Lỗi lấy lịch sử:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ==================== LIKE / UNLIKE REVIEW ====================
+router.post('/:reviewId/like', auth, async (req, res) => {
+    try {
+        const reviewId = req.params.reviewId;
+        const userId = req.user.id;
+        
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy đánh giá' });
+        }
+        
+        // Khởi tạo mảng likedBy nếu chưa có
+        if (!review.likedBy) review.likedBy = [];
+        if (typeof review.likes !== 'number') review.likes = 0;
+        
+        // Kiểm tra đã like chưa
+        const alreadyLiked = review.likedBy.some(id => id.toString() === userId);
+        
+        if (alreadyLiked) {
+            // Unlike: giảm likes và xóa userId khỏi mảng
+            review.likes = Math.max(0, review.likes - 1);
+            review.likedBy = review.likedBy.filter(id => id.toString() !== userId);
+        } else {
+            // Like: tăng likes và thêm userId vào mảng
+            review.likes += 1;
+            review.likedBy.push(userId);
+        }
+        
+        await review.save();
+        
+        res.json({ 
+            success: true, 
+            likes: review.likes,
+            liked: !alreadyLiked
+        });
+        
+    } catch (error) {
+        console.error('Lỗi like review:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ==================== THÊM BÌNH LUẬN VÀO REVIEW ====================
+router.post('/:reviewId/comments', auth, async (req, res) => {
+    try {
+        const reviewId = req.params.reviewId;
+        const userId = req.user.id;
+        const { text } = req.body;
+        
+        if (!text || text.trim().length === 0) {
+            return res.status(400).json({ success: false, message: 'Vui lòng nhập nội dung bình luận' });
+        }
+        
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy đánh giá' });
+        }
+        
+        // Khởi tạo mảng comments nếu chưa có
+        if (!review.comments) review.comments = [];
+        
+        // Lấy thông tin user
+        const User = require('../models/User');
+        const user = await User.findById(userId);
+        
+        const newComment = {
+            userId: userId,
+            userName: user?.username || 'Người dùng',
+            text: text.trim(),
+            createdAt: new Date()
+        };
+        
+        review.comments.push(newComment);
+        await review.save();
+        
+        res.status(201).json({ 
+            success: true, 
+            comment: newComment,
+            totalComments: review.comments.length
+        });
+        
+    } catch (error) {
+        console.error('Lỗi thêm bình luận:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ==================== LẤY DANH SÁCH BÌNH LUẬN ====================
+router.get('/:reviewId/comments', async (req, res) => {
+    try {
+        const reviewId = req.params.reviewId;
+        
+        const review = await Review.findById(reviewId).select('comments');
+        if (!review) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy đánh giá' });
+        }
+        
+        res.json({ 
+            success: true, 
+            comments: review.comments || [],
+            total: review.comments?.length || 0
+        });
+        
+    } catch (error) {
+        console.error('Lỗi lấy bình luận:', error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ==================== XÓA BÌNH LUẬN ====================
+router.delete('/:reviewId/comments/:commentIndex', auth, async (req, res) => {
+    try {
+        const reviewId = req.params.reviewId;
+        const commentIndex = parseInt(req.params.commentIndex);
+        const userId = req.user.id;
+        
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy đánh giá' });
+        }
+        
+        if (!review.comments || commentIndex >= review.comments.length) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy bình luận' });
+        }
+        
+        const comment = review.comments[commentIndex];
+        
+        // Kiểm tra quyền: chỉ chủ comment hoặc admin mới được xóa
+        if (comment.userId.toString() !== userId && req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Không có quyền xóa bình luận này' });
+        }
+        
+        review.comments.splice(commentIndex, 1);
+        await review.save();
+        
+        res.json({ 
+            success: true, 
+            message: 'Đã xóa bình luận',
+            totalComments: review.comments.length
+        });
+        
+    } catch (error) {
+        console.error('Lỗi xóa bình luận:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });

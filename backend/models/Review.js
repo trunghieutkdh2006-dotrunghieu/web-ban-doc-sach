@@ -6,7 +6,18 @@ const ReviewSchema = new mongoose.Schema({
     rating: { type: Number, min: 1, max: 5, required: true },
     comment: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
+    
+    // ========== THÊM MỚI: LIKES & COMMENTS ==========
+    likes: { type: Number, default: 0 },
+    likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    comments: [{
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        userName: { type: String },
+        text: { type: String, required: true },
+        createdAt: { type: Date, default: Date.now }
+    }]
+    // ================================================
 });
 
 // ========== PHƯƠNG THỨC CẬP NHẬT RATING CHO SÁCH ==========
