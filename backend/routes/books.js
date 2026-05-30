@@ -149,15 +149,38 @@ router.put(
                 updates.samplePdf = `/uploads/pdf/${sampleFile.filename}`;
             }
             
+            // Xóa ảnh gallery được đánh dấu xóa từ frontend
+            let imagesToDelete = [];
+            if (req.body.imagesToDelete) {
+                try {
+                    imagesToDelete = JSON.parse(req.body.imagesToDelete);
+                    if (!Array.isArray(imagesToDelete)) imagesToDelete = [];
+                } catch (e) { imagesToDelete = []; }
+            }
+            // Xóa file vật lý trên disk
+            imagesToDelete.forEach(imgUrl => {
+                const filePath = path.join(__dirname, "..", imgUrl.replace(/^\/+/, ""));
+                if (fs.existsSync(filePath)) {
+                    try { fs.unlinkSync(filePath); } catch (e) { console.error("Lỗi xóa file:", e); }
+                }
+            });
+
             // Merge ảnh cũ giữ lại + ảnh mới upload
+            // Frontend gửi field "existingImages" (danh sách URL ảnh cũ được giữ lại)
             const newImageUrls = imageFiles.map(f => `/uploads/images/${f.filename}`);
             let keptImages = [];
-            if (req.body.existingGalleryImages !== undefined) {
+            if (req.body.existingImages !== undefined) {
                 try {
-                    keptImages = JSON.parse(req.body.existingGalleryImages);
+                    keptImages = JSON.parse(req.body.existingImages);
                     if (!Array.isArray(keptImages)) keptImages = [];
                 } catch (e) { keptImages = []; }
                 updates.galleryImages = [...keptImages, ...newImageUrls];
+            } else if (imagesToDelete.length > 0) {
+                // Không có existingImages nhưng có ảnh cần xóa: lọc từ DB
+                const existingBook = await Book.findById(req.params.id).select("galleryImages");
+                const existingImgs = existingBook?.galleryImages || [];
+                const filtered = existingImgs.filter(img => !imagesToDelete.includes(img));
+                updates.galleryImages = [...filtered, ...newImageUrls];
             } else if (newImageUrls.length > 0) {
                 const existingBook = await Book.findById(req.params.id).select("galleryImages");
                 const existingImgs = existingBook?.galleryImages || [];
