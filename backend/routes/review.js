@@ -67,8 +67,10 @@ router.get('/book/:bookId', async (req, res) => {
             count: reviews.length,
             reviews: reviews,
             bookInfo: {
-                avgRating: book?.avgRating || 0,
-                reviewCount: book?.reviewCount || 0
+                avgRating: reviews.length > 0 
+                    ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length 
+                    : 0,
+                reviewCount: reviews.length
             }
         });
         

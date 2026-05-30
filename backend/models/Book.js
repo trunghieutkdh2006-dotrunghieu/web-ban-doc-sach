@@ -11,6 +11,8 @@ const BookSchema = new mongoose.Schema({
     galleryImages: { type: [String], default: [] },
     samplePdf: { type: String },
     pdfFile: { type: String },
+    reviewCount: { type: Number, default: 0 },
+    avgRating: { type: Number, default: 0 },
     createdAt: { type: Date, default: Date.now }
 });
 
