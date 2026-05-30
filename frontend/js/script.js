@@ -2607,14 +2607,37 @@ async function deleteReviewById(reviewId, bookId) {
 // Export ra window
 window.deleteReviewById = deleteReviewById;
 // ==================== XEM LỊCH SỬ CHỈNH SỬA ====================
-async function viewEditHistory(reviewId) {
+// ==================== XEM LỊCH SỬ CHỈNH SỬA ====================
+async function viewEditHistory(reviewId, event) {
+    // Ngăn chặn sự kiện lan truyền
+    if (event) {
+        event.stopPropagation();
+        event.preventDefault();
+    }
+    
     const storedUser = localStorage.getItem('user');
     if (!storedUser) {
         showToast('Vui lòng đăng nhập!', 'warning');
         return;
     }
     
+    // ========== ĐÓNG MODAL REVIEW ĐANG MỞ ==========
+    const reviewsModal = document.getElementById('reviewsListModal');
+    if (reviewsModal && reviewsModal.style.display === 'flex') {
+        reviewsModal.style.display = 'none';
+        reviewsModal.removeAttribute('aria-hidden');
+        document.body.style.overflow = 'auto';
+    }
+    // ================================================
+    
     const userData = JSON.parse(storedUser);
+    
+    // Hiệu ứng loading
+    Swal.fire({
+        title: 'Đang tải lịch sử...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading()
+    });
     
     try {
         const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}/history`, {
@@ -2625,41 +2648,64 @@ async function viewEditHistory(reviewId) {
         });
         
         const data = await response.json();
+        Swal.close();
         
-        if (!data.success || !data.history.length) {
+        if (!data.success || !data.history || data.history.length === 0) {
             Swal.fire({
                 icon: 'info',
                 title: 'Không có lịch sử',
-                text: 'Đánh giá này chưa được chỉnh sửa lần nào.'
+                text: 'Đánh giá này chưa được chỉnh sửa lần nào.',
+                confirmButtonColor: '#1D3557'
             });
             return;
         }
         
-        let historyHtml = '<div style="max-height: 400px; overflow-y: auto;">';
+        // Tạo HTML hiển thị lịch sử
+        let historyHtml = `
+            <div style="max-height: 500px; overflow-y: auto; padding: 5px;">
+                <div style="text-align: center; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0;">
+                    <span style="background: #1D3557; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px;">
+                        📜 Tổng số lần chỉnh sửa: ${data.history.length}
+                    </span>
+                </div>
+        `;
         
         data.history.forEach((item, index) => {
             const editDate = new Date(item.editedAt).toLocaleString('vi-VN');
+            const oldRatingStars = '★'.repeat(item.oldRating) + '☆'.repeat(5 - item.oldRating);
+            const newRatingStars = '★'.repeat(item.newRating) + '☆'.repeat(5 - item.newRating);
+            
             historyHtml += `
-                <div style="border-bottom: 1px solid #e2e8f0; padding: 12px; margin-bottom: 8px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <strong>✏️ Lần ${index + 1}</strong>
-                        <small style="color: #64748b;">📅 ${editDate}</small>
+                <div style="border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; margin-bottom: 12px; background: #f8fafc;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                        <span style="background: #1D3557; color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px;">
+                            ✏️ Lần #${index + 1}
+                        </span>
+                        <span style="color: #64748b; font-size: 12px;">
+                            <i class="far fa-clock"></i> ${editDate}
+                        </span>
                     </div>
-                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-bottom: 15px;">
                         <div>
-                            <span style="color: #64748b;">⭐ Cũ:</span>
-                            <span>${'★'.repeat(item.oldRating)}${'☆'.repeat(5 - item.oldRating)}</span>
-                            <span style="margin-left: 12px; color: #64748b;">📝 Mới:</span>
-                            <span>${'★'.repeat(item.newRating)}${'☆'.repeat(5 - item.newRating)}</span>
+                            <div style="color: #64748b; font-size: 11px; margin-bottom: 4px;">⭐ Đánh giá cũ:</div>
+                            <div style="font-size: 16px; color: #f59e0b;">${oldRatingStars}</div>
+                        </div>
+                        <div>
+                            <div style="color: #64748b; font-size: 11px; margin-bottom: 4px;">⭐ Đánh giá mới:</div>
+                            <div style="font-size: 16px; color: #f59e0b;">${newRatingStars}</div>
                         </div>
                     </div>
-                    <div style="margin-top: 8px;">
-                        <div style="color: #64748b; font-size: 12px;">Nhận xét cũ:</div>
-                        <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; font-size: 13px;">"${escapeHtml(item.oldComment)}"</div>
+                    <div style="margin-bottom: 10px;">
+                        <div style="color: #64748b; font-size: 11px; margin-bottom: 4px;">📝 Nhận xét cũ:</div>
+                        <div style="background: white; padding: 10px; border-radius: 8px; border-left: 3px solid #dc2626; font-size: 13px;">
+                            "${escapeHtml(item.oldComment)}"
+                        </div>
                     </div>
-                    <div style="margin-top: 8px;">
-                        <div style="color: #64748b; font-size: 12px;">Nhận xét mới:</div>
-                        <div style="background: #f1f5f9; padding: 8px; border-radius: 8px; font-size: 13px;">"${escapeHtml(item.newComment)}"</div>
+                    <div>
+                        <div style="color: #64748b; font-size: 11px; margin-bottom: 4px;">📝 Nhận xét mới:</div>
+                        <div style="background: white; padding: 10px; border-radius: 8px; border-left: 3px solid #10b981; font-size: 13px;">
+                            "${escapeHtml(item.newComment)}"
+                        </div>
                     </div>
                 </div>
             `;
@@ -2667,14 +2713,31 @@ async function viewEditHistory(reviewId) {
         
         historyHtml += '</div>';
         
+        // Đảm bảo modal mới không bị lỗi aria-hidden
         Swal.fire({
             title: '📜 Lịch sử chỉnh sửa',
             html: historyHtml,
-            width: '700px',
-            confirmButtonColor: '#1D3557'
+            width: '750px',
+            confirmButtonColor: '#1D3557',
+            confirmButtonText: 'Đóng',
+            showCloseButton: true,
+            backdrop: true,
+            didOpen: () => {
+                // Đảm bảo modal hiển thị trên cùng và không bị lỗi
+                const swalContainer = document.querySelector('.swal2-container');
+                if (swalContainer) {
+                    swalContainer.style.zIndex = '100000';
+                    swalContainer.removeAttribute('aria-hidden');
+                }
+            },
+            willClose: () => {
+                // Khi đóng modal lịch sử, không tự động mở lại modal review
+                // Để tránh lỗi focus
+            }
         });
         
     } catch (err) {
+        Swal.close();
         console.error('Lỗi lấy lịch sử:', err);
         showToast('Lỗi tải lịch sử chỉnh sửa!', 'error');
     }
