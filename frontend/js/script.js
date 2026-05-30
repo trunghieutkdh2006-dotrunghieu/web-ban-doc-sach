@@ -1062,12 +1062,10 @@ async function likeReview(reviewId, buttonElement) {
                     icon.classList.remove('far');
                     icon.classList.add('fas');
                     buttonElement.classList.add('liked');
-                    showToast('Cảm ơn bạn đã đánh giá!', 'success');
                 } else {
                     icon.classList.remove('fas');
                     icon.classList.add('far');
                     buttonElement.classList.remove('liked');
-                    showToast('Đã bỏ đánh giá hữu ích!', 'info');
                 }
             }
         } else {
