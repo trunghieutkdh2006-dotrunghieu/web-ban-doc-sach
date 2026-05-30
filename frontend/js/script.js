@@ -959,13 +959,6 @@ function renderReviewItem(review, index, bookId) {
         </button>
     ` : '';
     
-    // Nút lịch sử
-    const historyButton = hasBeenEdited && isOwner ? `
-        <button class="review-action-btn history-btn" onclick="viewEditHistory('${reviewId}')">
-            <i class="fas fa-history"></i> Lịch sử
-        </button>
-    ` : '';
-    
     const isLoggedIn = localStorage.getItem('user') ? true : false;
     
     return `
@@ -997,7 +990,6 @@ function renderReviewItem(review, index, bookId) {
                     </button>
                     ${editButton}
                     ${deleteButton}
-                    ${historyButton}
                     <button class="review-action-btn comment-btn" onclick="toggleCommentSection('${reviewId}')">
                         <i class="far fa-comment"></i> 
                         <span class="comment-count">${review.comments?.length || 0}</span> Bình luận
