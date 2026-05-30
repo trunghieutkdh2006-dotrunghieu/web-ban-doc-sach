@@ -416,39 +416,59 @@ async function openBookDetail(id) {
     if (!book) return;
 
     // ========== THÊM: LẤY REVIEW TRỰC TIẾP TỪ API REVIEWS ==========
-    try {
-        const reviewRes = await fetch(`${BASE_URL}/api/reviews/book/${id}`, {
-            headers: { 'ngrok-skip-browser-warning': '69420' }
-        });
-        if (reviewRes.ok) {
-            const reviewData = await reviewRes.json();
-            let reviews = [];
-            if (Array.isArray(reviewData)) reviews = reviewData;
-            else if (reviewData.reviews) reviews = reviewData.reviews;
-            else if (reviewData.data) reviews = reviewData.data;
-            
-            const realCount = reviews.length;
-            const realAvg = realCount > 0 
-                ? reviews.reduce((sum, r) => sum + (r.rating || 0), 0) / realCount 
-                : 0;
-            
-            // Ghi đè dữ liệu cũ bằng dữ liệu thật
-            book.reviewCount = realCount;
-            book.avgRating = parseFloat(realAvg.toFixed(1));
-            
-            // Đồng bộ lại vào booksCache để card ngoài cũng hiển thị đúng
-            const cachedBook = booksCache.find(b => b._id === id);
-            if (cachedBook) {
-                cachedBook.reviewCount = realCount;
-                cachedBook.avgRating = parseFloat(realAvg.toFixed(1));
-            }
-            
-            console.log(`📊 ${book.title}: ${realCount} đánh giá, ${realAvg.toFixed(1)} sao`);
-        }
-    } catch (err) {
-        console.warn('Không thể lấy review chi tiết:', err);
+    // ========== LẤY REVIEW TRỰC TIẾP TỪ API REVIEWS ==========
+try {
+    const reviewRes = await fetch(`${BASE_URL}/api/reviews/book/${id}`, {
+        headers: { 'ngrok-skip-browser-warning': '69420' }
+    });
+    if (reviewRes.ok) {
+        const reviewData = await reviewRes.json();
+        let reviews = [];
+        if (Array.isArray(reviewData)) reviews = reviewData;
+        else if (reviewData.reviews) reviews = reviewData.reviews;
+        else if (reviewData.data) reviews = reviewData.data;
+        
+        const realCount = reviews.length;
+        const realAvg = realCount > 0 
+            ? reviews.reduce((sum, r) => sum + r.rating, 0) / realCount 
+            : 0;
+        
+        // GHI ĐÈ dữ liệu từ API reviews (chính xác hơn)
+        book.reviewCount = realCount;
+        book.avgRating = parseFloat(realAvg.toFixed(1));
+        
+        console.log(`📊 ${book.title}: ${realCount} đánh giá, ${realAvg.toFixed(1)} sao`);
     }
-    // ===============================================================
+} catch (err) {
+    console.warn('Không thể lấy review chi tiết:', err);
+}
+// ================================================================// ========== LẤY REVIEW TRỰC TIẾP TỪ API REVIEWS ==========
+try {
+    const reviewRes = await fetch(`${BASE_URL}/api/reviews/book/${id}`, {
+        headers: { 'ngrok-skip-browser-warning': '69420' }
+    });
+    if (reviewRes.ok) {
+        const reviewData = await reviewRes.json();
+        let reviews = [];
+        if (Array.isArray(reviewData)) reviews = reviewData;
+        else if (reviewData.reviews) reviews = reviewData.reviews;
+        else if (reviewData.data) reviews = reviewData.data;
+        
+        const realCount = reviews.length;
+        const realAvg = realCount > 0 
+            ? reviews.reduce((sum, r) => sum + r.rating, 0) / realCount 
+            : 0;
+        
+        // GHI ĐÈ dữ liệu từ API reviews (chính xác hơn)
+        book.reviewCount = realCount;
+        book.avgRating = parseFloat(realAvg.toFixed(1));
+        
+        console.log(`📊 ${book.title}: ${realCount} đánh giá, ${realAvg.toFixed(1)} sao`);
+    }
+} catch (err) {
+    console.warn('Không thể lấy review chi tiết:', err);
+}
+// ================================================================
 
     const coverImg = getBookImage(book);
     const gallery = Array.isArray(book.galleryImages) ? book.galleryImages.filter(Boolean) : [];

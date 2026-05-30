@@ -94,7 +94,9 @@ router.post(
                 image: imageUrl,
                 samplePdf: samplePdfUrl,
                 pdfFile: pdfFile || "",
-                galleryImages: galleryUrls
+                galleryImages: galleryUrls,
+                reviewCount: 0,
+                avgRating: 0
             });
 
             await newBook.save();
@@ -110,7 +112,7 @@ router.post(
     }
 );
 
-// UPDATE BOOK
+// UPDATE BOOK - ĐÃ SỬA ĐỂ CẬP NHẬT reviewCount VÀ avgRating
 router.put(
     "/:id",
     auth, admin,
@@ -122,13 +124,19 @@ router.put(
     async (req, res) => {
         try {
             const updates = {};
-            const { title, author, price, description, category } = req.body;
+            const { title, author, price, description, category, reviewCount, avgRating } = req.body;
 
+            // Cập nhật các trường cơ bản
             if (title !== undefined) updates.title = title;
             if (author !== undefined) updates.author = author;
             if (price !== undefined && price !== "") updates.price = Number(price);
             if (description !== undefined) updates.description = description;
             if (category !== undefined) updates.category = String(category).trim() || "Khác";
+            
+            // ========== QUAN TRỌNG: THÊM 2 DÒNG NÀY ĐỂ CẬP NHẬT reviewCount VÀ avgRating ==========
+            if (reviewCount !== undefined && reviewCount !== "") updates.reviewCount = Number(reviewCount);
+            if (avgRating !== undefined && avgRating !== "") updates.avgRating = Number(avgRating);
+            // ====================================================================================
 
             const imageFile = req.files?.image?.[0];
             const sampleFile = req.files?.samplePdf?.[0];
@@ -140,6 +148,7 @@ router.put(
             if (sampleFile) {
                 updates.samplePdf = `/uploads/pdf/${sampleFile.filename}`;
             }
+            
             // Merge ảnh cũ giữ lại + ảnh mới upload
             const newImageUrls = imageFiles.map(f => `/uploads/images/${f.filename}`);
             let keptImages = [];
@@ -148,10 +157,8 @@ router.put(
                     keptImages = JSON.parse(req.body.existingGalleryImages);
                     if (!Array.isArray(keptImages)) keptImages = [];
                 } catch (e) { keptImages = []; }
-                // Luôn update galleryImages khi có gửi field này
                 updates.galleryImages = [...keptImages, ...newImageUrls];
             } else if (newImageUrls.length > 0) {
-                // Không gửi existingGalleryImages nhưng có file mới → append vào existing
                 const existingBook = await Book.findById(req.params.id).select("galleryImages");
                 const existingImgs = existingBook?.galleryImages || [];
                 updates.galleryImages = [...existingImgs, ...newImageUrls];
@@ -159,6 +166,7 @@ router.put(
 
             const updated = await Book.findByIdAndUpdate(req.params.id, updates, { new: true });
             if (!updated) return res.status(404).json({ message: "Không tìm thấy sách" });
+            
             res.json(updated);
         } catch (err) {
             console.error(err);
