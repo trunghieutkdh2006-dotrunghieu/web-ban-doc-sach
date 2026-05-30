@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Review = require('../models/Review');
 const Book = require('../models/Book');
+const ReviewHistory = require('../models/ReviewHistory');
 const auth = require('../middleware/auth');
 
 // ==================== TẠO REVIEW ====================
@@ -131,6 +132,17 @@ router.put('/:reviewId', auth, async (req, res) => {
         
         await review.save();
         
+        // Lưu lịch sử chỉnh sửa
+        await ReviewHistory.create({
+            reviewId: review._id,
+            userId: userId,
+            bookId: review.bookId,
+            oldRating: oldRating,
+            oldComment: oldComment,
+            newRating: rating,
+            newComment: comment.trim()
+        });
+
         console.log(`✏️ User ${userId} đã sửa review ${reviewId}: ${oldRating}→${rating}`);
         
         // CẬP NHẬT LẠI ĐIỂM TRUNG BÌNH CỦA SÁCH
@@ -205,6 +217,33 @@ router.delete('/:id', auth, async (req, res) => {
         
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+});
+
+// ==================== LẤY LỊCH SỬ CHỈNH SỬA ====================
+router.get('/:reviewId/history', auth, async (req, res) => {
+    try {
+        const { reviewId } = req.params;
+        const userId = req.user.id;
+
+        // Kiểm tra review tồn tại và thuộc về user
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy đánh giá' });
+        }
+
+        if (review.userId.toString() !== userId && req.user.role !== 'admin') {
+            return res.status(403).json({ success: false, message: 'Không có quyền xem lịch sử này' });
+        }
+
+        const history = await ReviewHistory.find({ reviewId })
+            .sort({ editedAt: -1 });
+
+        res.json({ success: true, history });
+
+    } catch (error) {
+        console.error('Lỗi lấy lịch sử:', error);
+        res.status(500).json({ success: false, message: error.message });
     }
 });
 
