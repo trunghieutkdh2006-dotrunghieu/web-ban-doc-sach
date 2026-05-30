@@ -1841,8 +1841,15 @@ async function removeGalleryImage(idx) {
                 renderGalleryPreviews();
                 showToast('Đã xóa ảnh khỏi gallery!', 'success');
                 
-                // Reload lại sách để cập nhật
-                await loadBooks();
+                // ❌ XÓA DÒNG NÀY - KHÔNG RELOAD
+                // await loadBooks();
+                
+                // ✅ THAY BẰNG: Chỉ cập nhật lại thông tin sách trong allBooks
+                // (cập nhật lại galleryImages của sách hiện tại trong allBooks)
+                const currentBook = allBooks.find(b => b._id === bookId);
+                if (currentBook && currentBook.galleryImages) {
+                    currentBook.galleryImages = currentBook.galleryImages.filter(img => img !== oldImageUrl);
+                }
             } else {
                 const error = await res.text();
                 showToast('Xóa thất bại: ' + error.substring(0, 100), 'error');
@@ -7269,6 +7276,49 @@ function initCharts() {
                 }
             }
         });
+    }
+}
+// ============================================
+// XÓA REVIEW VỚI XÁC THỰC
+// ============================================
+
+async function deleteReviewWithAuth(reviewId) {
+    // Kiểm tra đăng nhập
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+    if (!user.token) {
+        showToast('Vui lòng đăng nhập để xóa đánh giá!', true);
+        return;
+    }
+    
+    const result = await Swal.fire({
+        title: 'Xóa đánh giá?',
+        text: 'Bạn có chắc muốn xóa đánh giá này?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+    });
+    
+    if (!result.isConfirmed) return;
+    
+    try {
+        const res = await apiFetch(
+            `${API_BASE}/reviews/${reviewId}`,
+            { method: 'DELETE' }
+        );
+        
+        if (res.ok) {
+            showToast('Đã xóa đánh giá!');
+            loadAllReviews();  // Tải lại danh sách review
+            loadBooks();       // Tải lại sách để cập nhật rating
+        } else {
+            const error = await res.text();
+            showToast('Xóa thất bại: ' + error.substring(0, 100), true);
+        }
+    } catch (err) {
+        console.error('Lỗi xóa review:', err);
+        showToast('Lỗi kết nối!', true);
     }
 }
 
