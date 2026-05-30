@@ -1188,22 +1188,23 @@ async function saveBook() {
     // UPLOAD ẢNH GALLERY
     // ============================================
 
-    // galleryBase64List:
-    // mảng chứa danh sách ảnh gallery
-    galleryBase64List.forEach(item => {
+const oldImagesToKeep = galleryBase64List
+    .filter(item => typeof item === 'object' && item.isOld === true)
+    .map(item => item.oldUrl);  // URL gốc từ server
 
-        // Chỉ upload ảnh mới
-        // có object file
-        if (item && item.file) {
+// 2. Gửi danh sách ảnh cũ cần giữ (để backend không xóa chúng)
+if (oldImagesToKeep.length > 0) {
+    formData.append('existingImages', JSON.stringify(oldImagesToKeep));
+}
 
-            // images:
-            // backend nhận nhiều file
-            formData.append(
-                'images',
-                item.file
-            );
-        }
-    });
+// 3. Upload ảnh mới (có file)
+galleryBase64List.forEach(item => {
+    // Chỉ upload ảnh mới có thuộc tính file
+    if (item && item.file) {
+        formData.append('images', item.file);
+    }
+});
+
 
 
 
@@ -1480,372 +1481,109 @@ async function deleteBook(id) {
 // CHỈNH SỬA SÁCH
 // ============================================
 
-// Hàm load dữ liệu sách lên form để edit
 function editBook(id) {
 
-    // ============================================
     // TÌM SÁCH THEO ID
-    // ============================================
-
-    // find():
-    // tìm phần tử đầu tiên thỏa điều kiện
-    const b = allBooks.find(
-        b => b._id === id
-    );
-
-
-
-    // Nếu không tìm thấy sách
-    // -> dừng hàm
+    const b = allBooks.find(b => b._id === id);
     if (!b) return;
 
-
-
-    // ============================================
     // TẠO BASE URL
-    // ============================================
+    const BASE_URL = API_BASE.replace('/api', '');
 
-    // API_BASE:
-    // https://domain.com/api
-    //
-    // replace('/api', '')
-    // -> https://domain.com
-    const BASE_URL =
-        API_BASE.replace('/api', '');
-
-
-
-    // ============================================
     // HÀM CHUYỂN URL THÀNH URL TUYỆT ĐỐI
-    // ============================================
-
     function toAbsUrl(url) {
-
-        // Nếu không có url
         if (!url) return '';
-
-
-
-        // Nếu đã là URL đầy đủ
-        // hoặc base64
-        //
-        // Ví dụ:
-        // https://...
-        // data:image/png;base64,...
-        if (
-            url.startsWith('http') ||
-            url.startsWith('data:')
-        ) {
+        if (url.startsWith('http') || url.startsWith('data:')) {
             return url;
         }
-
-
-
-        // Nếu là URL tương đối
-        //
-        // Ví dụ:
-        // /uploads/a.png
-        //
-        // -> ghép BASE_URL
-        return BASE_URL +
-
-            // Nếu url chưa có /
-            (url.startsWith('/')
-                ? url
-                : '/' + url);
+        return BASE_URL + (url.startsWith('/') ? url : '/' + url);
     }
 
-
-
-    // ============================================
     // ĐỔ DỮ LIỆU TEXT VÀO FORM
-    // ============================================
-
-    // ID sách
-    document.getElementById('bookId').value =
-        b._id;
-
-
-
-    // Tên sách
-    document.getElementById('bookTitle').value =
-        b.title || '';
-
-
-
-    // Tác giả
-    document.getElementById('bookAuthor').value =
-        b.author || '';
-
-
-
-    // Giá sách
-    document.getElementById('bookPrice').value =
-        b.price || 0;
-
-
-
-    // Category
-    document.getElementById('bookCategorySelect').value =
-        b.category || '';
-
-
-
-    // Mô tả
-    document.getElementById('bookDescription').value =
-        b.description || '';
-
-
+    document.getElementById('bookId').value = b._id;
+    document.getElementById('bookTitle').value = b.title || '';
+    document.getElementById('bookAuthor').value = b.author || '';
+    document.getElementById('bookPrice').value = b.price || 0;
+    document.getElementById('bookCategorySelect').value = b.category || '';
+    document.getElementById('bookDescription').value = b.description || '';
 
     // ============================================
     // XỬ LÝ ẢNH BÌA
     // ============================================
-
-    // Ưu tiên:
-    // image
-    // fallback:
-    // coverImage
-    const coverUrl = toAbsUrl(
-        b.image || b.coverImage || ''
-    );
-
-
-
-    // Nếu có ảnh bìa
+    const coverUrl = toAbsUrl(b.image || b.coverImage || '');
     if (coverUrl) {
-
-        // Lưu URL ảnh hiện tại
         currentCoverBase64 = coverUrl;
-
-
-
-        // Hiển thị preview ảnh
-        document.getElementById(
-            'coverPreviewContainer'
-        ).innerHTML = `
-
-            <div class="preview-item">
-
-                <!-- Ảnh preview -->
-                <img
-                    src="${coverUrl}"
-                    style="
-                        max-width:120px;
-                        max-height:160px;
-                        object-fit:cover;
-                        border-radius:6px;
-                    "
-                >
-
-
-
-                <!-- Nút xóa ảnh -->
-                <button
-                    class="remove-img"
-                    onclick="clearCoverImage()"
-                >
-                    ✖
-                </button>
-
+        document.getElementById('coverPreviewContainer').innerHTML = `
+            <div class="preview-item" data-is-old-cover="true">
+                <img src="${coverUrl}" style="max-width:120px; max-height:160px; object-fit:cover; border-radius:6px;">
+                <button class="remove-img" onclick="clearCoverImage()" style="background:#e53e3e; color:white;">✖</button>
+                <span style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.6); color:white; font-size:10px; text-align:center;">Ảnh hiện tại</span>
             </div>
         `;
-
-
-
-        // Gán URL vào input
-        document.getElementById(
-            'bookCoverUrl'
-        ).value = coverUrl;
-    }
-
-
-
-    // Nếu không có ảnh
-    else {
-
-        // Xóa preview
+        document.getElementById('bookCoverUrl').value = coverUrl;
+    } else {
         clearCoverImage();
     }
 
+// ============================================
+// XỬ LÝ ẢNH GALLERY - SỬA LỖI QUAN TRỌNG
+// ============================================
 
+// RESET mảng gallery trước khi load mới (QUAN TRỌNG)
+galleryBase64List = [];
 
-    // ============================================
-    // XỬ LÝ ẢNH GALLERY
-    // ============================================
+const gallery = b.galleryImages || b.images || [];
 
-    // Ưu tiên:
-    // galleryImages
-    //
-    // fallback:
-    // images
-    const gallery =
-        b.galleryImages ||
-        b.images ||
-        [];
-
-
-
-    // Nếu có ảnh gallery
-    if (gallery.length) {
-
-        // map():
-        // chuyển tất cả URL thành absolute URL
-        galleryBase64List = gallery.map(
-            img => toAbsUrl(img)
-        );
-
-
-
-        // Render preview gallery
-        renderGalleryPreviews();
-    }
-
-
-
-    // Nếu không có gallery
-    else {
-
-        // Reset mảng
-        galleryBase64List = [];
-
-
-
-        // Render lại rỗng
-        renderGalleryPreviews();
-    }
-
-
+if (gallery.length) {
+    // Chuyển đổi URL và lưu vào mảng với thông tin đầy đủ
+    galleryBase64List = gallery.map((img, index) => ({
+        url: toAbsUrl(img),
+        isOld: true,           // Đánh dấu là ảnh cũ từ server
+        oldUrl: img,           // Lưu URL gốc để xóa sau
+        index: index
+    }));
+    
+    // Render preview gallery
+    renderGalleryPreviews();
+} else {
+    renderGalleryPreviews();
+}
 
     // ============================================
-    // HIỂN THỊ FILE PDF ĐỌC THỬ
+    // HIỂN THỊ FILE PDF
     // ============================================
-
     if (b.samplePdf) {
-
-        document.getElementById(
-            "samplePdfPreview"
-        ).innerHTML = `
-
-            <div class="pdf-preview">
-
-                <!-- Icon PDF -->
+        document.getElementById("samplePdfPreview").innerHTML = `
+            <div class="pdf-preview" data-is-old-pdf="true">
                 <i class="fas fa-file-pdf"></i>
-
-
-
                 <div>
-
-                    <!-- Tên -->
-                    <div class="pdf-preview-name">
-                        Đã có file đọc thử
-                    </div>
-
-
-
-                    <!-- Mô tả -->
-                    <div style="
-                        font-size:12px;
-                        color:#64748b;
-                    ">
-                        Click "Lưu sách" để giữ nguyên
-                    </div>
-
+                    <div class="pdf-preview-name">Đã có file đọc thử</div>
+                    <div style="font-size:12px; color:#64748b;">Click "Lưu sách" để giữ nguyên</div>
                 </div>
-
-
-
-                <!-- Nút xóa -->
-                <button
-                    type="button"
-                    onclick="clearSamplePdf()"
-                    style="
-                        margin-left:auto;
-                        background:none;
-                        border:none;
-                        color:#dc2626;
-                        cursor:pointer;
-                    "
-                >
-                    <i class="fas fa-times"></i>
-                    Xóa
+                <button type="button" onclick="clearSamplePdf()" style="margin-left:auto; background:#e53e3e; border:none; color:white; cursor:pointer; padding:4px 8px; border-radius:4px;">
+                    <i class="fas fa-times"></i> Xóa
                 </button>
-
             </div>
         `;
     }
-
-
-
-    // ============================================
-    // HIỂN THỊ FILE EBOOK PDF
-    // ============================================
 
     if (b.pdfFile) {
-
-        document.getElementById(
-            'pdfPreviewContainer'
-        ).innerHTML = `
-
-            <div class="pdf-preview">
-
-                <!-- Icon PDF -->
+        document.getElementById('pdfPreviewContainer').innerHTML = `
+            <div class="pdf-preview" data-is-old-ebook="true">
                 <i class="fas fa-file-pdf"></i>
-
-
-
                 <div>
-
-                    <!-- Tên -->
-                    <div class="pdf-preview-name">
-                        Đã có file Ebook PDF
-                    </div>
-
-
-
-                    <!-- Mô tả -->
-                    <div style="
-                        font-size:12px;
-                        color:#64748b;
-                    ">
-                        Click "Lưu sách" để giữ nguyên
-                    </div>
-
+                    <div class="pdf-preview-name">Đã có file Ebook PDF</div>
+                    <div style="font-size:12px; color:#64748b;">Click "Lưu sách" để giữ nguyên</div>
                 </div>
-
-
-
-                <!-- Nút xóa -->
-                <button
-                    type="button"
-                    onclick="clearEbookPdf()"
-                    style="
-                        margin-left:auto;
-                        background:none;
-                        border:none;
-                        color:#dc2626;
-                        cursor:pointer;
-                    "
-                >
-                    <i class="fas fa-times"></i>
-                    Xóa
+                <button type="button" onclick="clearEbookPdf()" style="margin-left:auto; background:#e53e3e; border:none; color:white; cursor:pointer; padding:4px 8px; border-radius:4px;">
+                    <i class="fas fa-times"></i> Xóa
                 </button>
-
             </div>
         `;
     }
 
-
-
-    // ============================================
     // SCROLL LÊN ĐẦU TRANG
-    // ============================================
-
-    // behavior: smooth
-    // -> cuộn mượt
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // ============================================
@@ -1997,206 +1735,136 @@ function clearCoverImage() {
     ).value = '';
 }
 
-// ============================================
-// PREVIEW ẢNH GALLERY
-// ============================================
-
-// Hàm xem trước nhiều ảnh gallery
-//
-// event:
-// sự kiện onchange của input file
 function previewGalleryImages(event) {
-
-    // ============================================
-    // DUYỆT TẤT CẢ FILE ĐƯỢC CHỌN
-    // ============================================
-
-    // Array.from():
-    // chuyển FileList -> Array
     Array.from(event.target.files).forEach(file => {
-
-        // ========================================
-        // TẠO FILE READER
-        // ========================================
-
         const reader = new FileReader();
-
-
-
-        // ========================================
-        // KHI ĐỌC FILE THÀNH CÔNG
-        // ========================================
-
         reader.onload = (e) => {
-
-            // ====================================
-            // LƯU ẢNH VÀO MẢNG
-            // ====================================
-
-            // push():
-            // thêm phần tử vào cuối mảng
+            // Thêm ảnh mới với flag isOld = false
             galleryBase64List.push({
-
-                // URL/Base64 preview
                 url: e.target.result,
-
-
-
-                // File gốc
-                //
-                // dùng để upload sau này
-                file: file
+                file: file,
+                isOld: false,    // Đánh dấu là ảnh mới
+                fileSize: file.size,
+                fileName: file.name
             });
-
-
-
-            // ====================================
-            // RENDER LẠI GALLERY
-            // ====================================
-
             renderGalleryPreviews();
         };
-
-
-
-        // ========================================
-        // ĐỌC FILE THÀNH BASE64
-        // ========================================
-
         reader.readAsDataURL(file);
     });
 }
 
 
 
-// ============================================
-// HIỂN THỊ PREVIEW GALLERY
-// ============================================
-
-// Hàm render danh sách ảnh gallery
 function renderGalleryPreviews() {
-
-    // ============================================
-    // TẠO HTML PREVIEW
-    // ============================================
-
-    document.getElementById(
-        'galleryPreviewContainer'
-    ).innerHTML =
-
-        // map():
-        // duyệt từng ảnh
-        galleryBase64List.map((item, idx) => {
-
-            // ====================================
-            // XÁC ĐỊNH URL ẢNH
-            // ====================================
-
-            // Nếu item là string
-            // -> ảnh cũ từ server
-            //
-            // Nếu item là object
-            // -> ảnh mới upload
-            const src =
-                typeof item === 'string'
-                    ? item
-                    : item.url;
-
-
-
-            // ====================================
-            // TRẢ VỀ HTML
-            // ====================================
-
-            return `
-
-                <div class="preview-item">
-
-                    <!-- Ảnh preview -->
-                    <img
-                        src="${src}"
-                        style="
-                            max-width:80px;
-                            max-height:100px;
-                            object-fit:cover;
-                            border-radius:4px;
-                        "
-                    >
-
-
-
-                    <!-- Nút xóa ảnh -->
-                    <button
-                        class="remove-img"
-                        onclick="removeGalleryImage(${idx})"
-                    >
-                        ✖
-                    </button>
-
-                </div>
-            `;
-        })
-
-
-
-        // ============================================
-        // GHÉP HTML THÀNH CHUỖI
-        // ============================================
-
-        .join('');
-}
-// ============================================
-// XÓA ẢNH GALLERY
-// ============================================
-
-// Hàm xóa 1 ảnh khỏi gallery
-//
-// idx:
-// vị trí ảnh trong mảng
-function removeGalleryImage(idx) {
-
-    // ============================================
-    // XÓA PHẦN TỬ KHỎI MẢNG
-    // ============================================
-
-    // splice(vị trí, số lượng)
-    //
-    // Ví dụ:
-    // splice(2,1)
-    // -> xóa 1 phần tử tại index 2
-    galleryBase64List.splice(idx, 1);
-
-
-
-    // ============================================
-    // RENDER LẠI GALLERY
-    // ============================================
-
-    // Cập nhật giao diện sau khi xóa
-    renderGalleryPreviews();
-
-
-
-    // ============================================
-    // CẬP NHẬT INPUT HIDDEN
-    // ============================================
-
-    // JSON.stringify():
-    // chuyển array -> chuỗi JSON
-    //
-    // dùng để lưu dữ liệu gallery
-    document.getElementById(
-        'bookGalleryUrls'
-    ).value = JSON.stringify(galleryBase64List);
+    const container = document.getElementById('galleryPreviewContainer');
+    if (!container) return;
+    
+    if (!galleryBase64List.length) {
+        container.innerHTML = '<div style="color:#94a3b8; font-size:13px; padding:10px 0;">📷 Chưa có ảnh nào. Hãy thêm ảnh gallery bên dưới.</div>';
+        return;
+    }
+    
+    container.innerHTML = galleryBase64List.map((item, idx) => {
+        let src = '';
+        let isOldImage = false;
+        let oldUrl = '';
+        
+        if (typeof item === 'string') {
+            src = item;
+            isOldImage = false;
+        } else if (item.url) {
+            src = item.url;
+            isOldImage = item.isOld === true;
+            oldUrl = item.oldUrl || '';
+        }
+        
+        return `
+            <div class="preview-item" data-is-old="${isOldImage}" data-old-url="${oldUrl}" data-gallery-idx="${idx}">
+                <img src="${src}" style="width:80px; height:100px; object-fit:cover; border-radius:8px; border:2px solid ${isOldImage ? '#e53e3e' : '#10b981'};">
+                <button class="remove-img" onclick="removeGalleryImage(${idx})" style="${isOldImage ? 'background:#e53e3e; color:white;' : 'background:#64748b; color:white;'}" title="${isOldImage ? 'Xóa ảnh khỏi server' : 'Xóa ảnh này'}">
+                    ✖
+                </button>
+                ${isOldImage ? '<span style="position:absolute; bottom:0; left:0; right:0; background:rgba(0,0,0,0.7); color:white; font-size:10px; text-align:center; padding:2px;">Đã lưu</span>' : '<span style="position:absolute; bottom:0; left:0; right:0; background:rgba(16,185,129,0.8); color:white; font-size:10px; text-align:center; padding:2px;">Mới</span>'}
+            </div>
+        `;
+    }).join('');
 }
 
+async function removeGalleryImage(idx) {
+    const item = galleryBase64List[idx];
+    if (!item) return;
+    
+    // Kiểm tra xem có phải ảnh cũ từ server không
+    const isOldImage = typeof item === 'object' && item.isOld === true;
+    const oldImageUrl = typeof item === 'object' ? item.oldUrl : null;
+    
+    if (isOldImage && oldImageUrl) {
+        // ========================================
+        // XÓA ẢNH CŨ TRÊN SERVER
+        // ========================================
+        
+        const bookId = document.getElementById('bookId').value;
+        if (!bookId) {
+            // Nếu chưa có bookId (đang thêm mới), chỉ xóa local
+            galleryBase64List.splice(idx, 1);
+            renderGalleryPreviews();
+            showToast('Đã xóa ảnh khỏi danh sách', 'success');
+            return;
+        }
+        
+        // Hiển thị xác nhận xóa ảnh trên server
+        const result = await Swal.fire({
+            title: 'Xóa ảnh khỏi gallery?',
+            text: 'Ảnh này sẽ bị xóa vĩnh viễn khỏi server!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc2626',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        });
+        
+        if (!result.isConfirmed) return;
+        
+        try {
+            // Gọi API xóa ảnh gallery
+            const res = await apiFetch(
+                `${BOOKS_API}/${bookId}/gallery`,
+                {
+                    method: 'DELETE',
+                    body: JSON.stringify({ imageUrl: oldImageUrl })
+                }
+            );
+            
+            if (res.ok) {
+                // Xóa khỏi mảng local
+                galleryBase64List.splice(idx, 1);
+                renderGalleryPreviews();
+                showToast('Đã xóa ảnh khỏi gallery!', 'success');
+                
+                // Reload lại sách để cập nhật
+                await loadBooks();
+            } else {
+                const error = await res.text();
+                showToast('Xóa thất bại: ' + error.substring(0, 100), 'error');
+            }
+        } catch (err) {
+            console.error('Lỗi xóa ảnh gallery:', err);
+            showToast('Lỗi kết nối!', 'error');
+        }
+    } else {
+        // Xóa ảnh mới (chưa upload lên server)
+        galleryBase64List.splice(idx, 1);
+        renderGalleryPreviews();
+        
+        // Cập nhật input hidden
+        document.getElementById('bookGalleryUrls').value = JSON.stringify(
+            galleryBase64List.filter(item => typeof item === 'string' || !item.isOld)
+        );
+        
+        showToast('Đã xóa ảnh khỏi danh sách', 'success');
+    }
+}
 
-
-// ============================================
-// XỬ LÝ FILE PDF ĐỌC THỬ
-// ============================================
-
-// Hàm xử lý khi user chọn file PDF
 function handleSamplePdf(event) {
 
     // ============================================
@@ -7605,6 +7273,47 @@ function initCharts() {
 }
 
         // ==================== TAB MANAGEMENT ====================
+        async function clearAllGalleryImages() {
+    const bookId = document.getElementById('bookId').value;
+    
+    if (!bookId) {
+        galleryBase64List = [];
+        renderGalleryPreviews();
+        showToast('Đã xóa tất cả ảnh khỏi form', 'success');
+        return;
+    }
+    
+    const result = await Swal.fire({
+        title: 'Xóa tất cả ảnh gallery?',
+        text: 'Hành động này không thể hoàn tác!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc2626',
+        confirmButtonText: 'Xóa tất cả',
+        cancelButtonText: 'Hủy'
+    });
+    
+    if (!result.isConfirmed) return;
+    
+    try {
+        const res = await apiFetch(
+            `${BOOKS_API}/${bookId}/gallery/all`,
+            { method: 'DELETE' }
+        );
+        
+        if (res.ok) {
+            galleryBase64List = [];
+            renderGalleryPreviews();
+            showToast('Đã xóa tất cả ảnh gallery!', 'success');
+            await loadBooks();
+        } else {
+            showToast('Xóa thất bại!', 'error');
+        }
+    } catch (err) {
+        console.error('Lỗi xóa gallery:', err);
+        showToast('Lỗi kết nối!', 'error');
+    }
+}
         function switchTab(tab) {
             const tabs = ['dashboard', 'users', 'books', 'categories', 'orders', 'reviews'];
             tabs.forEach(t => {
