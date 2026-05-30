@@ -635,10 +635,20 @@ function closeBookModal() {
   document.body.style.overflow = 'auto';
 }
 
-function openPdfPreview(bookId) { 
-  const book = booksCache.find(b => b._id === bookId); 
-  if (book?.samplePdf) window.open(book.samplePdf.startsWith("http") ? book.samplePdf : `${BASE_URL}${book.samplePdf}`, '_blank'); 
-  else showToast('Chưa có file đọc thử cho sách này', 'warning'); 
+function openPdfPreview(bookId) {
+  const book = booksCache.find(b => b._id === bookId);
+  if (book?.samplePdf) {
+    const pdfUrl = book.samplePdf.startsWith('http') ? book.samplePdf : BASE_URL + book.samplePdf;
+    const a = document.createElement('a');
+    a.href = pdfUrl;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } else {
+    showToast('Chưa có file đọc thử cho sách này', 'warning');
+  }
 }
 
 // ==================== REVIEW MODAL ====================
