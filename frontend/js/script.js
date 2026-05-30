@@ -414,34 +414,6 @@ async function openBookDetail(id) {
     // Nếu không lấy được từ API, dùng cache
     if (!book) book = booksCache.find(b => b._id === id);
     if (!book) return;
-
-    // ========== THÊM: LẤY REVIEW TRỰC TIẾP TỪ API REVIEWS ==========
-    // ========== LẤY REVIEW TRỰC TIẾP TỪ API REVIEWS ==========
-try {
-    const reviewRes = await fetch(`${BASE_URL}/api/reviews/book/${id}`, {
-        headers: { 'ngrok-skip-browser-warning': '69420' }
-    });
-    if (reviewRes.ok) {
-        const reviewData = await reviewRes.json();
-        let reviews = [];
-        if (Array.isArray(reviewData)) reviews = reviewData;
-        else if (reviewData.reviews) reviews = reviewData.reviews;
-        else if (reviewData.data) reviews = reviewData.data;
-        
-        const realCount = reviews.length;
-        const realAvg = realCount > 0 
-            ? reviews.reduce((sum, r) => sum + r.rating, 0) / realCount 
-            : 0;
-        
-        // GHI ĐÈ dữ liệu từ API reviews (chính xác hơn)
-        book.reviewCount = realCount;
-        book.avgRating = parseFloat(realAvg.toFixed(1));
-        
-        console.log(`📊 ${book.title}: ${realCount} đánh giá, ${realAvg.toFixed(1)} sao`);
-    }
-} catch (err) {
-    console.warn('Không thể lấy review chi tiết:', err);
-}
 // ================================================================// ========== LẤY REVIEW TRỰC TIẾP TỪ API REVIEWS ==========
 try {
     const reviewRes = await fetch(`${BASE_URL}/api/reviews/book/${id}`, {
@@ -925,6 +897,38 @@ function renderReviewItem(review, index, bookId) {
     const isVerified = review.isVerifiedPurchase || false;
     const reviewId = review._id || review.id || `review_${index}`;
     
+    // ========== THÊM BIẾN isLiked ==========
+    let isLiked = false;
+    try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser && review.likedBy && Array.isArray(review.likedBy)) {
+            const currentUser = JSON.parse(storedUser);
+            const currentUserId = currentUser?._id || currentUser?.id;
+            isLiked = review.likedBy.some(id => String(id) === String(currentUserId));
+        }
+    } catch(e) { isLiked = false; }
+    
+    // ========== TẠO HTML BÌNH LUẬN ==========
+    let commentsHtml = '';
+    if (review.comments && review.comments.length > 0) {
+        commentsHtml = review.comments.map(c => `
+            <div style="padding: 10px 0; border-bottom: 1px solid #e2e8f0; display: flex; gap: 10px;">
+                <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #1D3557, #274c77); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 14px; flex-shrink: 0;">
+                    ${(c.userName || 'U').charAt(0).toUpperCase()}
+                </div>
+                <div style="flex: 1;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 5px;">
+                        <strong style="font-size: 12px; color: #1D3557;">${escapeHtml(c.userName)}</strong>
+                        <small style="color: #94a3b8; font-size: 10px;">${new Date(c.createdAt).toLocaleDateString('vi-VN')}</small>
+                    </div>
+                    <div style="font-size: 13px; margin-top: 4px; color: #334155;">${escapeHtml(c.text)}</div>
+                </div>
+            </div>
+        `).join('');
+    } else {
+        commentsHtml = '<div style="text-align: center; padding: 12px; color: #94a3b8; font-size: 13px;">💬 Chưa có bình luận nào. Hãy là người đầu tiên bình luận!</div>';
+    }
+    
     // Kiểm tra quyền sở hữu
     let isOwner = false;
     try {
@@ -935,9 +939,7 @@ function renderReviewItem(review, index, bookId) {
             const currentUserId = currentUser?._id || currentUser?.id;
             isOwner = currentUserId && userIdFromReview && String(currentUserId) === String(userIdFromReview);
         }
-    } catch(e) {
-        isOwner = false;
-    }
+    } catch(e) { isOwner = false; }
     
     // Kiểm tra đã chỉnh sửa chưa
     const hasBeenEdited = review.updatedAt && review.updatedAt !== review.createdAt;
@@ -989,15 +991,29 @@ function renderReviewItem(review, index, bookId) {
                     "${escapeHtml(review.comment || review.content || 'Không có nội dung')}"
                 </div>
                 <div class="review-actions">
-                    <button class="review-action-btn" onclick="likeReview('${reviewId}')">
-                        <i class="far fa-thumbs-up"></i> Hữu ích (${review.likes || review.helpful || 0})
+                    <button class="review-action-btn like-btn ${isLiked ? 'liked' : ''}" onclick="likeReview('${reviewId}', this)">
+                        <i class="${isLiked ? 'fas' : 'far'} fa-thumbs-up"></i> 
+                        <span class="like-count">${review.likes || 0}</span> Hữu ích
                     </button>
                     ${editButton}
                     ${deleteButton}
                     ${historyButton}
-                    ${isLoggedIn ? `<button class="review-action-btn" onclick="replyToReview('${reviewId}', '${escapeHtml(userName).replace(/'/g, "\\'")}')">
-                        <i class="far fa-comment"></i> Trả lời
-                    </button>` : ''}
+                    <button class="review-action-btn comment-btn" onclick="toggleCommentSection('${reviewId}')">
+                        <i class="far fa-comment"></i> 
+                        <span class="comment-count">${review.comments?.length || 0}</span> Bình luận
+                    </button>
+                </div>
+
+                <!-- KHU VỰC BÌNH LUẬN (Ẩn ban đầu) -->
+                <div id="comment-section-${reviewId}" class="comments-section" style="display: none; margin-top: 16px;">
+                    <div id="comments-list-${reviewId}" style="max-height: 300px; overflow-y: auto;">
+                        ${commentsHtml}
+                    </div>
+                    ${isLoggedIn ? `
+                    <div class="comment-input-area" style="display: flex; gap: 10px; margin-top: 12px;">
+                        <input type="text" id="comment-input-${reviewId}" placeholder="Viết bình luận..." maxlength="300" style="flex: 1; padding: 10px; border: 1px solid #e2e8f0; border-radius: 20px; font-size: 13px;">
+                        <button onclick="addCommentToReview('${reviewId}')" style="background: #1D3557; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer;">Gửi</button>
+                    </div>` : '<div style="text-align:center; padding:10px; color:#94a3b8;">🔒 Đăng nhập để bình luận</div>'}
                 </div>
             </div>
         </div>
@@ -1011,22 +1027,122 @@ function getUserInitials(name) {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
-function likeReview(reviewId) {
-  if (!user) {
-    showToast('Vui lòng đăng nhập để like đánh giá!', 'warning');
-    toggleAuth(true);
-    return;
-  }
-  showToast('Tính năng đang được phát triển', 'info');
+// ==================== LIKE / UNLIKE REVIEW ====================
+async function likeReview(reviewId, buttonElement) {
+    if (!user) {
+        showToast('Vui lòng đăng nhập để đánh giá hữu ích!', 'warning');
+        toggleAuth(true);
+        return;
+    }
+    
+    const originalHtml = buttonElement.innerHTML;
+    buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
+    buttonElement.disabled = true;
+    
+    try {
+        const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}/like`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`,
+                'ngrok-skip-browser-warning': '69420'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const reviewContainer = buttonElement.closest('.review-item');
+            if (reviewContainer) {
+                const likeCountSpan = buttonElement.querySelector('.like-count');
+                if (likeCountSpan) likeCountSpan.textContent = data.likes;
+                
+                const icon = buttonElement.querySelector('i');
+                if (data.liked) {
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    buttonElement.classList.add('liked');
+                    showToast('Cảm ơn bạn đã đánh giá!', 'success');
+                } else {
+                    icon.classList.remove('fas');
+                    icon.classList.add('far');
+                    buttonElement.classList.remove('liked');
+                    showToast('Đã bỏ đánh giá hữu ích!', 'info');
+                }
+            }
+        } else {
+            showToast(data.message || 'Có lỗi xảy ra!', 'error');
+        }
+    } catch (error) {
+        console.error('Lỗi like review:', error);
+        showToast('Lỗi kết nối đến máy chủ!', 'error');
+    } finally {
+        buttonElement.innerHTML = originalHtml;
+        buttonElement.disabled = false;
+    }
 }
 
+// ==================== THÊM BÌNH LUẬN ====================
+async function addCommentToReview(reviewId) {
+    if (!user) {
+        showToast('Vui lòng đăng nhập để bình luận!', 'warning');
+        toggleAuth(true);
+        return;
+    }
+    
+    const { value: commentText } = await Swal.fire({
+        title: '💬 Viết bình luận',
+        input: 'textarea',
+        inputLabel: 'Nhập bình luận của bạn',
+        inputPlaceholder: 'Viết bình luận...',
+        inputAttributes: { 'aria-label': 'Nhập bình luận' },
+        showCancelButton: true,
+        confirmButtonText: 'Gửi',
+        cancelButtonText: 'Hủy',
+        confirmButtonColor: '#1D3557',
+        inputValidator: (value) => {
+            if (!value || value.trim().length === 0) return 'Vui lòng nhập nội dung bình luận!';
+            if (value.trim().length < 3) return 'Bình luận phải có ít nhất 3 ký tự!';
+            return null;
+        }
+    });
+    
+    if (!commentText) return;
+    
+    Swal.fire({ title: 'Đang gửi...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    
+    try {
+        const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}/comments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${user.token}`,
+                'ngrok-skip-browser-warning': '69420'
+            },
+            body: JSON.stringify({ text: commentText.trim() })
+        });
+        
+        const data = await response.json();
+        Swal.close();
+        
+        if (response.ok) {
+            showToast('✅ Đã gửi bình luận thành công!', 'success');
+            if (currentReviewsBookId) {
+                await viewReviews(currentReviewsBookId, currentReviewsBookTitle);
+            }
+        } else {
+            showToast(data.message || 'Gửi bình luận thất bại!', 'error');
+        }
+    } catch (err) {
+        Swal.close();
+        console.error('Lỗi gửi bình luận:', err);
+        showToast('Lỗi kết nối server!', 'error');
+    }
+}
+
+// Hàm replyToReview gọi lại addCommentToReview
 function replyToReview(reviewId, userName) {
-  if (!user) {
-    showToast('Vui lòng đăng nhập để trả lời!', 'warning');
-    toggleAuth(true);
-    return;
-  }
-  showToast(`Trả lời ${userName} - Tính năng đang phát triển`, 'info');
+    addCommentToReview(reviewId);
 }
 
 function closeReviewsModal() { 
@@ -2258,9 +2374,7 @@ async function loadAvatarFromServer() {
     }
 }
 // ==================== CHỈNH SỬA ĐÁNH GIÁ ====================
-let currentEditReviewId = null;
-let currentEditBookId = null;
-let currentEditBookTitle = '';
+let currentEditReviewId = null, currentEditBookId = null, currentEditBookTitle = '';
 
 function openEditReviewModal(reviewId, currentRating, currentComment, bookId, bookTitle, createdAt) {
     console.log('📝 openEditReviewModal được gọi', { reviewId, currentRating, currentComment, bookId, bookTitle });
@@ -2565,5 +2679,27 @@ async function viewEditHistory(reviewId) {
         showToast('Lỗi tải lịch sử chỉnh sửa!', 'error');
     }
 }
-
+// Thêm CSS cho nút like
+const likeButtonStyle = document.createElement('style');
+likeButtonStyle.textContent = `
+    .review-action-btn.liked {
+        color: #2563eb !important;
+        background: rgba(37, 99, 235, 0.1) !important;
+    }
+    .review-action-btn.liked i {
+        color: #2563eb !important;
+    }
+    body.dark-mode .review-action-btn.liked {
+        color: #60a5fa !important;
+        background: rgba(96, 165, 250, 0.15) !important;
+    }
+`;
+document.head.appendChild(likeButtonStyle);
+function toggleCommentSection(reviewId) {
+    const section = document.getElementById(`comment-section-${reviewId}`);
+    if (section) {
+        const isVisible = section.style.display === 'block';
+        section.style.display = isVisible ? 'none' : 'block';
+    }
+}
 window.viewEditHistory = viewEditHistory;
