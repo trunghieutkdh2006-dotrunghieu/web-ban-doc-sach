@@ -1767,12 +1767,11 @@ async function removeGalleryImage(idx) {
     
     if (!result.isConfirmed) return;
     
-    // LUÔN XÓA LOCAL - KHÔNG GỌI API
+    // CHỈ XÓA LOCAL, KHÔNG GỌI API
     galleryBase64List.splice(idx, 1);
     renderGalleryPreviews();
     
     if (isOldImage && oldImageUrl) {
-        // Đánh dấu ảnh cần xóa khi lưu sách
         if (!window.imagesToDelete) window.imagesToDelete = [];
         if (!window.imagesToDelete.includes(oldImageUrl)) {
             window.imagesToDelete.push(oldImageUrl);
