@@ -833,6 +833,34 @@ function renderReviewItem(review, index, bookId) {
   const isVerified = review.isVerifiedPurchase || false;
   const reviewId = review._id || review.id || `review_${index}`;
   
+  // ========== KIỂM TRA XEM REVIEW NÀY CÓ PHẢI CỦA USER HIỆN TẠI KHÔNG ==========
+  let isOwner = false;
+  try {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      const currentUser = JSON.parse(storedUser);
+      const userIdFromReview = review.userId?._id || review.userId;
+      const currentUserId = currentUser?._id || currentUser?.id;
+      isOwner = currentUserId && userIdFromReview && String(currentUserId) === String(userIdFromReview);
+    }
+  } catch(e) {
+    isOwner = false;
+  }
+  
+  // Kiểm tra xem review đã được chỉnh sửa chưa
+  const hasBeenEdited = review.updatedAt && review.updatedAt !== review.createdAt;
+  const editedBadge = hasBeenEdited ? '<span class="edited-badge"><i class="fas fa-pen"></i> Đã chỉnh sửa</span>' : '';
+  
+  // Nút chỉnh sửa - CHỈ HIỆN NẾU LÀ CHỦ SỞ HỮU
+  const editButton = isOwner ? `
+    <button class="review-action-btn" onclick="openEditReviewModal('${reviewId}', ${review.rating || 0}, '${escapeHtml(review.comment || review.content || '').replace(/'/g, "\\'")}', '${bookId}', '${escapeHtml(currentReviewsBookTitle || '').replace(/'/g, "\\'")}')">
+      <i class="fas fa-edit"></i> Chỉnh sửa
+    </button>
+  ` : '';
+  
+  // Kiểm tra user có đăng nhập để hiện nút trả lời
+  const isLoggedIn = localStorage.getItem('user') ? true : false;
+  
   return `
     <div class="review-item" data-review-id="${reviewId}">
       <div class="review-avatar">
@@ -843,6 +871,7 @@ function renderReviewItem(review, index, bookId) {
           <div class="reviewer-name">
             ${escapeHtml(userName)}
             ${isVerified ? '<span class="reviewer-badge"><i class="fas fa-check-circle"></i> Đã mua</span>' : ''}
+            ${editedBadge}
           </div>
           <div class="review-rating">
             ${renderStarsText(review.rating || 0)}
@@ -858,7 +887,8 @@ function renderReviewItem(review, index, bookId) {
           <button class="review-action-btn" onclick="likeReview('${reviewId}')">
             <i class="far fa-thumbs-up"></i> Hữu ích (${review.likes || review.helpful || 0})
           </button>
-          ${user ? `<button class="review-action-btn" onclick="replyToReview('${reviewId}', '${escapeHtml(userName).replace(/'/g, "\\'")}')">
+          ${editButton}
+          ${isLoggedIn ? `<button class="review-action-btn" onclick="replyToReview('${reviewId}', '${escapeHtml(userName).replace(/'/g, "\\'")}')">
             <i class="far fa-comment"></i> Trả lời
           </button>` : ''}
         </div>

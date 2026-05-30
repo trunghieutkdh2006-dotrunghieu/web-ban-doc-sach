@@ -26,7 +26,7 @@ router.post('/', auth, async (req, res) => {
         const review = new Review({ bookId, userId, rating, comment });
         await review.save();
         
-        // ========== CẬP NHẬT RATING CHO SÁCH (THỦ CÔNG) ==========
+        // Cập nhật rating cho sách
         const allReviews = await Review.find({ bookId });
         const totalReviews = allReviews.length;
         const avgRating = allReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews;
@@ -35,12 +35,14 @@ router.post('/', auth, async (req, res) => {
             reviewCount: totalReviews,
             avgRating: avgRating
         });
-        // ========================================================
+        
+        // Populate user data trước khi trả về
+        const populatedReview = await Review.findById(review._id).populate('userId', 'username name email');
         
         res.status(201).json({
             success: true,
             message: 'Đánh giá thành công!',
-            review: review
+            review: populatedReview
         });
         
     } catch (error) {
@@ -73,6 +75,101 @@ router.get('/book/:bookId', async (req, res) => {
     } catch (error) {
         console.error('Lỗi lấy reviews:', error);
         res.status(500).json({ message: error.message });
+    }
+});
+
+// ==================== CHỈNH SỬA ĐÁNH GIÁ (THÊM MỚI) ====================
+router.put('/:reviewId', auth, async (req, res) => {
+    try {
+        const { rating, comment } = req.body;
+        const reviewId = req.params.reviewId;
+        const userId = req.user.id;
+
+        // Kiểm tra dữ liệu đầu vào
+        if (!rating || rating < 1 || rating > 5) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Vui lòng chọn số sao từ 1 đến 5' 
+            });
+        }
+
+        if (!comment || comment.trim().length < 5) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Nhận xét phải có ít nhất 5 ký tự' 
+            });
+        }
+
+        // Tìm review cần sửa
+        const review = await Review.findById(reviewId);
+        
+        if (!review) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Không tìm thấy đánh giá' 
+            });
+        }
+        
+        // KIỂM TRA QUYỀN SỞ HỮU
+        if (review.userId.toString() !== userId) {
+            return res.status(403).json({ 
+                success: false, 
+                message: 'Bạn không có quyền chỉnh sửa đánh giá này' 
+            });
+        }
+        
+        // Lưu giá trị cũ để log
+        const oldRating = review.rating;
+        const oldComment = review.comment;
+        
+        // Cập nhật review
+        review.rating = rating;
+        review.comment = comment.trim();
+        review.updatedAt = new Date();
+        
+        await review.save();
+        
+        console.log(`✏️ User ${userId} đã sửa review ${reviewId}: ${oldRating}→${rating}`);
+        
+        // CẬP NHẬT LẠI ĐIỂM TRUNG BÌNH CỦA SÁCH
+        const allReviews = await Review.find({ bookId: review.bookId });
+        const totalReviews = allReviews.length;
+        const avgRating = totalReviews > 0 
+            ? allReviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews 
+            : 0;
+        
+        await Book.findByIdAndUpdate(review.bookId, {
+            avgRating: Number(avgRating.toFixed(1)),
+            reviewCount: totalReviews
+        });
+        
+        // Populate user data trước khi trả về
+        const populatedReview = await Review.findById(review._id).populate('userId', 'username name email');
+        
+        // Gửi thông báo realtime qua Socket.IO nếu có
+        const io = req.app.get('io');
+        if (io) {
+            io.emit('reviewUpdated', {
+                reviewId: review._id,
+                bookId: review.bookId,
+                rating: rating,
+                comment: comment.trim(),
+                updatedAt: review.updatedAt
+            });
+        }
+        
+        res.json({ 
+            success: true, 
+            message: 'Đã cập nhật đánh giá thành công',
+            review: populatedReview
+        });
+        
+    } catch (error) {
+        console.error('Lỗi update review:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Lỗi server: ' + error.message 
+        });
     }
 });
 
