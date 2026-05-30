@@ -857,82 +857,121 @@ async function viewReviews(bookId, bookTitle) {
 }
 
 function renderReviewItem(review, index, bookId) {
-  const userName = review.userId?.username || review.userId?.name || review.userName || review.author || 'Người dùng';
-  const userAvatar = getUserInitials(userName);
-  const reviewDate = review.createdAt ? new Date(review.createdAt).toLocaleDateString('vi-VN') : 
-                     (review.date ? new Date(review.date).toLocaleDateString('vi-VN') : 'Ngày không rõ');
-  const isVerified = review.isVerifiedPurchase || false;
-  const reviewId = review._id || review.id || `review_${index}`;
-  
-  // Kiểm tra quyền sở hữu
-  let isOwner = false;
-  try {
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      const currentUser = JSON.parse(storedUser);
-      const userIdFromReview = review.userId?._id || review.userId;
-      const currentUserId = currentUser?._id || currentUser?.id;
-      isOwner = currentUserId && userIdFromReview && String(currentUserId) === String(userIdFromReview);
+    // ƯU TIÊN: Lấy userName từ review.userId
+    let userName = 'Người dùng';
+    
+    if (review.userId) {
+        if (typeof review.userId === 'object') {
+            userName = review.userId.username || review.userId.name || review.userId.email || 'Người dùng';
+        } else {
+            userName = review.userName || review.author || 'Người dùng';
+        }
+    } else {
+        userName = review.userName || review.author || 'Người dùng';
     }
-  } catch(e) {
-    isOwner = false;
-  }
-  
-  // Kiểm tra đã chỉnh sửa chưa
-  const hasBeenEdited = review.updatedAt && review.updatedAt !== review.createdAt;
-  const editedBadge = hasBeenEdited ? '<span class="edited-badge"><i class="fas fa-pen"></i> Đã chỉnh sửa</span>' : '';
-  
-  // Nút chỉnh sửa
-const editButton = isOwner ? `
-  <button class="review-action-btn" onclick="openEditReviewModal('${reviewId}', ${review.rating || 0}, '${escapeHtml(review.comment || review.content || '').replace(/'/g, "\\'")}', '${bookId}', '${escapeHtml(currentReviewsBookTitle || '').replace(/'/g, "\\'")}', '${review.createdAt}')">
-    <i class="fas fa-edit"></i> Chỉnh sửa
-  </button>
-` : '';
-  
-  // ========== THÊM NÚT XÓA ==========
-  const deleteButton = isOwner ? `
-    <button class="review-action-btn delete-review-btn" onclick="deleteReviewById('${reviewId}', '${bookId}')">
-      <i class="fas fa-trash-alt"></i> Xóa
-    </button>
-  ` : '';
-  
-  const isLoggedIn = localStorage.getItem('user') ? true : false;
-  
-  return `
-    <div class="review-item" data-review-id="${reviewId}">
-      <div class="review-avatar">
-        <span>${userAvatar}</span>
-      </div>
-      <div class="review-content">
-        <div class="review-header">
-          <div class="reviewer-name">
-            ${escapeHtml(userName)}
-            ${isVerified ? '<span class="reviewer-badge"><i class="fas fa-check-circle"></i> Đã mua</span>' : ''}
-            ${editedBadge}
-          </div>
-          <div class="review-rating">
-            ${renderStarsText(review.rating || 0)}
-          </div>
+    
+    // Xử lý avatar - ưu tiên lấy từ userProfile
+    let avatarHtml = '';
+    const userId = review.userId?._id || review.userId;
+    
+    if (userId) {
+        const profileKey = `userProfile_${userId}`;
+        const userProfile = JSON.parse(localStorage.getItem(profileKey) || '{}');
+        const avatarUrl = userProfile.avatar;
+        
+        if (avatarUrl && avatarUrl.startsWith('http')) {
+            avatarHtml = `<img src="${avatarUrl}" style="width: 42px; height: 42px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?background=1D3557&color=fff&size=42&length=2&name=${encodeURIComponent(userName)}&bold=true'">`;
+        } else {
+            const initial = userName.charAt(0).toUpperCase();
+            avatarHtml = `<div style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #1D3557, #274c77); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">${initial}</div>`;
+        }
+    } else {
+        const initial = userName.charAt(0).toUpperCase();
+        avatarHtml = `<div style="width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #1D3557, #274c77); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px;">${initial}</div>`;
+    }
+    
+    const reviewDate = review.createdAt ? new Date(review.createdAt).toLocaleDateString('vi-VN') : 
+                       (review.date ? new Date(review.date).toLocaleDateString('vi-VN') : 'Ngày không rõ');
+    const isVerified = review.isVerifiedPurchase || false;
+    const reviewId = review._id || review.id || `review_${index}`;
+    
+    // Kiểm tra quyền sở hữu
+    let isOwner = false;
+    try {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const currentUser = JSON.parse(storedUser);
+            const userIdFromReview = review.userId?._id || review.userId;
+            const currentUserId = currentUser?._id || currentUser?.id;
+            isOwner = currentUserId && userIdFromReview && String(currentUserId) === String(userIdFromReview);
+        }
+    } catch(e) {
+        isOwner = false;
+    }
+    
+    // Kiểm tra đã chỉnh sửa chưa
+    const hasBeenEdited = review.updatedAt && review.updatedAt !== review.createdAt;
+    const editedBadge = hasBeenEdited ? '<span class="edited-badge"><i class="fas fa-pen"></i> Đã chỉnh sửa</span>' : '';
+    
+    // Nút chỉnh sửa
+    const editButton = isOwner ? `
+        <button class="review-action-btn" onclick="openEditReviewModal('${reviewId}', ${review.rating || 0}, '${escapeHtml(review.comment || review.content || '').replace(/'/g, "\\'")}', '${bookId}', '${escapeHtml(currentReviewsBookTitle || '').replace(/'/g, "\\'")}', '${review.createdAt}')">
+            <i class="fas fa-edit"></i> Chỉnh sửa
+        </button>
+    ` : '';
+    
+    // Nút xóa
+    const deleteButton = isOwner ? `
+        <button class="review-action-btn delete-review-btn" onclick="deleteReviewById('${reviewId}', '${bookId}')">
+            <i class="fas fa-trash-alt"></i> Xóa
+        </button>
+    ` : '';
+    
+    // Nút lịch sử
+    const historyButton = hasBeenEdited && isOwner ? `
+        <button class="review-action-btn history-btn" onclick="viewEditHistory('${reviewId}')">
+            <i class="fas fa-history"></i> Lịch sử
+        </button>
+    ` : '';
+    
+    const isLoggedIn = localStorage.getItem('user') ? true : false;
+    
+    return `
+        <div class="review-item" data-review-id="${reviewId}">
+            <div class="review-avatar">
+                ${avatarHtml}
+            </div>
+            <div class="review-content">
+                <div class="review-header">
+                    <div class="reviewer-name">
+                        ${escapeHtml(userName)}
+                        ${isVerified ? '<span class="reviewer-badge"><i class="fas fa-check-circle"></i> Đã mua</span>' : ''}
+                        ${editedBadge}
+                    </div>
+                    <div class="review-rating">
+                        ${renderStarsText(review.rating || 0)}
+                    </div>
+                </div>
+                <div class="review-date">
+                    <i class="far fa-calendar-alt"></i> ${reviewDate}
+                </div>
+                <div class="review-comment">
+                    "${escapeHtml(review.comment || review.content || 'Không có nội dung')}"
+                </div>
+                <div class="review-actions">
+                    <button class="review-action-btn" onclick="likeReview('${reviewId}')">
+                        <i class="far fa-thumbs-up"></i> Hữu ích (${review.likes || review.helpful || 0})
+                    </button>
+                    ${editButton}
+                    ${deleteButton}
+                    ${historyButton}
+                    ${isLoggedIn ? `<button class="review-action-btn" onclick="replyToReview('${reviewId}', '${escapeHtml(userName).replace(/'/g, "\\'")}')">
+                        <i class="far fa-comment"></i> Trả lời
+                    </button>` : ''}
+                </div>
+            </div>
         </div>
-        <div class="review-date">
-          <i class="far fa-calendar-alt"></i> ${reviewDate}
-        </div>
-        <div class="review-comment">
-          "${escapeHtml(review.comment || review.content || 'Không có nội dung')}"
-        </div>
-        <div class="review-actions">
-          <button class="review-action-btn" onclick="likeReview('${reviewId}')">
-            <i class="far fa-thumbs-up"></i> Hữu ích (${review.likes || review.helpful || 0})
-          </button>
-          ${editButton}
-          ${deleteButton}
-          ${isLoggedIn ? `<button class="review-action-btn" onclick="replyToReview('${reviewId}', '${escapeHtml(userName).replace(/'/g, "\\'")}')">
-            <i class="far fa-comment"></i> Trả lời
-          </button>` : ''}
-        </div>
-      </div>
-    </div>
-  `;
+    `;
 }
 
 function getUserInitials(name) {
