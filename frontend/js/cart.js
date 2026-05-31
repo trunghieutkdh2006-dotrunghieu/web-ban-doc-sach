@@ -94,6 +94,7 @@ function addToCart(id, title, price, image, author) {
     const cartItem = {
         id: id,
         title: title || "Không có tiêu đề",
+        author: author || "Không rõ tác giả",
         price: Number(price) || 0,
         image: image || "https://via.placeholder.com/200x250?text=No+Image",
         quantity: 1
@@ -238,6 +239,7 @@ function renderCart() {
         <img src="${getBookImage(item)}" alt="${escapeHtml(item.title)}" onerror="this.src='https://via.placeholder.com/200x250?text=No+Image'">
         <div class="cart-product-info">
           <h4>${escapeHtml(item.title)}</h4>
+          <p>${escapeHtml(item.author) || "Không rõ tác giả"}</p>
           <div class="cart-product-price">${formatPrice(item.price)}</div>
           <div style="display:flex;gap:8px;margin-top:8px;">
             <button class="remove-item" onclick="saveForLater('${item.id}')" style="background:#e53e3e;color:white;padding:6px 12px;border-radius:8px;border:none;cursor:pointer;">
