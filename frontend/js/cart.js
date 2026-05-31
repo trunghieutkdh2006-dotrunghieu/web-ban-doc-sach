@@ -10,6 +10,39 @@ const VALID_COUPONS = {
 let appliedCoupon = null;
 
 
+// ==================== LẤY EMAIL TỪ TÀI KHOẢN ĐĂNG NHẬP ====================
+function getLoggedInEmail() {
+  try {
+    // Thử lấy từ user object trong localStorage
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      if (user && user.email) {
+        return user.email;
+      }
+      if (user && user.username && user.username.includes('@')) {
+        return user.username;
+      }
+    }
+    
+    // Fallback: lấy từ lastOrderEmail
+    const lastEmail = localStorage.getItem("lastOrderEmail");
+    if (lastEmail) return lastEmail;
+    
+    // Fallback: lấy từ customer-email input nếu có
+    const emailInput = document.getElementById("customer-email");
+    if (emailInput && emailInput.value) {
+      return emailInput.value.trim();
+    }
+    
+    return "";
+  } catch (e) {
+    console.error("Lỗi lấy email:", e);
+    return "";
+  }
+}
+
+
 // ==================== CART FUNCTIONS ====================
 function getCart() {
   try {
@@ -125,6 +158,17 @@ function applyCoupon() {
 
 // ==================== RENDER CART ====================
 function renderCart() {
+  // === TỰ ĐỘNG SET EMAIL TỪ TÀI KHOẢN ===
+  const emailInput = document.getElementById("customer-email");
+  if (emailInput) {
+    const loggedInEmail = getLoggedInEmail();
+    if (loggedInEmail) {
+      emailInput.value = loggedInEmail;
+      localStorage.setItem("lastOrderEmail", loggedInEmail);
+    }
+  }
+  // =====================================
+
   const cart = getCart();
   const container = document.getElementById("cart-items-list");
   const subtotalSpan = document.getElementById("subtotal");
@@ -526,11 +570,43 @@ async function processCheckout() {
     return;
   }
 
-  const email = document.getElementById("customer-email").value.trim();
+  // Lấy email từ tài khoản đã đăng nhập
+  const email = getLoggedInEmail();
   if (!email) {
-    Swal.fire({ icon: "warning", title: "Thiếu email", text: "Vui lòng nhập email để nhận file PDF" });
+    Swal.fire({ 
+      icon: "warning", 
+      title: "Chưa đăng nhập", 
+      text: "Vui lòng đăng nhập để tiếp tục mua hàng!",
+      confirmButtonText: "Đăng nhập ngay"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "account.html";
+      }
+    });
     return;
   }
+
+  // Hiển thị email đang dùng để xác nhận
+  const confirmEmail = await Swal.fire({
+    icon: "info",
+    title: "Xác nhận email nhận file",
+    html: `
+      <p style="margin-bottom: 10px;">File PDF sẽ được gửi đến email:</p>
+      <p style="font-size: 18px; font-weight: bold; color: #e53e3e; background: #f1f5f9; padding: 10px; border-radius: 8px;">
+        ${escapeHtml(email)}
+      </p>
+      <p style="font-size: 13px; color: #64748b; margin-top: 10px;">
+        <i class="fas fa-info-circle"></i> Đây là email từ tài khoản đăng nhập của bạn
+      </p>
+    `,
+    showCancelButton: true,
+    confirmButtonColor: "#e53e3e",
+    cancelButtonColor: "#718096",
+    confirmButtonText: "Tiếp tục",
+    cancelButtonText: "Hủy"
+  });
+
+  if (!confirmEmail.isConfirmed) return;
 
   const paymentMethod = getSelectedPaymentMethod();
   const { subtotal, discount, total } = calculateTotals();
@@ -552,7 +628,6 @@ async function processCheckout() {
       if (!name) { Swal.showValidationMessage("Vui lòng nhập họ tên!"); return false; }
       if (!phone) { Swal.showValidationMessage("Vui lòng nhập số điện thoại!"); return false; }
       localStorage.setItem("customerName", name);
-      localStorage.setItem("lastOrderEmail", email);
       localStorage.setItem("customerPhone", phone);
       return { name, phone };
     },
@@ -594,11 +669,19 @@ async function processCheckout() {
         <p>SĐT: ${escapeHtml(result.value.phone)}</p>
         <p>Tổng tiền: <strong style="color:#e53e3e">${formatPrice(total)}</strong></p>
         <p>File PDF sẽ gửi đến: <strong>${escapeHtml(email)}</strong></p>
+        <p style="font-size: 12px; color: #38a169; margin-top: 10px;">
+          <i class="fas fa-check-circle"></i> Vui lòng kiểm tra email để nhận file (cả spam nếu không thấy)
+        </p>
       `,
       confirmButtonColor: "#38a169",
     });
   } catch (err) {
-    Swal.fire({ icon: "error", title: "Đặt hàng thất bại", text: err.message || "Vui lòng thử lại!" });
+    Swal.fire({ 
+      icon: "error", 
+      title: "Đặt hàng thất bại", 
+      text: err.message || "Vui lòng thử lại!",
+      confirmButtonColor: "#e53e3e"
+    });
   }
 }
 
@@ -621,21 +704,23 @@ let allMyOrders = [];
 let currentOrderFilter = 'all';
 
 async function loadMyOrders() {
-  const email = document.getElementById("customer-email")?.value.trim()
-    || localStorage.getItem("lastOrderEmail")
-    || "";
-
+  // Lấy email từ tài khoản đã đăng nhập
+  const email = getLoggedInEmail();
   const listEl = document.getElementById("myOrdersList");
 
   if (!email) {
     if (listEl) listEl.innerHTML = `
       <div class="empty-orders">
-        <i class="fas fa-envelope"></i>
-        <p>Vui lòng nhập email ở trên để xem lịch sử đơn hàng</p>
+        <i class="fas fa-sign-in-alt"></i>
+        <p>Vui lòng <a href="account.html" style="color:#e53e3e;">đăng nhập</a> để xem lịch sử đơn hàng</p>
       </div>`;
     updateOrderStats([]);
     return;
   }
+
+  // Hiển thị email đang dùng
+  const emailDisplay = document.getElementById("currentUserEmail");
+  if (emailDisplay) emailDisplay.textContent = email;
 
   try {
     const response = await fetch(`${API_BASE_URL}/orders/email/${encodeURIComponent(email)}`, {
@@ -817,14 +902,12 @@ function getStatusText(status) {
 }
 
 // ==================== SOCKET.IO ====================
-// ✅ SỬA LỖI: Dùng API_BASE_URL thay vì BASE_URL (BASE_URL không được định nghĩa)
 let socket;
 
 function connectSocket() {
   try {
     if (typeof io === 'undefined') return;
 
-    // Lấy base URL từ API_BASE_URL (bỏ phần /api ở cuối)
     const socketUrl = (typeof API_BASE_URL !== 'undefined')
       ? API_BASE_URL.replace('/api', '')
       : window.location.origin;
