@@ -1,73 +1,66 @@
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Đảm bảo thư mục uploads tồn tại
-const uploadDir = 'uploads/';
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Tạo thư mục con
-const imagesDir = 'uploads/images/';
-const pdfDir = 'uploads/pdf/';
-if (!fs.existsSync(imagesDir)) fs.mkdirSync(imagesDir, { recursive: true });
-if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
-
-// Cấu hình cho ảnh
-const imageStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, imagesDir);
-    },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const ext = path.extname(file.originalname);
-        cb(null, 'img-' + uniqueSuffix + ext);
-    }
+// ============================================================
+// CẤU HÌNH CLOUDINARY
+// ============================================================
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key:    process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Cấu hình cho PDF
-const pdfStorage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, pdfDir);
+// ============================================================
+// STORAGE CHO ẢNH (JPEG, PNG, WEBP...)
+// ============================================================
+const imageStorage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+        folder: 'bookstore/images',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
+        transformation: [{ quality: 'auto', fetch_format: 'auto' }],
+        public_id: (req, file) => 'img-' + Date.now() + '-' + Math.round(Math.random() * 1e6),
     },
-    filename: (req, file, cb) => {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const ext = path.extname(file.originalname);
-        cb(null, 'pdf-' + uniqueSuffix + ext);
-    }
 });
 
-// Filter cho ảnh
+// ============================================================
+// STORAGE CHO PDF
+// ============================================================
+const pdfStorage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+        folder: 'bookstore/pdfs',
+        allowed_formats: ['pdf'],
+        resource_type: 'raw',
+        public_id: (req, file) => 'pdf-' + Date.now() + '-' + Math.round(Math.random() * 1e6),
+    },
+});
+
+// ============================================================
+// FILTER
+// ============================================================
 const imageFilter = (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
-    if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new Error('Chỉ chấp nhận file ảnh (JPEG, PNG, GIF, WEBP)'), false);
-    }
+    const ok = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    ok.includes(file.mimetype) ? cb(null, true) : cb(new Error('Chỉ chấp nhận file ảnh'), false);
 };
 
-// Filter cho PDF
 const pdfFilter = (req, file, cb) => {
-    if (file.mimetype === 'application/pdf') {
-        cb(null, true);
-    } else {
-        cb(new Error('Chỉ chấp nhận file PDF'), false);
-    }
+    file.mimetype === 'application/pdf' ? cb(null, true) : cb(new Error('Chỉ chấp nhận file PDF'), false);
 };
 
-// Tạo các middleware
+// ============================================================
+// MULTER INSTANCES
+// ============================================================
 const uploadImage = multer({
     storage: imageStorage,
     fileFilter: imageFilter,
-    limits: { fileSize: 5 * 1024 * 1024 } // 5MB cho ảnh
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
 });
 
 const uploadPdf = multer({
     storage: pdfStorage,
     fileFilter: pdfFilter,
-    limits: { fileSize: 10 * 1024 * 1024 } // 10MB cho PDF
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
 });
-
-module.exports = { uploadImage, uploadPdf };
+module.exports = { uploadImage, uploadPdf, cloudinary };
