@@ -80,25 +80,49 @@ let isLoading = false, retryCount = 0;
 const MAX_RETRY = 3;
 
 function getBookImage(book) {
+    // Kiểm tra book có tồn tại không
     if (!book) return PLACEHOLDER_SVG;
     
-    let imgField = book.image || book.coverImage || book.cover;
+    // Lấy URL ảnh từ nhiều nguồn khác nhau
+    let imageUrl = book.image || book.coverImage || '';
     
-    if (!imgField || imgField === "undefined" || imgField === "null" || imgField === "") {
-        const title = book?.title || "Book";
-        const encodedTitle = encodeURIComponent(title.substring(0, 20));
-        return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=200&fontsize=40&length=2&name=${encodedTitle}&bold=true`;
+    // Nếu không có ảnh bìa, thử lấy ảnh đầu tiên từ gallery
+    if (!imageUrl || imageUrl === 'undefined' || imageUrl === 'null' || imageUrl === '') {
+        if (book.galleryImages && Array.isArray(book.galleryImages) && book.galleryImages.length > 0) {
+            imageUrl = book.galleryImages[0];
+        }
     }
     
-    if (imgField.startsWith('/uploads/')) {
-        return BASE_URL + imgField;
+    // Vẫn không có ảnh -> dùng placeholder với tên sách
+    if (!imageUrl || imageUrl === 'undefined' || imageUrl === 'null' || imageUrl === '') {
+        const bookTitle = book.title || 'Book';
+        const encodedTitle = encodeURIComponent(bookTitle.substring(0, 20));
+        return `https://ui-avatars.com/api/?background=1D3557&color=fff&size=200&fontsize=40&length=3&name=${encodedTitle}&bold=true`;
     }
     
-    if (imgField.startsWith('http://') || imgField.startsWith('https://') || imgField.startsWith('data:')) {
-        return imgField;
+    // XỬ LÝ ĐƯỜNG DẪN - QUAN TRỌNG NHẤT
+    // Nếu đường dẫn đã là URL đầy đủ (http:// hoặc https://)
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+        return imageUrl;
     }
     
-    return BASE_URL + '/uploads/' + imgField;
+    // Nếu đường dẫn bắt đầu bằng /uploads/ (dạng /uploads/ten_file.jpg)
+    if (imageUrl.startsWith('/uploads/')) {
+        return BASE_URL + imageUrl;
+    }
+    
+    // Nếu đường dẫn bắt đầu bằng / (dạng /ten_file.jpg)
+    if (imageUrl.startsWith('/')) {
+        return BASE_URL + imageUrl;
+    }
+    
+    // Nếu đường dẫn bắt đầu bằng uploads/ (không có dấu / ở đầu)
+    if (imageUrl.startsWith('uploads/')) {
+        return BASE_URL + '/' + imageUrl;
+    }
+    
+    // Trường hợp còn lại, thử ghép với BASE_URL
+    return BASE_URL + '/' + imageUrl;
 }
 
 function renderStars(rating) {
