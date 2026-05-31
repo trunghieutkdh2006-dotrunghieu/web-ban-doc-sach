@@ -125,11 +125,21 @@ function renderCartDropdown() {
     return;
   }
   let total = 0;
-  dropdownItems.innerHTML = cart.map(item => {
+dropdownItems.innerHTML = cart.map(item => {
     const itemTotal = (item.price || 0) * (item.quantity || 1);
     total += itemTotal;
-    return `<div class="cart-dropdown-item"><img src="${item.image || PLACEHOLDER_SVG}" onerror="this.onerror=null; this.src=PLACEHOLDER_SVG"><div class="cart-dropdown-item-info"><div class="title">${escapeHtml(item.title)}</div><div class="price">${formatPrice(item.price)}</div><div class="quantity">Số lượng: ${item.quantity || 1}</div></div><div class="cart-dropdown-item-total">${formatPrice(itemTotal)}</div><button class="remove-cart-item" onclick="removeCartItem('${item.id}')"><i class="fas fa-times"></i></button></div>`;
-  }).join('');
+    return `<div class="cart-dropdown-item">
+        <img src="${item.image || PLACEHOLDER_SVG}" onerror="this.src=PLACEHOLDER_SVG">
+        <div class="cart-dropdown-item-info">
+            <div class="title">${escapeHtml(item.title)}</div>
+            <div class="author">${escapeHtml(item.author) || 'Không rõ tác giả'}</div>
+            <div class="quantity">Số lượng: ${item.quantity || 1}</div>
+        </div>
+        <div class="cart-dropdown-item-total">${formatPrice(itemTotal)}</div>
+        <button class="remove-cart-item" onclick="removeCartItem('${item.id}')"><i class="fas fa-times"></i></button>
+    </div>`;
+}).join('');
+
   if (dropdownTotalSpan) dropdownTotalSpan.textContent = formatPrice(total);
   if (dropdownFooter) dropdownFooter.style.display = 'block';
 }
