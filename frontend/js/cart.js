@@ -615,7 +615,10 @@ async function processCheckout() {
     title: "Thông tin giao hàng",
     html: `
       <input type="text" id="customerName" class="swal2-input" placeholder="Họ tên người nhận" value="${escapeHtml(localStorage.getItem("customerName") || "")}">
-      <input type="tel" id="customerPhone" class="swal2-input" placeholder="Số điện thoại" value="${escapeHtml(localStorage.getItem("customerPhone") || "")}">
+      <input type="tel" id="customerPhone" class="swal2-input" placeholder="Số điện thoại (VD: 0912345678)" value="${escapeHtml(localStorage.getItem("customerPhone") || "")}" inputmode="numeric">
+      <p style="font-size: 12px; color: #64748b; margin-top: 5px; text-align: left;">
+        <i class="fas fa-info-circle"></i> Số điện thoại gồm 10-11 chữ số, bắt đầu bằng 0
+      </p>
     `,
     showCancelButton: true,
     confirmButtonColor: "#e53e3e",
@@ -624,9 +627,41 @@ async function processCheckout() {
     cancelButtonText: "Hủy",
     preConfirm: () => {
       const name = document.getElementById("customerName").value.trim();
-      const phone = document.getElementById("customerPhone").value.trim();
-      if (!name) { Swal.showValidationMessage("Vui lòng nhập họ tên!"); return false; }
-      if (!phone) { Swal.showValidationMessage("Vui lòng nhập số điện thoại!"); return false; }
+      let phone = document.getElementById("customerPhone").value.trim();
+      
+      if (!name) { 
+        Swal.showValidationMessage("Vui lòng nhập họ tên!"); 
+        return false; 
+      }
+      
+      if (!phone) { 
+        Swal.showValidationMessage("Vui lòng nhập số điện thoại!"); 
+        return false; 
+      }
+      
+      // Xóa khoảng trắng và dấu gạch ngang
+      phone = phone.replace(/[\s\-]/g, '');
+      
+      // Kiểm tra chỉ chứa số hoặc + ở đầu, độ dài 10-12 ký tự
+      const phoneRegex = /^[0-9]{10,11}$/;
+      const phoneWithCountryRegex = /^\+84[0-9]{9,10}$/;
+      
+      if (!phoneRegex.test(phone) && !phoneWithCountryRegex.test(phone)) {
+        Swal.showValidationMessage("Số điện thoại không hợp lệ! Vui lòng nhập 10-11 số (VD: 0912345678)");
+        return false;
+      }
+      
+      // Kiểm tra không có chữ cái
+      if (/[a-zA-Z]/.test(phone)) {
+        Swal.showValidationMessage("Số điện thoại không được chứa chữ cái!");
+        return false;
+      }
+      
+      // Chuyển đổi +84 thành 0
+      if (phone.startsWith('+84')) {
+        phone = '0' + phone.slice(3);
+      }
+      
       localStorage.setItem("customerName", name);
       localStorage.setItem("customerPhone", phone);
       return { name, phone };
@@ -666,7 +701,7 @@ async function processCheckout() {
       title: "🎉 Đặt hàng thành công!",
       html: `
         <p>Cảm ơn <strong>${escapeHtml(result.value.name)}</strong> đã mua hàng!</p>
-        <p>SĐT: ${escapeHtml(result.value.phone)}</p>
+        <p>SĐT: <strong>${escapeHtml(result.value.phone)}</strong></p>
         <p>Tổng tiền: <strong style="color:#e53e3e">${formatPrice(total)}</strong></p>
         <p>File PDF sẽ gửi đến: <strong>${escapeHtml(email)}</strong></p>
         <p style="font-size: 12px; color: #38a169; margin-top: 10px;">
