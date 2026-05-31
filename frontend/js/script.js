@@ -28,43 +28,68 @@ function showToast(message, type = 'success', title = '') {
 }
 
 // ==================== CART ====================
-function getCart() { const cart = localStorage.getItem('shoppingCart'); return cart ? JSON.parse(cart) : []; }
-function saveCart(cart) { 
-    localStorage.setItem('shoppingCart', JSON.stringify(cart)); 
-    updateCartBadge(); 
-    renderCartDropdown(); 
-    updateCartCount();
+const CART_KEY = 'shoppingCart'; 
+function getCart() {
+  try {
+    const cart = localStorage.getItem(CART_KEY);
+    return cart ? JSON.parse(cart) : [];
+  } catch (e) { return []; }
+}
+function saveCart(cart) {
+  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  localStorage.setItem("cart_last_update", new Date().toISOString());
+  renderCart();
+  updateCartCount();  // ⭐ THÊM DÒNG NÀY: Cập nhật số lượng trên icon
+  console.log('🛒 saveCart - Đã lưu, tổng số lượng:', getTotalCartItems());
 }
 function updateCartCount() {
     const cart = getCart();
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     
-    // Tìm phần tử hiển thị giỏ hàng
-    const cartElements = document.querySelectorAll('.cart-count, #cartCount, .cart-badge, [class*="cart-count"]');
+    console.log('🛒 updateCartCount - Tổng số lượng:', totalItems);
+    console.log('🛒 Dữ liệu giỏ hàng:', cart);
     
-    cartElements.forEach(el => {
-        if (totalItems > 0) {
-            // Có sản phẩm: hiển thị số lượng
-            el.textContent = totalItems;
-            el.style.display = 'inline-flex';
-            el.style.display = 'flex';
-            console.log(`🛒 Hiển thị số: ${totalItems}`);
-        } else {
-            // Không có sản phẩm: hiển thị số 0 (hoặc ẩn đi)
-            el.textContent = '0';
-            el.style.display = 'inline-flex';
-            el.style.display = 'flex';
-            // Hoặc nếu muốn ẩn: el.style.display = 'none';
-            console.log(`🛒 Giỏ hàng trống, hiển thị 0`);
-        }
-    });
+    // Tìm phần tử #cartCount TRƯỚC TIÊN
+    let countElement = document.getElementById('cartCount');
     
-    return totalItems;
+    // Nếu không tìm thấy, tìm .cart-count
+    if (!countElement) {
+        countElement = document.querySelector('.cart-count');
+    }
+    
+    // Nếu vẫn không tìm thấy, in ra cảnh báo
+    if (!countElement) {
+        console.warn('⚠️ KHÔNG TÌM THẤY #cartCount hoặc .cart-count!');
+        console.log('Các element có chứa "cart" trong id/class:', 
+            Array.from(document.querySelectorAll('[id*="cart"], [class*="cart"]')).map(el => ({
+                tag: el.tagName,
+                id: el.id,
+                class: el.className
+            }))
+        );
+        return;
+    }
+    
+    // Cập nhật giao diện
+    if (totalItems > 0) {
+        countElement.textContent = totalItems;
+        countElement.style.display = 'inline-flex';
+        countElement.style.removeProperty('display');
+        console.log(`✅ Đã cập nhật số lượng: ${totalItems}`);
+    } else {
+        countElement.textContent = '0';
+        countElement.style.display = 'none';
+        console.log(`✅ Đã ẩn số lượng (giỏ hàng trống)`);
+    }
+}
+function getTotalCartItems() {
+    const cart = getCart();
+    return cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
 }
 function updateCartBadge() { const cart = getCart(); const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0); const cartCountSpan = document.getElementById('cartCount'); if (cartCountSpan) { if (totalItems > 0) { cartCountSpan.textContent = totalItems; cartCountSpan.style.display = 'flex'; } else { cartCountSpan.style.display = 'none'; } } }
 function formatPrice(price) { if (!price && price !== 0) return '0đ'; return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + 'đ'; }
 function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
-
+// Hàm thêm vào giỏ hàng - ĐẢM BẢO LƯU ĐẦY ĐỦ THÔNG TIN
 function addToCart(id, title, price, image, author) {
     // Trường hợp 1: Gọi với 1 tham số là object (cách cũ)
     if (arguments.length === 1 && typeof id === 'object') {
@@ -108,9 +133,7 @@ function addToCart(id, title, price, image, author) {
         showToast(`Đã thêm "${cartItem.title}" vào giỏ hàng!`, 'success');
     }
     
-    saveCart(cart);
-    updateCartCount();
-    renderCartDropdown();
+    saveCart(cart);  // saveCart sẽ tự động gọi updateCartCount
 }
 
 function renderCartDropdown() {
@@ -119,6 +142,9 @@ function renderCartDropdown() {
   const dropdownFooter = document.getElementById('cartDropdownFooter');
   const dropdownTotalSpan = document.getElementById('dropdownTotal');
   if (!dropdownItems) return;
+  
+  console.log('🛒 renderCartDropdown - Số lượng sản phẩm:', cart.length);
+  
   if (cart.length === 0) {
     dropdownItems.innerHTML = `<div class="cart-dropdown-empty"><i class="fas fa-shopping-cart"></i><p>Giỏ hàng đang trống</p></div>`;
     if (dropdownFooter) dropdownFooter.style.display = 'none';
@@ -144,7 +170,6 @@ dropdownItems.innerHTML = cart.map(item => {
   if (dropdownFooter) dropdownFooter.style.display = 'block';
 }
 
-function removeCartItem(itemId) { let cart = getCart(); cart = cart.filter(item => item.id !== itemId); saveCart(cart); renderCartDropdown(); updateCartBadge(); showToast('Đã xóa sản phẩm khỏi giỏ hàng', 'warning', '🗑️ Đã xóa'); }
 function clearCartDropdown() { 
     const cart = getCart(); 
     if (cart.length === 0) { 
@@ -161,13 +186,20 @@ function clearCartDropdown() {
         if (result.isConfirmed) { 
             localStorage.setItem('shoppingCart', JSON.stringify([])); 
             renderCartDropdown(); 
-            updateCartBadge(); 
             updateCartCount();  // ⭐ THÊM DÒNG NÀY
             showToast('Đã xóa toàn bộ giỏ hàng', 'success'); 
         } 
     }); 
 }
-// ==================== CONFIG (từ config.js) ====================
+
+function removeCartItem(itemId) { 
+    let cart = getCart(); 
+    cart = cart.filter(item => item.id !== itemId); 
+    saveCart(cart); 
+    renderCartDropdown(); 
+    updateCartCount();  // ⭐ SỬA: updateCartBadge -> updateCartCount
+    showToast('Đã xóa sản phẩm khỏi giỏ hàng', 'warning', '🗑️ Đã xóa'); 
+}// ==================== CONFIG (từ config.js) ====================
 let booksCache = [], categoriesCache = [], wishlist = [], user = null;
 let currentReviewBookId = null, currentReviewsBookId = null, currentReviewsBookTitle = '';
 let _modalImgs = [], _modalImgIdx = 0;
