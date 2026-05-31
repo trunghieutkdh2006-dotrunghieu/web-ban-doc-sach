@@ -35,6 +35,27 @@ function saveCart(cart) {
     renderCartDropdown(); 
     updateCartCount();
 }
+function updateCartCount() {
+    const cart = getCart();
+    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
+    
+    // Tìm tất cả các phần tử hiển thị số lượng
+    const elements = document.querySelectorAll('.cart-count, #cartCount, .cart-badge, span[id*="cart"], span[class*="cart"]');
+    
+    elements.forEach(el => {
+        if (totalItems > 0) {
+            el.textContent = totalItems;
+            el.style.display = 'inline-flex';
+            el.style.display = 'flex';
+        } else {
+            el.textContent = '0';
+            el.style.display = 'none';
+        }
+    });
+    
+    console.log(`🛒 Cập nhật số lượng giỏ hàng: ${totalItems}`);
+    return totalItems;
+}
 function updateCartBadge() { const cart = getCart(); const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0); const cartCountSpan = document.getElementById('cartCount'); if (cartCountSpan) { if (totalItems > 0) { cartCountSpan.textContent = totalItems; cartCountSpan.style.display = 'flex'; } else { cartCountSpan.style.display = 'none'; } } }
 function formatPrice(price) { if (!price && price !== 0) return '0đ'; return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + 'đ'; }
 function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }

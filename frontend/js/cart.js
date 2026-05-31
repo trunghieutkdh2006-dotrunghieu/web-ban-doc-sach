@@ -1026,31 +1026,67 @@ function updateCartCount() {
     const cart = getCart();
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     
-    // Tìm phần tử hiển thị số lượng
-    let countElement = document.getElementById('cartCount');
-    if (!countElement) countElement = document.querySelector('.cart-count');
+    console.log('🛒 updateCartCount - totalItems từ localStorage:', totalItems);
+    
+    // Tìm tất cả các phần tử có thể hiển thị số lượng
+    const selectors = [
+        '#cartCount',
+        '.cart-count',
+        '.cart-badge',
+        '#cartItemCount',
+        '.cart-quantity',
+        'span.cart-count',
+        '[data-cart-count]'
+    ];
+    
+    let countElement = null;
+    for (const selector of selectors) {
+        countElement = document.querySelector(selector);
+        if (countElement) {
+            console.log(`✅ Tìm thấy phần tử với selector: ${selector}`);
+            break;
+        }
+    }
+    
+    // Nếu vẫn không tìm thấy, tìm bất kỳ element nào có chứa số và nằm gần icon giỏ hàng
+    if (!countElement) {
+        const possibleElements = document.querySelectorAll('span, div, strong, em');
+        for (const el of possibleElements) {
+            const text = el.textContent?.trim();
+            if (text && /^\d+$/.test(text) && el.closest('.cart-wrapper, .cart-icon, .cart-btn, [class*="cart"]')) {
+                countElement = el;
+                console.log(`✅ Tìm thấy phần tử thay thế:`, el);
+                break;
+            }
+        }
+    }
     
     if (countElement) {
         if (totalItems > 0) {
             countElement.textContent = totalItems;
-            // ⭐ QUAN TRỌNG: Xóa style display:none và set đúng style
-            countElement.style.display = '';
             countElement.style.display = 'inline-flex';
-            countElement.style.removeProperty('display');
-            // Hoặc dùng cách này:
             countElement.style.display = 'flex';
+            countElement.style.removeProperty('display');
+            console.log(`✅ Đã cập nhật số lượng: ${totalItems}`);
         } else {
             countElement.textContent = '0';
             countElement.style.display = 'none';
+            console.log(`✅ Đã ẩn số lượng (giỏ hàng trống)`);
         }
-        console.log(`🛒 Cập nhật số lượng giỏ hàng: ${totalItems}`);
     } else {
-        console.warn('⚠️ Không tìm thấy phần tử hiển thị số lượng giỏ hàng');
+        console.warn('⚠️ KHÔNG TÌM THẤY phần tử hiển thị số lượng giỏ hàng!');
+        console.log('Các element có chứa "cart" trong class/id:', 
+            Array.from(document.querySelectorAll('[class*="cart"], [id*="cart"]')).map(el => ({
+                tag: el.tagName,
+                class: el.className,
+                id: el.id,
+                text: el.textContent
+            }))
+        );
     }
     
     return totalItems;
 }
-
 // ==================== INIT ====================
 window.addEventListener("storage", (e) => {
   if (e.key === CART_KEY) renderCart();
