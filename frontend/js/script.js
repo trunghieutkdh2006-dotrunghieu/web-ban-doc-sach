@@ -1228,11 +1228,11 @@ async function likeReview(reviewId, buttonElement) {
         toggleAuth(true);
         return;
     }
-    
+
     const originalHtml = buttonElement.innerHTML;
-    buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
     buttonElement.disabled = true;
-    
+    buttonElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ...';
+
     try {
         const response = await fetch(`${BASE_URL}/api/reviews/${reviewId}/like`, {
             method: 'POST',
@@ -1242,34 +1242,27 @@ async function likeReview(reviewId, buttonElement) {
                 'ngrok-skip-browser-warning': '69420'
             }
         });
-        
+
         const data = await response.json();
-        
+
         if (data.success) {
-            const reviewContainer = buttonElement.closest('.review-item');
-            if (reviewContainer) {
-                const likeCountSpan = buttonElement.querySelector('.like-count');
-                if (likeCountSpan) likeCountSpan.textContent = data.likes;
-                
-                const icon = buttonElement.querySelector('i');
-                if (data.liked) {
-                    icon.classList.remove('far');
-                    icon.classList.add('fas');
-                    buttonElement.classList.add('liked');
-                } else {
-                    icon.classList.remove('fas');
-                    icon.classList.add('far');
-                    buttonElement.classList.remove('liked');
-                }
+            // Xây dựng HTML mới từ kết quả API - KHÔNG restore originalHtml
+            const iconClass = data.liked ? 'fas fa-thumbs-up' : 'far fa-thumbs-up';
+            buttonElement.innerHTML = `<i class="${iconClass}"></i> <span class="like-count">${data.likes}</span> Hữu ích`;
+            if (data.liked) {
+                buttonElement.classList.add('liked');
+            } else {
+                buttonElement.classList.remove('liked');
             }
         } else {
             showToast(data.message || 'Có lỗi xảy ra!', 'error');
+            buttonElement.innerHTML = originalHtml;
         }
     } catch (error) {
         console.error('Lỗi like review:', error);
         showToast('Lỗi kết nối đến máy chủ!', 'error');
-    } finally {
         buttonElement.innerHTML = originalHtml;
+    } finally {
         buttonElement.disabled = false;
     }
 }
