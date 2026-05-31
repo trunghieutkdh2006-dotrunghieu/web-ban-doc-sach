@@ -94,7 +94,7 @@ function addToCart(id, title, price, image, author) {
     const cartItem = {
         id: id,
         title: title || "Không có tiêu đề",
-        author: author || "Không rõ tác giả",
+        author: author,
         price: Number(price) || 0,
         image: image || "https://via.placeholder.com/200x250?text=No+Image",
         quantity: 1
