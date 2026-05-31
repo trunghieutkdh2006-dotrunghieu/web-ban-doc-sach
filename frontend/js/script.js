@@ -29,50 +29,62 @@ function showToast(message, type = 'success', title = '') {
 
 // ==================== CART ====================
 function getCart() { const cart = localStorage.getItem('shoppingCart'); return cart ? JSON.parse(cart) : []; }
-function saveCart(cart) { localStorage.setItem('shoppingCart', JSON.stringify(cart)); updateCartBadge(); renderCartDropdown(); }
+function saveCart(cart) { 
+    localStorage.setItem('shoppingCart', JSON.stringify(cart)); 
+    updateCartBadge(); 
+    renderCartDropdown(); 
+    updateCartCount();
+}
 function updateCartBadge() { const cart = getCart(); const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0); const cartCountSpan = document.getElementById('cartCount'); if (cartCountSpan) { if (totalItems > 0) { cartCountSpan.textContent = totalItems; cartCountSpan.style.display = 'flex'; } else { cartCountSpan.style.display = 'none'; } } }
 function formatPrice(price) { if (!price && price !== 0) return '0đ'; return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + 'đ'; }
 function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-// HÀM THÊM VÀO GIỎ - SỬA LẠI NHƯ SAU
-function addToCart(book) {
-    let cart = JSON.parse(localStorage.getItem("shoppingCart") || "[]");
+function addToCart(id, title, price, image, author) {
+    // Trường hợp 1: Gọi với 1 tham số là object (cách cũ)
+    if (arguments.length === 1 && typeof id === 'object') {
+        const book = id;
+        id = book._id;
+        title = book.title || book.name;
+        price = book.price;
+        image = book.image;
+        author = book.author;
+    }
+    
+    // Kiểm tra dữ liệu đầu vào
+    if (!id || !title) {
+        console.error('❌ Thiếu thông tin sản phẩm:', { id, title, price, image, author });
+        showToast('Không thể thêm sản phẩm: thiếu thông tin!', 'error');
+        return;
+    }
+    
+    let cart = getCart();
     
     // Kiểm tra sản phẩm đã tồn tại chưa
-    const existingIndex = cart.findIndex(item => item.id === book._id);
+    const existingIndex = cart.findIndex(item => item.id === id);
     
     // Tạo object sản phẩm ĐẦY ĐỦ thông tin
     const cartItem = {
-        id: book._id,
-        title: book.title || book.name || "Không có tiêu đề",
-        author: book.author || "Không rõ tác giả",   // ⭐ THÊM DÒNG NÀY
-        price: book.price || 0,
-        image: book.image || "https://via.placeholder.com/200x250?text=No+Image", // ⭐ THÊM DÒNG NÀY
+        id: id,
+        title: title || "Không có tiêu đề",
+        author: author || "Không rõ tác giả",
+        price: Number(price) || 0,
+        image: image || "https://via.placeholder.com/200x250?text=No+Image",
         quantity: 1
     };
     
+    console.log('🛒 Thêm vào giỏ:', cartItem);
+    
     if (existingIndex !== -1) {
         cart[existingIndex].quantity += 1;
+        showToast(`Đã tăng số lượng "${cartItem.title}" lên ${cart[existingIndex].quantity}`, 'success');
     } else {
         cart.push(cartItem);
+        showToast(`Đã thêm "${cartItem.title}" vào giỏ hàng!`, 'success');
     }
     
-    localStorage.setItem("shoppingCart", JSON.stringify(cart));
-    
-    // Cập nhật lại số lượng hiển thị trên icon giỏ hàng
+    saveCart(cart);
     updateCartCount();
-    
-    // Hiển thị thông báo
-    Swal.fire({
-        icon: "success",
-        title: "Đã thêm vào giỏ",
-        text: cartItem.title,
-        timer: 1500,
-        showConfirmButton: false
-    });
-    
-    // Nếu đang ở trang giỏ hàng, render lại
-    if (typeof renderCart === 'function') renderCart();
+    renderCartDropdown();
 }
 
 function renderCartDropdown() {
