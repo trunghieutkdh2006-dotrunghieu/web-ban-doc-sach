@@ -1022,7 +1022,6 @@ function connectSocket() {
     console.error('Lỗi kết nối socket:', err);
   }
 }
-// ==================== CẬP NHẬT SỐ LƯỢNG GIỎ HÀNG ====================
 function updateCartCount() {
     const cart = getCart();
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
@@ -1030,18 +1029,23 @@ function updateCartCount() {
     // Tìm phần tử hiển thị số lượng
     let countElement = document.getElementById('cartCount');
     if (!countElement) countElement = document.querySelector('.cart-count');
-    if (!countElement) countElement = document.querySelector('.cart-badge');
-    if (!countElement) countElement = document.querySelector('#cartItemCount');
     
     if (countElement) {
         if (totalItems > 0) {
             countElement.textContent = totalItems;
+            // ⭐ QUAN TRỌNG: Xóa style display:none và set đúng style
+            countElement.style.display = '';
             countElement.style.display = 'inline-flex';
+            countElement.style.removeProperty('display');
+            // Hoặc dùng cách này:
+            countElement.style.display = 'flex';
         } else {
             countElement.textContent = '0';
             countElement.style.display = 'none';
         }
         console.log(`🛒 Cập nhật số lượng giỏ hàng: ${totalItems}`);
+    } else {
+        console.warn('⚠️ Không tìm thấy phần tử hiển thị số lượng giỏ hàng');
     }
     
     return totalItems;
