@@ -484,11 +484,11 @@
 }
 
 .cart-dropdown-item {
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    border-radius: 10px;
-    transition: var(--transition);
+    display: flex !important;
+    align-items: center !important;
+    gap: 12px !important;
+    padding: 12px !important;
+    border-bottom: 1px solid #e2e8f0 !important;
 }
 
 .cart-dropdown-item:hover {
@@ -496,10 +496,43 @@
 }
 
 .cart-dropdown-item img {
-    width: 48px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 6px;
+    width: 48px !important;
+    height: 60px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+}
+
+.cart-dropdown-item-info {
+    flex: 1 !important;
+    min-width: 0 !important;
+    /* Cho phép text wrap */
+}
+
+.cart-dropdown-item-info .title {
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    color: #1e293b !important;
+    margin-bottom: 4px !important;
+}
+
+.cart-dropdown-item-info .author {
+    font-size: 12px !important;
+    color: #64748b !important;
+    margin-bottom: 4px !important;
+}
+
+.cart-dropdown-item-info .quantity {
+    font-size: 12px !important;
+    color: #64748b !important;
+}
+
+.cart-dropdown-item-total {
+    font-weight: 700 !important;
+    color: #e53e3e !important;
+    font-size: 14px !important;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
 }
 
 .cart-item-info {
@@ -560,18 +593,25 @@
 }
 
 .remove-cart-item {
-    background: none;
-    border: none;
-    outline: none;
-    color: var(--danger);
-    cursor: pointer;
-    padding: 0;
-    font-size: 18px;
-    transition: var(--transition);
+    background: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    color: #94a3b8 !important;
+    font-size: 16px !important;
+    padding: 8px !important;
+    transition: all 0.3s !important;
+    flex-shrink: 0 !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
 }
 
 .remove-cart-item:hover {
-    color: #d9363e;
+    color: #e53e3e !important;
+    background: #fee2e2 !important;
 }
 
 .clear-cart-btn {
