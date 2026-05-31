@@ -34,14 +34,14 @@ function updateCartBadge() { const cart = getCart(); const totalItems = cart.red
 function formatPrice(price) { if (!price && price !== 0) return '0đ'; return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + 'đ'; }
 function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-function addToCart(bookId, bookTitle, bookPrice, bookImage) {
+function addToCart(bookId, bookTitle, bookPrice, bookImage, bookAuthor) {
   let cart = getCart();
   const existingItem = cart.find(item => item.id === bookId);
   if (existingItem) {
     existingItem.quantity += 1;
     showToast(`Đã tăng số lượng "${bookTitle}" lên ${existingItem.quantity}`, 'success', '🛒 Cập nhật giỏ hàng');
   } else {
-    cart.push({ id: bookId, title: bookTitle, price: bookPrice, image: bookImage, quantity: 1 });
+    cart.push({ id: bookId, title: bookTitle, price: bookPrice, image: bookImage, author: bookAuthor || '', quantity: 1 });
     showToast(`Đã thêm "${bookTitle}" vào giỏ hàng với giá ${formatPrice(bookPrice)}`, 'success', '🛒 Thêm giỏ hàng');
   }
   saveCart(cart);
@@ -331,7 +331,7 @@ function renderBookCard(book) {
                 ${discountPct > 0 ? `<span class="price-orig">${formatPrice(originalPrice)}</span>` : ''}
             </div>
             <div class="book-actions">
-                <button class="modal-btn modal-btn-cart" onclick="addToCart('${book._id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}', ${book.price}, '${bookImage}')">🛒 Thêm giỏ</button>
+                <button class="modal-btn modal-btn-cart" onclick="addToCart('${book._id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}', ${book.price}, '${bookImage}', '${escapeHtml(book.author || '').replace(/'/g, "\\'")}')">🛒 Thêm giỏ</button>
                 <button class="modal-btn modal-btn-review" onclick="openReviewModal('${book._id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}')">⭐ Đánh giá</button>
                 <button class="modal-btn modal-btn-view-reviews" onclick="viewReviews('${book._id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}')">📝 Xem đánh giá</button>
                 ${pdfButton}
@@ -480,7 +480,7 @@ try {
                     <button class="view-reviews-link" onclick="viewReviews('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}')">Xem tất cả</button>
                 </div>
                 <div class="modal-actions-row">
-                    <button class="modal-btn modal-btn-cart" onclick="addToCart('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}', ${book.price}, '${coverImg}')">🛒 Thêm giỏ</button>
+                    <button class="modal-btn modal-btn-cart" onclick="addToCart('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}', ${book.price}, '${coverImg}', '${escapeHtml(book.author || '').replace(/'/g, "\\'")}')">🛒 Thêm giỏ</button>
                     <button class="modal-btn modal-btn-review" onclick="openReviewModal('${id}', '${escapeHtml(book.title).replace(/'/g, "\\'")}')">⭐ Đánh giá</button>
                     ${pdfButton}
                     <button class="modal-btn modal-btn-wish ${isWishlisted(id) ? 'active' : ''}" onclick="toggleWishlist('${id}')">

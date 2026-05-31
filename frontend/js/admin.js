@@ -1146,7 +1146,12 @@ async function saveBook() {
         .map(item => item.oldUrl);  // URL gốc từ server
 
     // 2. Gửi danh sách ảnh cũ cần giữ (để backend không xóa chúng)
-    if (oldImagesToKeep.length > 0) {
+    // Luôn gửi existingImages khi là edit (bookId có giá trị)
+    const bookIdValue = document.getElementById('bookId')?.value;
+    if (bookIdValue) {
+        // Khi edit: luôn gửi (kể cả rỗng) để backend biết chỉ giữ những ảnh này
+        formData.append('existingImages', JSON.stringify(oldImagesToKeep));
+    } else if (oldImagesToKeep.length > 0) {
         formData.append('existingImages', JSON.stringify(oldImagesToKeep));
     }
 
