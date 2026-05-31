@@ -195,8 +195,49 @@ function applyCoupon() {
   renderCart();
 }
 
+// ==================== LÀM GIÀU DỮ LIỆU GIỎ HÀNG TỪ API ====================
+async function enrichCartAuthors() {
+  let cart = getCart();
+  const missing = cart.filter(item => !item.author || item.author === "Không rõ tác giả");
+  if (missing.length === 0) return; // tất cả đã có author, bỏ qua
+
+  try {
+    const ids = missing.map(item => item.id).join(',');
+    // Lấy từng sách bị thiếu author
+    const fetchPromises = missing.map(item =>
+      fetch(`${API_BASE_URL}/books/${item.id}`, {
+        headers: { 'ngrok-skip-browser-warning': 'true' }
+      })
+        .then(res => res.ok ? res.json() : null)
+        .catch(() => null)
+    );
+    const results = await Promise.all(fetchPromises);
+
+    results.forEach((book, i) => {
+      if (book && book.author) {
+        const cartIndex = cart.findIndex(c => c.id === missing[i].id);
+        if (cartIndex !== -1) {
+          cart[cartIndex].author = book.author;
+          // Cập nhật thêm ảnh nếu bị thiếu
+          if (!cart[cartIndex].image || cart[cartIndex].image === "undefined") {
+            cart[cartIndex].image = book.image || book.coverImage || "";
+          }
+        }
+      }
+    });
+
+    // Lưu lại cart đã được bổ sung author
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  } catch (e) {
+    console.warn("Không thể bổ sung thông tin tác giả từ API:", e);
+  }
+}
+
 // ==================== RENDER CART ====================
-function renderCart() {
+async function renderCart() {
+  // Bổ sung author còn thiếu từ API trước khi render
+  await enrichCartAuthors();
+
   // === TỰ ĐỘNG SET EMAIL TỪ TÀI KHOẢN ===
   const emailInput = document.getElementById("customer-email");
   if (emailInput) {
@@ -239,7 +280,7 @@ function renderCart() {
         <img src="${getBookImage(item)}" alt="${escapeHtml(item.title)}" onerror="this.src='https://via.placeholder.com/200x250?text=No+Image'">
         <div class="cart-product-info">
           <h4>${escapeHtml(item.title)}</h4>
-          <p>${escapeHtml(item.author) || "Không rõ tác giả"}</p>
+          <p>${item.author && item.author.trim() ? escapeHtml(item.author) : "Không rõ tác giả"}</p>
           <div class="cart-product-price">${formatPrice(item.price)}</div>
           <div style="display:flex;gap:8px;margin-top:8px;">
             <button class="remove-item" onclick="saveForLater('${item.id}')" style="background:#e53e3e;color:white;padding:6px 12px;border-radius:8px;border:none;cursor:pointer;">
