@@ -135,7 +135,48 @@ function addToCart(id, title, price, image, author) {
     saveCart(cart);  // saveCart sẽ tự động gọi updateCartCount
 }
 
-function renderCartDropdown() {
+// ==================== BỔ SUNG AUTHOR TỪ API NẾU THIẾU ====================
+async function enrichCartAuthors() {
+  let cart = getCart();
+  const missing = cart.filter(item => !item.author || item.author === "Không rõ tác giả");
+  if (missing.length === 0) return;
+
+  try {
+    const fetchPromises = missing.map(item =>
+      fetch(`${API_BASE_URL}/books/${item.id}`, {
+        headers: { 'ngrok-skip-browser-warning': 'true' }
+      })
+        .then(res => res.ok ? res.json() : null)
+        .catch(() => null)
+    );
+    const results = await Promise.all(fetchPromises);
+
+    let updated = false;
+    results.forEach((book, i) => {
+      if (book && book.author) {
+        const cartIndex = cart.findIndex(c => c.id === missing[i].id);
+        if (cartIndex !== -1) {
+          cart[cartIndex].author = book.author;
+          if (!cart[cartIndex].image || cart[cartIndex].image === "undefined") {
+            cart[cartIndex].image = book.image || book.coverImage || "";
+          }
+          updated = true;
+        }
+      }
+    });
+
+    if (updated) {
+      localStorage.setItem('shoppingCart', JSON.stringify(cart));
+    }
+  } catch (e) {
+    console.warn("Không thể bổ sung thông tin tác giả:", e);
+  }
+}
+
+async function renderCartDropdown() {
+  // Bổ sung author còn thiếu từ API trước khi render
+  await enrichCartAuthors();
+
   const cart = getCart();
   const dropdownItems = document.getElementById('cartDropdownItems');
   const dropdownFooter = document.getElementById('cartDropdownFooter');
@@ -157,7 +198,7 @@ dropdownItems.innerHTML = cart.map(item => {
         <img src="${item.image || PLACEHOLDER_SVG}" onerror="this.src=PLACEHOLDER_SVG">
         <div class="cart-dropdown-item-info">
             <div class="title">${escapeHtml(item.title)}</div>
-            <div class="author">${escapeHtml(item.author) || 'Không rõ tác giả'}</div>
+            <div class="author">${item.author && item.author.trim() ? escapeHtml(item.author) : 'Không rõ tác giả'}</div>
             <div class="quantity">Số lượng: ${item.quantity || 1}</div>
         </div>
         <div class="cart-dropdown-item-total">${formatPrice(itemTotal)}</div>
