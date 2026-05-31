@@ -38,7 +38,6 @@ function getCart() {
 function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
   localStorage.setItem("cart_last_update", new Date().toISOString());
-  renderCart();
   updateCartCount();  // ⭐ THÊM DÒNG NÀY: Cập nhật số lượng trên icon
   console.log('🛒 saveCart - Đã lưu, tổng số lượng:', getTotalCartItems());
 }
