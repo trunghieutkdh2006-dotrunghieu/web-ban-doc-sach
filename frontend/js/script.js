@@ -39,21 +39,19 @@ function updateCartCount() {
     const cart = getCart();
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     
-    // Tìm tất cả các phần tử hiển thị số lượng
-    const elements = document.querySelectorAll('.cart-count, #cartCount, .cart-badge, span[id*="cart"], span[class*="cart"]');
+    const elements = document.querySelectorAll('.cart-count, #cartCount, .cart-badge');
     
     elements.forEach(el => {
-        if (totalItems > 0) {
-            el.textContent = totalItems;
-            el.style.display = 'inline-flex';
-            el.style.display = 'flex';
-        } else {
-            el.textContent = '0';
-            el.style.display = 'none';
-        }
+        // Luôn hiển thị chữ "Giỏ hàng", không hiển thị số
+        el.textContent = 'Giỏ hàng';
+        el.style.display = 'inline-flex';
+        el.style.display = 'flex';
+        
+        // Nếu muốn thêm số lượng nhỏ bên cạnh: 'Giỏ hàng (1)'
+        // el.textContent = totalItems > 0 ? `Giỏ hàng (${totalItems})` : 'Giỏ hàng';
     });
     
-    console.log(`🛒 Cập nhật số lượng giỏ hàng: ${totalItems}`);
+    console.log(`🛒 Đã đổi thành "Giỏ hàng"`);
     return totalItems;
 }
 function updateCartBadge() { const cart = getCart(); const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0); const cartCountSpan = document.getElementById('cartCount'); if (cartCountSpan) { if (totalItems > 0) { cartCountSpan.textContent = totalItems; cartCountSpan.style.display = 'flex'; } else { cartCountSpan.style.display = 'none'; } } }
@@ -130,8 +128,28 @@ function renderCartDropdown() {
 }
 
 function removeCartItem(itemId) { let cart = getCart(); cart = cart.filter(item => item.id !== itemId); saveCart(cart); renderCartDropdown(); updateCartBadge(); showToast('Đã xóa sản phẩm khỏi giỏ hàng', 'warning', '🗑️ Đã xóa'); }
-function clearCartDropdown() { const cart = getCart(); if (cart.length === 0) { showToast('Giỏ hàng đã trống', 'info'); return; } Swal.fire({ title: 'Xóa toàn bộ giỏ hàng?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#e53e3e', confirmButtonText: 'Xóa tất cả' }).then((result) => { if (result.isConfirmed) { localStorage.setItem('shoppingCart', JSON.stringify([])); renderCartDropdown(); updateCartBadge(); showToast('Đã xóa toàn bộ giỏ hàng', 'success'); } }); }
-
+function clearCartDropdown() { 
+    const cart = getCart(); 
+    if (cart.length === 0) { 
+        showToast('Giỏ hàng đã trống', 'info'); 
+        return; 
+    } 
+    Swal.fire({ 
+        title: 'Xóa toàn bộ giỏ hàng?', 
+        icon: 'warning', 
+        showCancelButton: true, 
+        confirmButtonColor: '#e53e3e', 
+        confirmButtonText: 'Xóa tất cả' 
+    }).then((result) => { 
+        if (result.isConfirmed) { 
+            localStorage.setItem('shoppingCart', JSON.stringify([])); 
+            renderCartDropdown(); 
+            updateCartBadge(); 
+            updateCartCount();  // ⭐ THÊM DÒNG NÀY
+            showToast('Đã xóa toàn bộ giỏ hàng', 'success'); 
+        } 
+    }); 
+}
 // ==================== CONFIG (từ config.js) ====================
 let booksCache = [], categoriesCache = [], wishlist = [], user = null;
 let currentReviewBookId = null, currentReviewsBookId = null, currentReviewsBookTitle = '';
