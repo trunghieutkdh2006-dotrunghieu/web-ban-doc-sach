@@ -34,17 +34,45 @@ function updateCartBadge() { const cart = getCart(); const totalItems = cart.red
 function formatPrice(price) { if (!price && price !== 0) return '0đ'; return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') + 'đ'; }
 function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
 
-function addToCart(bookId, bookTitle, bookPrice, bookImage, bookAuthor) {
-  let cart = getCart();
-  const existingItem = cart.find(item => item.id === bookId);
-  if (existingItem) {
-    existingItem.quantity += 1;
-    showToast(`Đã tăng số lượng "${bookTitle}" lên ${existingItem.quantity}`, 'success', '🛒 Cập nhật giỏ hàng');
-  } else {
-    cart.push({ id: bookId, title: bookTitle, price: bookPrice, image: bookImage, author: bookAuthor || '', quantity: 1 });
-    showToast(`Đã thêm "${bookTitle}" vào giỏ hàng với giá ${formatPrice(bookPrice)}`, 'success', '🛒 Thêm giỏ hàng');
-  }
-  saveCart(cart);
+// HÀM THÊM VÀO GIỎ - SỬA LẠI NHƯ SAU
+function addToCart(book) {
+    let cart = JSON.parse(localStorage.getItem("shoppingCart") || "[]");
+    
+    // Kiểm tra sản phẩm đã tồn tại chưa
+    const existingIndex = cart.findIndex(item => item.id === book._id);
+    
+    // Tạo object sản phẩm ĐẦY ĐỦ thông tin
+    const cartItem = {
+        id: book._id,
+        title: book.title || book.name || "Không có tiêu đề",
+        author: book.author || "Không rõ tác giả",   // ⭐ THÊM DÒNG NÀY
+        price: book.price || 0,
+        image: book.image || "https://via.placeholder.com/200x250?text=No+Image", // ⭐ THÊM DÒNG NÀY
+        quantity: 1
+    };
+    
+    if (existingIndex !== -1) {
+        cart[existingIndex].quantity += 1;
+    } else {
+        cart.push(cartItem);
+    }
+    
+    localStorage.setItem("shoppingCart", JSON.stringify(cart));
+    
+    // Cập nhật lại số lượng hiển thị trên icon giỏ hàng
+    updateCartCount();
+    
+    // Hiển thị thông báo
+    Swal.fire({
+        icon: "success",
+        title: "Đã thêm vào giỏ",
+        text: cartItem.title,
+        timer: 1500,
+        showConfirmButton: false
+    });
+    
+    // Nếu đang ở trang giỏ hàng, render lại
+    if (typeof renderCart === 'function') renderCart();
 }
 
 function renderCartDropdown() {
