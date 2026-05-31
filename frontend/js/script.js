@@ -39,19 +39,26 @@ function updateCartCount() {
     const cart = getCart();
     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0);
     
-    const elements = document.querySelectorAll('.cart-count, #cartCount, .cart-badge');
+    // Tìm phần tử hiển thị giỏ hàng
+    const cartElements = document.querySelectorAll('.cart-count, #cartCount, .cart-badge, [class*="cart-count"]');
     
-    elements.forEach(el => {
-        // Luôn hiển thị chữ "Giỏ hàng", không hiển thị số
-        el.textContent = 'Giỏ hàng';
-        el.style.display = 'inline-flex';
-        el.style.display = 'flex';
-        
-        // Nếu muốn thêm số lượng nhỏ bên cạnh: 'Giỏ hàng (1)'
-        // el.textContent = totalItems > 0 ? `Giỏ hàng (${totalItems})` : 'Giỏ hàng';
+    cartElements.forEach(el => {
+        if (totalItems > 0) {
+            // Có sản phẩm: hiển thị số lượng
+            el.textContent = totalItems;
+            el.style.display = 'inline-flex';
+            el.style.display = 'flex';
+            console.log(`🛒 Hiển thị số: ${totalItems}`);
+        } else {
+            // Không có sản phẩm: hiển thị số 0 (hoặc ẩn đi)
+            el.textContent = '0';
+            el.style.display = 'inline-flex';
+            el.style.display = 'flex';
+            // Hoặc nếu muốn ẩn: el.style.display = 'none';
+            console.log(`🛒 Giỏ hàng trống, hiển thị 0`);
+        }
     });
     
-    console.log(`🛒 Đã đổi thành "Giỏ hàng"`);
     return totalItems;
 }
 function updateCartBadge() { const cart = getCart(); const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 1), 0); const cartCountSpan = document.getElementById('cartCount'); if (cartCountSpan) { if (totalItems > 0) { cartCountSpan.textContent = totalItems; cartCountSpan.style.display = 'flex'; } else { cartCountSpan.style.display = 'none'; } } }
