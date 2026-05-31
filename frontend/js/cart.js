@@ -166,6 +166,7 @@ function clearCart() {
       localStorage.removeItem(CART_KEY);
       appliedCoupon = null;
       renderCart();
+      updateCartCount();
       Swal.fire({ icon: "success", title: "Đã xóa giỏ hàng", timer: 1200, showConfirmButton: false });
     }
   });
