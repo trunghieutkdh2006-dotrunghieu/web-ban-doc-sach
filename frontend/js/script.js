@@ -2031,6 +2031,8 @@ function openOrderHistory() {
         return;
     }
     
+    const _savedScrollY = window.scrollY;
+
     Swal.fire({
         title: '📦 Lịch sử đơn hàng',
         width: '900px',
@@ -2039,6 +2041,15 @@ function openOrderHistory() {
         html: '<div id="orderHistoryModalContent" style="max-height: 500px; overflow-y: auto;"><div style="text-align: center; padding: 40px;"><i class="fas fa-spinner fa-spin"></i> Đang tải...</div></div>',
         didOpen: async () => {
             await loadOrderHistoryForModal();
+            window.scrollTo({ top: _savedScrollY, behavior: 'instant' });
+        },
+        willOpen: () => {
+            // Giữ vị trí scroll khi SweetAlert thêm padding vào body
+            document.body.style.top = `-${_savedScrollY}px`;
+        },
+        didClose: () => {
+            document.body.style.top = '';
+            window.scrollTo({ top: _savedScrollY, behavior: 'instant' });
         }
     });
 }
