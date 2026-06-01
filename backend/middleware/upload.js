@@ -1,19 +1,11 @@
 const multer = require('multer');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-
-// ============================================================
-// CẤU HÌNH CLOUDINARY
-// ============================================================
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
     api_key:    process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-
-// ============================================================
-// STORAGE CHO ẢNH (JPEG, PNG, WEBP...)
-// ============================================================
 const imageStorage = new CloudinaryStorage({
     cloudinary,
     params: {
@@ -23,10 +15,6 @@ const imageStorage = new CloudinaryStorage({
         public_id: (req, file) => 'img-' + Date.now() + '-' + Math.round(Math.random() * 1e6),
     },
 });
-
-// ============================================================
-// STORAGE CHO PDF
-// ============================================================
 const pdfStorage = new CloudinaryStorage({
     cloudinary,
     params: {
@@ -36,10 +24,6 @@ const pdfStorage = new CloudinaryStorage({
         public_id: (req, file) => 'pdf-' + Date.now() + '-' + Math.round(Math.random() * 1e6),
     },
 });
-
-// ============================================================
-// FILTER
-// ============================================================
 const imageFilter = (req, file, cb) => {
     const ok = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     ok.includes(file.mimetype) ? cb(null, true) : cb(new Error('Chỉ chấp nhận file ảnh'), false);
@@ -48,19 +32,15 @@ const imageFilter = (req, file, cb) => {
 const pdfFilter = (req, file, cb) => {
     file.mimetype === 'application/pdf' ? cb(null, true) : cb(new Error('Chỉ chấp nhận file PDF'), false);
 };
-
-// ============================================================
-// MULTER INSTANCES
-// ============================================================
 const uploadImage = multer({
     storage: imageStorage,
     fileFilter: imageFilter,
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    limits: { fileSize: 10 * 1024 * 1024 },
 });
 
 const uploadPdf = multer({
     storage: pdfStorage,
     fileFilter: pdfFilter,
-    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+    limits: { fileSize: 50 * 1024 * 1024 },
 });
 module.exports = { uploadImage, uploadPdf, cloudinary };

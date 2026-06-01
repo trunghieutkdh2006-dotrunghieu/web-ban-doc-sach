@@ -13,7 +13,7 @@ const OrderSchema = new mongoose.Schema({
     customerName: { type: String, required: true },
     customerEmail: { type: String, required: true },
     customerPhone: { type: String, required: true },
-    address: { type: String, default: "" },  // ⭐ SỬA: không bắt buộc
+    address: { type: String, default: "" },
     shippingAddress: { type: String, default: "" },
     userId: { type: String },
     items: [OrderItemSchema],

@@ -1,60 +1,48 @@
 const express = require("express");
-const router = express.Router();
+const router = express.Router(); 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
-// =========================
-// REGISTER
-// =========================
-router.post("/register", async (req, res) => {
+router.post("/register", async (req, res) => { // Đăng ký người dùng mới
     try {
-        const { username, name, email, password } = req.body;
+        const { username, name, email, password } = req.body; // Lấy thông tin từ request body
 
-        // CHECK EMPTY
-        if (!username || !email || !password) {
-            return res.status(400).json({
-                message: "Vui lòng nhập đầy đủ thông tin"
+        if (!username || !email || !password) { // Kiểm tra nếu thiếu thông tin bắt buộc
+            return res.status(400).json({ // Trả về lỗi nếu thiếu thông tin
+                success: false,
+                message: "Vui lòng nhập đầy đủ thông tin" // Trả về lỗi nếu thiếu thông tin
             });
         }
-
-        // CHECK EMAIL EXIST
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        const existingUser = await User.findOne({ email }); // Kiểm tra nếu email đã tồn tại
+        if (existingUser) { // Nếu email đã tồn tại, trả về lỗi
             return res.status(400).json({
+                success: false, // Trả về lỗi nếu email đã tồn tại
                 message: "Email đã tồn tại"
             });
         }
-
-        // CHECK USERNAME EXIST
-        const existingUsername = await User.findOne({ username });
-        if (existingUsername) {
+        const existingUsername = await User.findOne({ username }); // Kiểm tra nếu tên đăng nhập đã tồn tại
+        if (existingUsername) { 
             return res.status(400).json({
-                message: "Tên đăng nhập đã tồn tại"
+                success: false,
+                message: "Tên đăng nhập đã tồn tại" // Trả về lỗi nếu tên đăng nhập đã tồn tại
             });
         }
-
-        // HASH PASSWORD
-        const hashedPassword = await bcrypt.hash(password, 10);
-
-        // CREATE USER
+        const hashedPassword = await bcrypt.hash(password, 10); // Mã hóa mật khẩu trước khi lưu vào database
         const newUser = new User({
-            username,
-            name: name || username,
-            email,
-            password: hashedPassword,
-            role: "user"
+            username, // Sử dụng username làm tên hiển thị nếu name không được cung cấp
+            name: name || username, // Nếu name không được cung cấp, sử dụng username làm tên hiển thị
+            email, // Lưu email của người dùng
+            password: hashedPassword, // Lưu mật khẩu đã được mã hóa
+            role: "user" // Mặc định role là "user", có thể thay đổi nếu cần thiết
         });
 
-        await newUser.save();
-
-        // RESPONSE
+        await newUser.save(); // Lưu người dùng mới vào database
         res.status(201).json({
             success: true,
             message: "Đăng ký thành công"
         });
 
-    } catch (err) {
+    } catch (err) { // Xử lý lỗi server
         console.log(err);
         res.status(500).json({
             success: false,
@@ -62,69 +50,53 @@ router.post("/register", async (req, res) => {
         });
     }
 });
-
-// =========================
-// LOGIN
-// =========================
-router.post("/login", async (req, res) => {
+router.post("/login", async (req, res) => { // Đăng nhập người dùng
     try {
-        const { email, password } = req.body;
-        console.log(req.body);
-
-        // CHECK EMPTY
-        if (!email || !password) {
-            return res.status(400).json({
+        const { email, password } = req.body; // Lấy thông tin email và mật khẩu từ request body
+        console.log(req.body); // Debug: In ra thông tin đăng nhập nhận được từ client
+        if (!email || !password) { // Kiểm tra nếu thiếu email hoặc mật khẩu
+            return res.status(400).json({ // Trả về lỗi nếu thiếu email hoặc mật khẩu
                 success: false,
                 message: "Vui lòng nhập email và mật khẩu"
             });
         }
-
-        // FIND USER
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }); // Tìm người dùng theo email
         if (!user) {
-            return res.status(400).json({
+            return res.status(400).json({ // Trả về lỗi nếu email không tồn tại
                 success: false,
                 message: "Email không tồn tại"
             });
         }
-
-        // CHECK LOCKED
-        if (user.isLocked) {
-            return res.status(403).json({
+        if (user.isLocked) { // Kiểm tra nếu tài khoản bị khóa
+            return res.status(403).json({ // Trả về lỗi nếu tài khoản bị khóa
                 success: false,
                 message: "Tài khoản đã bị khóa"
             });
         }
-
-        // CHECK PASSWORD
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
-            return res.status(400).json({
+        const isMatch = await bcrypt.compare(password, user.password); // So sánh mật khẩu nhập vào với mật khẩu đã lưu trong database
+        if (!isMatch) { // Nếu mật khẩu không khớp, trả về lỗi
+            return res.status(400).json({ // Trả về lỗi nếu mật khẩu không đúng
                 success: false,
                 message: "Sai mật khẩu"
             });
         }
-
-        // CREATE TOKEN
-        const token = jwt.sign(
+        const token = jwt.sign( // Tạo token JWT để xác thực người dùng trong các yêu cầu tiếp theo
             {
                 id: user._id,
                 username: user.username,
                 email: user.email,
                 role: user.role
             },
-            process.env.JWT_SECRET || "SECRET_KEY",
+            process.env.JWT_SECRET || "SECRET_KEY", // Sử dụng biến môi trường để lưu trữ secret key, nếu không có thì dùng "SECRET_KEY" mặc định
             {
                 expiresIn: "7d"
             }
         );
-
-        // RESPONSE
-        res.json({
+        res.json({ // Trả về token và thông tin người dùng khi đăng nhập thành công
             success: true,
             message: "Đăng nhập thành công",
             token,
-            user: {
+            user: { 
                 id: user._id,
                 username: user.username,
                 name: user.name,
@@ -133,7 +105,7 @@ router.post("/login", async (req, res) => {
             }
         });
 
-    } catch (err) {
+    } catch (err) { // Xử lý lỗi server
         console.log(err);
         res.status(500).json({
             success: false,
@@ -141,11 +113,7 @@ router.post("/login", async (req, res) => {
         });
     }
 });
-
-// =========================
-// GET PROFILE
-// =========================
-router.get("/profile", async (req, res) => {
+router.get("/profile", async (req, res) => { // Lấy thông tin người dùng dựa trên token JWT
     try {
         const authHeader = req.headers.authorization;
         const token = authHeader?.replace('Bearer ', '');
@@ -155,11 +123,7 @@ router.get("/profile", async (req, res) => {
                 message: "Chưa đăng nhập"
             });
         }
-
-        // VERIFY TOKEN
         const decoded = jwt.verify(token, process.env.JWT_SECRET || "SECRET_KEY");
-
-        // FIND USER
         const user = await User.findById(decoded.id).select("-password");
 
         res.json(user);
@@ -171,11 +135,7 @@ router.get("/profile", async (req, res) => {
         });
     }
 });
-
-// =========================
-// CHANGE PASSWORD
-// =========================
-router.post("/change-password", async (req, res) => {
+router.post("/change-password", async (req, res) => { // Đổi mật khẩu cho người dùng đã đăng nhập
     try {
         const { email, oldPassword, newPassword } = req.body;
 
@@ -193,8 +153,6 @@ router.post("/change-password", async (req, res) => {
                 message: "Mật khẩu cũ sai"
             });
         }
-
-        // HASH NEW PASSWORD
         const hashedPassword = await bcrypt.hash(newPassword, 10);
 
         user.password = hashedPassword;
@@ -213,9 +171,6 @@ router.post("/change-password", async (req, res) => {
 });
 
 module.exports = router;
-// =========================
-// FORGOT PASSWORD - Gửi token
-// =========================
 router.post("/forgot-password", async (req, res) => {
     try {
         const { email } = req.body;
@@ -226,11 +181,8 @@ router.post("/forgot-password", async (req, res) => {
 
         const user = await User.findOne({ email });
         if (!user) {
-            // Trả về thành công để tránh lộ thông tin email có tồn tại không
             return res.json({ success: true, message: "Nếu email tồn tại, mã xác nhận đã được tạo" });
         }
-
-        // Tạo token 6 chữ số
         const crypto = require("crypto");
         const resetToken = crypto.randomInt(100000, 999999).toString();
         const hashedToken = await bcrypt.hash(resetToken, 10);
@@ -238,16 +190,11 @@ router.post("/forgot-password", async (req, res) => {
         user.resetPasswordToken = hashedToken;
         user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 phút
         await user.save();
-
-        // TODO: Gửi email thật với nodemailer
-        // Hiện tại trả về token trong response (chỉ dùng khi dev/test)
-        // Trong production, xóa dòng resetToken bên dưới và gửi qua email
         console.log(`🔑 Reset token cho ${email}: ${resetToken}`);
 
         res.json({
             success: true,
             message: "Mã xác nhận đã được tạo (xem console server). Mã có hiệu lực 15 phút.",
-            // ⚠️ XÓA DÒNG NÀY TRONG PRODUCTION - chỉ để test:
             devToken: resetToken
         });
 

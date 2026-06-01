@@ -7,8 +7,6 @@ const ReviewSchema = new mongoose.Schema({
     comment: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    
-    // ========== THÊM MỚI: LIKES & COMMENTS ==========
     likes: { type: Number, default: 0 },
     likedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     comments: [{
@@ -17,10 +15,7 @@ const ReviewSchema = new mongoose.Schema({
         text: { type: String, required: true },
         createdAt: { type: Date, default: Date.now }
     }]
-    // ================================================
 });
-
-// ========== PHƯƠNG THỨC CẬP NHẬT RATING CHO SÁCH ==========
 ReviewSchema.statics.updateBookRating = async function(bookId) {
     const result = await this.aggregate([
         { $match: { bookId: new mongoose.Types.ObjectId(bookId) } },
