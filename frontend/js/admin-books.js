@@ -399,8 +399,10 @@ function renderBooks() {
                 <button
                     class="action-btn action-delete"
                     onclick="deleteBook('${b._id}')"
+                    title="Xóa sách"
                 >
                     <i class="fas fa-trash"></i>
+                    <span style="margin-left:6px;">Xóa</span>
                 </button>
 
             </td>
