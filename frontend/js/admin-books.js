@@ -2018,17 +2018,34 @@ function viewCategoryBooks(categoryName) {
     const booksInCategory = (allBooks || []).filter(b => b.category === categoryName);
     const bookListHtml = booksInCategory.length
         ? `<ul style="text-align:left; padding-left:18px; margin:0;">${booksInCategory.map(b => `
-                <li style="margin-bottom: 8px;">
-                    <strong>${escapeHtml(b.title || 'Tên sách trống')}</strong>${b.author ? ` - ${escapeHtml(b.author)}` : ''}
+                <li style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                    <div>
+                        <strong>${escapeHtml(b.title || 'Tên sách trống')}</strong>${b.author ? ` - ${escapeHtml(b.author)}` : ''}
+                    </div>
+                    <div>
+                        <button class="swal2-styled" style="background:#dc2626;border:none;padding:6px 10px;border-radius:6px;color:#fff;cursor:pointer;" onclick="deleteBookFromCategory('${b._id || b.id}', '${String(categoryName).replace(/'/g, "\\'")}')">Xóa</button>
+                    </div>
                 </li>`).join('')}</ul>`
         : '<p>Không có sách nào thuộc danh mục này.</p>';
 
     Swal.fire({
         title: `Sách trong danh mục "${escapeHtml(categoryName)}"`,
         html: bookListHtml,
-        width: '680px',
+        width: '820px',
         confirmButtonText: 'Đóng',
     });
+}
+
+
+// Wrapper để xóa sách khi đang xem modal category
+async function deleteBookFromCategory(id, categoryName) {
+    try {
+        await deleteBook(id);
+        // Sau khi xóa, chờ một chút để loadBooks cập nhật rồi mở lại modal
+        setTimeout(() => viewCategoryBooks(categoryName), 200);
+    } catch (e) {
+        console.warn('deleteBookFromCategory error', e);
+    }
 }
 
 
