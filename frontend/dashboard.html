@@ -1072,6 +1072,10 @@
                     <div class="number" id="orderDelivered">0</div>
                 </div>
                 <div class="stat-card">
+                    <h4>Đã hủy</h4>
+                    <div class="number" id="orderCancelled">0</div>
+                </div>
+                <div class="stat-card">
                     <h4>Tổng doanh thu</h4>
                     <div class="number" id="orderRevenue">0đ</div>
                 </div>
@@ -1083,6 +1087,7 @@
                     <option value="pending">Chờ xử lý</option>
                     <option value="shipped">Đang gửi file Ebook/PDF</option>
                     <option value="delivered">Đã gửi file Ebook/PDF</option>
+                    <option value="Đã hủy">Đã hủy</option>
                 </select>
                 <button class="btn btn-primary" onclick="loadOrders()">Làm mới</button>
                 <button class="btn btn-success" onclick="exportOrdersCSV()"><i class="fas fa-download"></i> Export

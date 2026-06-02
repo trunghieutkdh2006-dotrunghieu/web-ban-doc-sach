@@ -53,7 +53,8 @@ async function loadOrders() {
         // RENDER GIAO DIỆN
         // ========================================
 
-        // Hiển thị orders
+        // Lưu snapshot adminOrders và hiển thị orders
+        try { localStorage.setItem('adminOrders', JSON.stringify(allOrders)); } catch (e) { /* ignore */ }
         renderOrders();
 
 
@@ -386,6 +387,10 @@ function renderOrders() {
 
             // Đã gửi
             delivered: '#d1fae5'
+            ,
+
+            // Đã hủy
+            'Đã hủy': '#fee2e2'
         };
 
 
@@ -537,6 +542,23 @@ function renderOrders() {
                         >
 
                             ✅ Đã gửi file Ebook/PDF
+
+                        </option>
+
+                        <!-- Cancelled -->
+                        <option
+                            value="Đã hủy"
+
+                            ${
+                                o.status === 'Đã hủy'
+
+                                    ? 'selected'
+
+                                    : ''
+                            }
+                        >
+
+                            ❌ Đã hủy
 
                         </option>
 
@@ -711,6 +733,19 @@ function updateOrderStats() {
             ).length;
 
 
+    // ============================================
+    // ĐƠN HÀNG ĐÃ HỦY
+    // ============================================
+
+    if (el('orderCancelled'))
+
+        el('orderCancelled').textContent =
+
+            allOrders.filter(
+                o => o.status === 'Đã hủy'
+            ).length;
+
+
 
     // ============================================
     // TÍNH DOANH THU
@@ -812,10 +847,10 @@ async function updateOrderStatus(orderId, newStatus) {
             // CẬP NHẬT STATUS LOCAL
             // ====================================
 
-            if (idx !== -1)
-
-                allOrders[idx].status =
-                    newStatus;
+            if (idx !== -1) {
+                allOrders[idx].status = newStatus;
+                try { localStorage.setItem('adminOrders', JSON.stringify(allOrders)); } catch (e) { /* ignore */ }
+            }
 
 
 
@@ -858,6 +893,8 @@ async function updateOrderStatus(orderId, newStatus) {
             // ====================================
             // THÔNG BÁO THÀNH CÔNG
             // ====================================
+
+            try { labels['Đã hủy'] = labels['Đã hủy'] || 'Đã hủy'; } catch (e) { /* ignore */ }
 
             showToast(
 

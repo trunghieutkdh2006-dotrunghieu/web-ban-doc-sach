@@ -37,12 +37,12 @@ router.get("/:id", async (req, res) => {
 // CẬP NHẬT TRẠNG THÁI
 router.patch("/:id/status", async (req, res) => {
     try {
-        const { status } = req.body;
-        const validStatus = ["pending", "shipped", "delivered"];
+            const { status } = req.body;
+            const validStatus = ["pending", "shipped", "delivered", "Đã hủy"];
         
-        if (!validStatus.includes(status)) {
-            return res.status(400).json({ success: false, message: "Trạng thái không hợp lệ" });
-        }
+            if (!validStatus.includes(status)) {
+                return res.status(400).json({ success: false, message: "Trạng thái không hợp lệ" });
+            }
         
         const order = await Order.findByIdAndUpdate(
             req.params.id, 

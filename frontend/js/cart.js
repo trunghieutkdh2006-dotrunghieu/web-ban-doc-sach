@@ -1012,7 +1012,7 @@ async function deleteOrderFromHistory(orderId) {
 }
 
 function getStatusText(status) {
-  const statusMap = { pending: 'Chờ xử lý', shipped: 'Đang gửi', delivered: 'Đã gửi' };
+  const statusMap = { pending: 'Chờ xử lý', shipped: 'Đang gửi', delivered: 'Đã gửi', 'Đã hủy': 'Đã hủy' };
   return statusMap[status] || status;
 }
 
