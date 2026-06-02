@@ -1903,18 +1903,22 @@ function renderCategoriesGrid() {
 
 
 
-                <!-- Nút xóa -->
-                <button
-                    class="action-btn action-delete"
-                    onclick="deleteCategory('${c._id || c.id}')"
-                >
-
-                    <i class="fas fa-trash-alt"></i>
-
-                    Xóa
-
-                </button>
-
+                <div class="category-card-actions">
+                    <button
+                        class="action-btn action-primary"
+                        onclick="viewCategoryBooks('${String(c.name).replace(/'/g, "\\'")}');"
+                    >
+                        <i class="fas fa-eye"></i>
+                        Xem sách
+                    </button>
+                    <button
+                        class="action-btn action-delete"
+                        onclick="deleteCategory('${c._id || c.id}')"
+                    >
+                        <i class="fas fa-trash-alt"></i>
+                        Xóa
+                    </button>
+                </div>
             </div>
         `;
     }).join('');
@@ -2003,6 +2007,28 @@ function loadCategoriesForSelect() {
 
             `).join('');
 }
+
+
+// ============================================
+// VIEW SÁCH TRONG CATEGORY
+// ============================================
+function viewCategoryBooks(categoryName) {
+    const booksInCategory = (allBooks || []).filter(b => b.category === categoryName);
+    const bookListHtml = booksInCategory.length
+        ? `<ul style="text-align:left; padding-left:18px; margin:0;">${booksInCategory.map(b => `
+                <li style="margin-bottom: 8px;">
+                    <strong>${escapeHtml(b.title || 'Tên sách trống')}</strong>${b.author ? ` - ${escapeHtml(b.author)}` : ''}
+                </li>`).join('')}</ul>`
+        : '<p>Không có sách nào thuộc danh mục này.</p>';
+
+    Swal.fire({
+        title: `Sách trong danh mục "${escapeHtml(categoryName)}"`,
+        html: bookListHtml,
+        width: '680px',
+        confirmButtonText: 'Đóng',
+    });
+}
+
 
 // ============================================
 // THÊM DANH MỤC
