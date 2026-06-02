@@ -714,8 +714,9 @@
 .user-dropdown {
     position: absolute;
     top: calc(100% + 4px);
-    left: 0;
-    right: auto;
+    right: 0;
+    left: auto;
+    min-width: 160px;
     width: auto;
     white-space: nowrap;
     background: rgba(255, 255, 255, 0.98) !important;
