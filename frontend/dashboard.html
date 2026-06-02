@@ -882,6 +882,21 @@
                                 <option value="admin">Admin</option>
                             </select></div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Ảnh đại diện</label>
+                            <div class="avatar-upload-section">
+                                <img id="userAvatarPreview" class="profile-avatar-preview"
+                                    src="https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=NA"
+                                    alt="Avatar preview">
+                                <label class="avatar-upload-label" for="userAvatarFile"><i class="fas fa-camera"></i>
+                                    Chọn ảnh</label>
+                                <input type="file" id="userAvatarFile"
+                                    accept="image/jpeg,image/png,image/jpg,image/gif,image/webp">
+                            </div>
+                            <small>Chỉ cập nhật ảnh đại diện khi sửa user.</small>
+                        </div>
+                    </div>
                     <div class="action-buttons">
                         <button type="submit" class="btn btn-primary">Lưu người dùng</button>
                         <button type="button" class="btn btn-secondary" onclick="resetUserForm()">Làm mới</button>

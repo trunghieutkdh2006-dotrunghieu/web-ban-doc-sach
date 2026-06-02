@@ -1,3 +1,5 @@
+let selectedUserAvatarFile = null;
+
 async function loadUsers() {
 
     try {
@@ -339,14 +341,11 @@ function renderUsers() {
 
                 <!-- Avatar -->
                 <div class="avatar">
-
                     ${
-                        // Lấy chữ cái đầu username
-                        (u.username || 'U')
-                        .charAt(0)
-                        .toUpperCase()
+                        u.avatar
+                            ? `<img src="${escapeHtml(u.avatar)}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;" alt="${escapeHtml(u.username || 'Avatar')}">`
+                            : (u.username || 'U').charAt(0).toUpperCase()
                     }
-
                 </div>
 
 
@@ -560,6 +559,14 @@ function editUser(id) {
         'role'
     ).value = u.role || 'user';
 
+    const avatarPreview = document.getElementById('userAvatarPreview');
+    if (avatarPreview) {
+        avatarPreview.src = u.avatar || `https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=${encodeURIComponent(u.username || 'U')}`;
+    }
+    const avatarInput = document.getElementById('userAvatarFile');
+    if (avatarInput) avatarInput.value = '';
+    selectedUserAvatarFile = null;
+
 
 
     // ============================================
@@ -653,6 +660,61 @@ function resetUserForm() {
     document.getElementById(
         'role'
     ).value = 'user';
+
+    const avatarPreview = document.getElementById('userAvatarPreview');
+    if (avatarPreview) {
+        avatarPreview.src = `https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=NA`;
+    }
+    const avatarInput = document.getElementById('userAvatarFile');
+    if (avatarInput) avatarInput.value = '';
+    selectedUserAvatarFile = null;
+}
+
+function handleUserAvatarFileChange(event) {
+    const file = event.target.files?.[0] || null;
+    selectedUserAvatarFile = file;
+    const preview = document.getElementById('userAvatarPreview');
+
+    if (!preview) return;
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            preview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.src = `https://ui-avatars.com/api/?background=1D3557&color=fff&size=100&length=2&name=NA`;
+    }
+}
+
+async function uploadUserAvatar(userId) {
+    if (!selectedUserAvatarFile || !userId) return null;
+
+    const formData = new FormData();
+    formData.append('avatar', selectedUserAvatarFile);
+
+    try {
+        const res = await apiFetch(`${USERS_API}/${userId}/avatar`, {
+            method: 'POST',
+            body: formData
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+            throw new Error(data.message || 'Upload avatar thất bại');
+        }
+
+        selectedUserAvatarFile = null;
+        const avatarInput = document.getElementById('userAvatarFile');
+        if (avatarInput) avatarInput.value = '';
+
+        return data.avatarUrl;
+    } catch (err) {
+        console.error(err);
+        showToast('Upload avatar thất bại!', true);
+        return null;
+    }
 }
 
 // ============================================
@@ -826,6 +888,7 @@ async function saveUser() {
                 body: JSON.stringify(data)
             }
         );
+        const result = await res.json();
 
 
 
@@ -834,6 +897,14 @@ async function saveUser() {
         // ========================================
 
         if (res.ok) {
+            const savedUserId = userId || result.user?._id || result.user?.id;
+
+            if (selectedUserAvatarFile && savedUserId) {
+                const avatarUrl = await uploadUserAvatar(savedUserId);
+                if (avatarUrl) {
+                    showToast('Ảnh đại diện đã được cập nhật!');
+                }
+            }
 
             // Toast thành công
             showToast(

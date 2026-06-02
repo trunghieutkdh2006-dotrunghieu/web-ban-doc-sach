@@ -6,6 +6,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
@@ -104,6 +105,41 @@ router.post('/avatar', auth, (req, res, next) => {
         res.json({ success: true, avatarUrl });
     } catch (err) {
         console.error('Upload avatar error:', err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// POST admin upload avatar cho user cụ thể
+router.post('/:id/avatar', auth, admin, (req, res, next) => {
+    uploadAvatar.single('avatar')(req, res, (err) => {
+        if (err) {
+            console.error('Multer/Cloudinary admin avatar error:', err);
+            return res.status(500).json({ success: false, message: err.message || 'Upload avatar thất bại' });
+        }
+        next();
+    });
+}, async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'Không có file avatar' });
+        }
+
+        const avatarUrl = req.file.path;
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            { avatar: avatarUrl },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy user' });
+        }
+
+        console.log(`✅ Admin đã upload avatar cho user ${req.params.id}: ${avatarUrl}`);
+        res.json({ success: true, avatarUrl, user: updatedUser });
+    } catch (err) {
+        console.error('Admin upload avatar error:', err);
         res.status(500).json({ success: false, message: err.message });
     }
 });

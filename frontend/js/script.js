@@ -1721,6 +1721,12 @@ async function saveUserProfile() {
     }
     
     localStorage.setItem(profileKey, JSON.stringify(userProfile));
+
+    if (user) {
+        user.avatar = userProfile.avatar || user.avatar || null;
+        localStorage.setItem('user', JSON.stringify(user));
+    }
+
     updateNavbarAvatar();
     
     if (avatarUploadFailed) {
